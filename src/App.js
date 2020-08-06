@@ -1,19 +1,14 @@
 import React from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar, NativeModules, Button
+  SafeAreaView, StyleSheet, ScrollView, View,
+  Text, StatusBar, NativeModules, Button
 } from 'react-native';
-
-import {
-  Header,
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
+
+
 import { domain } from './constants'
+
 
 const App: () => React$Node = () => {
   const [data, setData] = React.useState('Loading . .')
