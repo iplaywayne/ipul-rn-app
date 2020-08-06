@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import <Firebase.h> // Aug 6 2020 Install
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -32,6 +33,9 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  if ([FIRApp defaultApp] == nil) { // Aug 6 2020 Install
+    [FIRApp configure];
+  }
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"iPlayuListen"
                                             initialProperties:nil];

@@ -5,7 +5,8 @@ import {
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
-
+import firebase from '@react-native-firebase/app'
+import '@react-native-firebase/auth'
 
 import { domain } from './constants'
 
@@ -21,7 +22,7 @@ const App: () => React$Node = () => {
   }, [])
 
   const getModules = React.useCallback(() => {
-    console.log(domain)
+    console.log(firebase.auth().currentUser)
   }, [])
 
   return (
