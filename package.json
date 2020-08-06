@@ -3,18 +3,22 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "clean": "yarn start --reset-cache && rm -rf /tmp/metro-*",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "commit": "git add . && git commit -m 'yarn commit'",
+    "pushgit": "git push -u origin master",
+    "bigpush": "yarn commit && yarn pushgit"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^8.3.0",
     "axios": "^0.19.2",
-    "fs": "0.0.1-security",
+    "concurrently": "^5.2.0",
     "react": "16.13.1",
-    "react-native": "0.63.2",
-    "react-native-dotenv": "^2.3.0"
+    "react-native": "0.63.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

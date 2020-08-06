@@ -13,21 +13,20 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
-import { REACT_APP_ADMIN } from 'react-native-dotenv'
+import { domain } from './constants'
 
 const App: () => React$Node = () => {
   const [data, setData] = React.useState('Loading . .')
-  
+
   React.useEffect(() => {
     (async function () {
-      const { data } = await axios.post('https://www.iplayulisten.com/api/products')
+      const { data } = await axios.post(`${domain}/api/products`)
       setData(data)
     })()
   }, [])
 
   const getModules = React.useCallback(() => {
-    const RNHello = NativeModules.RNHello
-    console.log(REACT_APP_ADMIN)
+    console.log(domain)
   }, [])
 
   return (
