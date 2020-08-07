@@ -24,16 +24,18 @@ const Drawer = createDrawerNavigator();
 
 const AppNavigator = () => (
   <AppStack.Navigator>
-    <AppStack.Screen name='Home' component={DrawerNavigator} />
+    <AppStack.Screen name='Drawer' component={DrawerNavigator} options={{
+      headerShown: false
+    }}/>
   </AppStack.Navigator>
 )
 const DrawerNavigator = () => (
   <Drawer.Navigator initialRouteName="Home">
     <Drawer.Screen name="Home" component={HomeScreen} />
-    <Drawer.Screen name="Dashboard" component={HomeScreen} />
+    {/* <Drawer.Screen name="Dashboard" component={HomeScreen} />
     <Drawer.Screen name="Explore" component={HomeScreen} />
     <Drawer.Screen name="Media" component={HomeScreen} />
-    <Drawer.Screen name="Notifications" component={HomeScreen} />
+    <Drawer.Screen name="Notifications" component={HomeScreen} /> */}
   </Drawer.Navigator>
 )
 
@@ -134,7 +136,9 @@ export default function App({ navigation }) {
                 <AuthStack.Screen name="Sign Up" component={SignUp} />
               </>
             ) : (
-                <AuthStack.Screen name="Home" component={AppNavigator} />
+                <AuthStack.Screen name="App" component={AppNavigator} options={{
+                  headerShown: false
+                }}/>
               )}
           </AuthStack.Navigator>
         </Store>

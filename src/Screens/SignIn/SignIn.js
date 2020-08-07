@@ -59,7 +59,7 @@ const SignIn = (props) => {
             console.log(auth)
           }
           } />
-          <Button title="Sign up" onPress={() => navigation.push('Sign Up')} />
+          <Button icon='camera' title="Sign up" onPress={() => navigation.push('Sign Up')} />
         </View>
       </ScrollView>
     </Center>
