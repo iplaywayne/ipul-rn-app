@@ -1,10 +1,14 @@
 import React from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import firebase, { auth, database } from '../utils/firebase/FirebaseStore'
 
 export const AuthContext = React.createContext({})
 export const useAuth = () => React.useContext(AuthContext)
 
 
 export default function AuthProvider({ children }) {
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -42,15 +46,12 @@ export default function AuthProvider({ children }) {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        userToken = await AsyncStorage.getItem('_iPUser_userToken');
+        if (userToken) console.log(`Registered [`, userToken, ']')
       } catch (e) {
         // Restoring token failed
+        console.warn(e)
       }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       setTimeout(() => {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
       }, 250)
@@ -58,29 +59,46 @@ export default function AuthProvider({ children }) {
 
     bootstrapAsync();
   }, []);
-  
+
+
   const authDispatch = React.useMemo(
     () => ({
       signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        auth.signInWithEmailAndPassword(data.username, data.password)
+          .then(async result => {
+            try {
+              console.log('ACCOUNT ONLINE [', result.user.uid, ']')
+              await AsyncStorage.setItem('_iPUser_userToken', result.user.uid);
+              dispatch({ type: 'SIGN_IN', token: result.user.uid });
+            } catch (e) {
+              // Restoring token failed
+              console.warn(e)
+            }
+          })
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => {
+        auth.signOut().then(_ => {
+          console.log('ACCOUNT OFFLINE')
+          dispatch({ type: 'SIGN_OUT' })
+        })
+      },
       signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        auth.createUserWithEmailAndPassword(data.username, data.password)
+          .then(async result => {
+            try {
+              console.log('ACCOUNT CREATED [', result.user.uid, ']')
+              await AsyncStorage.setItem('_iPUser_userToken', result.user.uid);
+              dispatch({ type: 'SIGN_IN', token: result.user.uid });
+            } catch (e) {
+              // Restoring token failed
+              console.warn(e)
+            }
+          })
       },
     }),
     []
   );
+
 
   return (
     <AuthContext.Provider value={[state, authDispatch]}>

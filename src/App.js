@@ -49,8 +49,6 @@ export default function () {
   const [authState, authDispatch] = useAuth()
   const { isLoading, userToken } = authState
 
-
-
   if (isLoading) {
     return <Center><Text>Loading . .</Text></Center>
   }
@@ -60,12 +58,10 @@ export default function () {
       {userToken == null ?
         <AuthStack.Navigator>
           <AuthStack.Screen name="SplashScreen" component={SplashScreen} options={{
-            title: 'Sign In',
             headerShown: false,
             animationTypeForReplace: userToken ? 'pop' : 'push'
           }} />
           <AuthStack.Screen name="Sign In" component={SignInScreen} options={{
-            title: 'Sign In',
             headerShown: false,
             animationTypeForReplace: userToken ? 'pop' : 'push'
           }} />
