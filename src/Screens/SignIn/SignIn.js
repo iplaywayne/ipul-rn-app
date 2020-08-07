@@ -11,9 +11,9 @@ import '@react-native-firebase/auth'
 
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
-
-
 import { useStore, useStoreUpdate } from '../../utils/store'
+import { useAuth } from '../../App'
+
 
 const SignIn = (props) => {
   const { signIn, navigation } = props
@@ -21,6 +21,7 @@ const SignIn = (props) => {
   const { test } = useStoreUpdate()
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const auth = useAuth()
   // const [data, setData] = React.useState('Loading . .')
 
   // React.useEffect(() => {
@@ -48,8 +49,8 @@ const SignIn = (props) => {
         secureTextEntry
       />
       <Button title="Sign in" onPress={() => {
-        signIn({ username, password })
-        console.log(props)
+        auth.signIn({ username, password })
+        console.log(auth)
       }
       } />
     </Center>

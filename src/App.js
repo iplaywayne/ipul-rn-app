@@ -4,20 +4,30 @@ import { View, Text, TextInput, Button } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SignIn as SignInScreen, SignUp, Tabs } from './Screens'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import {
+  SignIn as SignInScreen, Home as HomeScreen,
+  SignUp, Tabs
+} from './Screens'
 
 import { Store, useStore } from './utils/store'
 import { Center } from './components/Center'
 
 const AuthContext = React.createContext();
+export const useAuth = () => React.useContext(AuthContext)
+
 const Stack = createStackNavigator();
-
-const Home = () => (
-  <Center>
-    <Text>You are in Home</Text>
-  </Center>
+const Drawer = createDrawerNavigator();
+const MainNavigator = () => (
+  <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Screen name="Home" component={HomeScreen} />
+    <Drawer.Screen name="Dashboard" component={HomeScreen} />
+    <Drawer.Screen name="Explore" component={HomeScreen} />
+    <Drawer.Screen name="Media" component={HomeScreen} />
+    <Drawer.Screen name="Notifications" component={HomeScreen} />
+  </Drawer.Navigator>
 )
-
 
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
@@ -101,22 +111,19 @@ export default function App({ navigation }) {
   }
 
   return (
-    <Store>
-      <NavigationContainer>
-        <AuthContext.Provider value={authContext}>
+    <NavigationContainer>
+      <AuthContext.Provider value={authContext}>
+        <Store>
           <Stack.Navigator>
             {state.userToken == null ? (
-              <Stack.Screen name="Sign In" >
-                {props => <SignInScreen {...props}
-                  signIn={({ username, password }) => authContext.signIn({ username, password })} />}
-              </Stack.Screen>
+              <Stack.Screen name="Sign In" component={SignInScreen}/>
             ) : (
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Home" component={MainNavigator} />
               )}
           </Stack.Navigator>
-        </AuthContext.Provider>
-      </NavigationContainer>
-    </Store>
+        </Store>
+      </AuthContext.Provider>
+    </NavigationContainer>
   );
 }
 // import React from 'react';
