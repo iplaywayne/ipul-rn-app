@@ -1,10 +1,10 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text } from 'react-native'
+import { View, Text, TextInput, Button } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SignIn, SignUp, Tabs } from './Screens'
+import { SignIn as SignInScreen, SignUp, Tabs } from './Screens'
 
 import { Store, useStore } from './utils/store'
 import { Center } from './components/Center'
@@ -17,6 +17,7 @@ const Home = () => (
     <Text>You are in Home</Text>
   </Center>
 )
+
 
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
@@ -105,7 +106,10 @@ export default function App({ navigation }) {
         <AuthContext.Provider value={authContext}>
           <Stack.Navigator>
             {state.userToken == null ? (
-              <Stack.Screen name="SignIn" component={SignIn} />
+              <Stack.Screen name="Sign In" >
+                {props => <SignInScreen {...props}
+                  signIn={({ username, password }) => authContext.signIn({ username, password })} />}
+              </Stack.Screen>
             ) : (
                 <Stack.Screen name="Home" component={Home} />
               )}

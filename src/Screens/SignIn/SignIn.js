@@ -1,20 +1,26 @@
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View,
-  Text, StatusBar, NativeModules, Button
+  Text, StatusBar, NativeModules, Button, TextInput
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
-import { domain } from '../../constants'
-
-
 import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
 
-import { useStore } from '../../utils/store'
 
-const SignIn = ({ navigation }) => {
+import { domain } from '../../constants'
+import { Center } from '../../components/Center'
+
+
+import { useStore, useStoreUpdate } from '../../utils/store'
+
+const SignIn = (props) => {
+  const { signIn, navigation } = props
   const [state, dispatch] = useStore()
+  const { test } = useStoreUpdate()
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
   // const [data, setData] = React.useState('Loading . .')
 
   // React.useEffect(() => {
@@ -29,15 +35,24 @@ const SignIn = ({ navigation }) => {
   // }, [])
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-      // style={styles.scrollView}
-      >
-        <Button title={state.name} onPress={() => dispatch({ type: 'new' })} />
-        <Button title='Sign Up' onPress={() => navigation.push('Sign Up')} />
-      </ScrollView>
-    </View>
+    <Center>
+      <TextInput
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button title="Sign in" onPress={() => {
+        signIn({ username, password })
+        console.log(props)
+      }
+      } />
+    </Center>
   )
 
 }
