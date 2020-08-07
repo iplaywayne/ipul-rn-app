@@ -17,7 +17,7 @@ function reducer(state, action) {
 }
 
 
-function Store({ children }) {
+function StoreProvider({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState)
 
   return (
@@ -29,4 +29,4 @@ function Store({ children }) {
   )
 }
 
-export default Store
+export default StoreProvider

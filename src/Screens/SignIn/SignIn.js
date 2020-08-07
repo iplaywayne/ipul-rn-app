@@ -7,12 +7,12 @@ import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
-import { useTheme } from 'react-native-paper';
+import { Card } from 'galio-framework';
 
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
 import { useStore, useStoreUpdate } from '../../utils/store'
-import { useAuth } from '../../utils'
+import { useAuth } from '../../contexts/AuthContext'
 
 
 const SignIn = (props) => {
@@ -21,24 +21,11 @@ const SignIn = (props) => {
   const { test } = useStoreUpdate()
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const auth = useAuth()
-  const { colors } = useTheme()
-  // const [data, setData] = React.useState('Loading . .')
-
-  // React.useEffect(() => {
-  //   (async function () {
-  //     const { data } = await axios.post(`${domain}/api/products`)
-  //     setData(data)
-  //   })()
-  // }, [])
-
-  // const getModules = React.useCallback(() => {
-  //   console.log(firebase.auth().currentUser)
-  // }, [])
+  const [authState, authDispatch] = useAuth()
 
   return (
     <Center>
-      <ScrollView style={{ backgroundColor: colors.primary, width: '100%' }}
+      <ScrollView style={{ width: '100%' }}
         contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ flex: 1 }}>
           <Image source={require('../../assets/images/ipul_logo_trans.png')}
@@ -57,10 +44,10 @@ const SignIn = (props) => {
             secureTextEntry
           />
           <Button title="Sign in" onPress={() => {
-            auth.signIn({ username, password })
-            console.log(auth)
+            authDispatch.signIn({ username, password })
           }
-          } />
+          }
+          />
           <Button icon='camera' title="Sign up" onPress={() => navigation.push('Sign Up')} />
         </View>
       </ScrollView>
