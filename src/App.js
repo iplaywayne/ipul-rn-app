@@ -13,20 +13,32 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { SignIn, SignUp } from './Screens'
+import { SignIn, SignUp, Tabs } from './Screens'
 import { domain } from './constants'
-import { Center} from './components/Center'
+import { Center } from './components/Center'
 
 
 const Stack = createStackNavigator();
-
-const Home = () => (
+const Drawer = createDrawerNavigator();
+const Dashboard = () => (
   <Center>
-    <Text>You are home</Text>
+    <Text>You are in Dashboard</Text>
   </Center>
 )
+const Explore = () => (
+  <Center>
+    <Text>You are in Explore</Text>
+  </Center>
+)
+const HomeNavigator = () => (
+  <Drawer.Navigator initialRouteName="Dashboard">
+    <Drawer.Screen name="Dashboard" component={Dashboard} />
+    <Drawer.Screen name="Explore" component={Explore} />
+  </Drawer.Navigator>
+)
 
-const App: () => React$Node = () => {
+
+const App = () => {
   const [data, setData] = React.useState('Loading . .')
 
   React.useEffect(() => {
@@ -45,7 +57,7 @@ const App: () => React$Node = () => {
       <Stack.Navigator initialRouteName="Sign In">
         <Stack.Screen name="Sign In" component={SignIn} />
         <Stack.Screen name="Sign Up" component={SignUp} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={HomeNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
