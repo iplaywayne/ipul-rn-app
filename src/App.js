@@ -36,7 +36,10 @@ const DrawerNavigator = () => (
 
 const AppStackNavigator = () => (
   <AppStack.Navigator>
-    <AppStack.Screen name="Home" component={DrawerNavigator} options={{
+    <AppStack.Screen name="Home" component={HomeScreen} options={{
+      headerShown: false
+    }} />
+    <AppStack.Screen name="Explore" component={ExploreScreen} options={{
       headerShown: false
     }} />
   </AppStack.Navigator>
@@ -47,9 +50,7 @@ export default function () {
   const { isLoading, userToken } = authState
 
 
-  return <SplashScreen />
 
-  
   if (isLoading) {
     return <Center><Text>Loading . .</Text></Center>
   }
@@ -58,6 +59,11 @@ export default function () {
     <NavigationContainer>
       {userToken == null ?
         <AuthStack.Navigator>
+          <AuthStack.Screen name="SplashScreen" component={SplashScreen} options={{
+            title: 'Sign In',
+            headerShown: false,
+            animationTypeForReplace: userToken ? 'pop' : 'push'
+          }} />
           <AuthStack.Screen name="Sign In" component={SignInScreen} options={{
             title: 'Sign In',
             headerShown: false,

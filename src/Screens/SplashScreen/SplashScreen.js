@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Center } from '../../components/Center'
 const { width, height } = Dimensions.get('window')
 
-function SplashScreen() {
+function SplashScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,7 +17,7 @@ function SplashScreen() {
 
         <Text style={styles.title}>New sounds on the rise!</Text>
         <Text style={styles.text}>We're all about creative arts</Text>
-        <TouchableOpacity style={styles.button} onPress={()=>console.log('lets go!')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Sign In')}>
           <LinearGradient
             colors={['#235566', '#01a483']} style={styles.signIn} >
             <Text style={styles.textGo}>Let's Go</Text>
