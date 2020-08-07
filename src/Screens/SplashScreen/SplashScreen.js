@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import { Center } from '../../components/Center'
 const { width, height } = Dimensions.get('window')
@@ -11,7 +13,17 @@ function SplashScreen() {
         <Image source={require('../../assets/images/ipul_logo_trans.png')}
           style={styles.logo} />
         <Text>Welcome to iPlayuListen</Text></View>
-      <View style={styles.footer}><Text>We're all about creative arts</Text></View>
+      <View style={styles.footer}>
+
+        <Text style={styles.title}>New sounds on the rise!</Text>
+        <Text style={styles.text}>We're all about creative arts</Text>
+        <TouchableOpacity style={styles.button} onPress={()=>console.log('lets go!')}>
+          <LinearGradient
+            colors={['#235566', '#01a483']} style={styles.signIn} >
+            <Text style={styles.textGo}>Let's Go</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -37,6 +49,29 @@ const styles = StyleSheet.create({
   logo: {
     height: height * .2,
     width: width * .7,
+  },
+  title: {
+    color: '#05374a',
+    fontSize: 30,
+    fontWeight: 'bold'
+  },
+  text: {
+    marginTop: 20
+  },
+  button: {
+    alignItems: 'flex-end',
+    marginTop: 30
+  },
+  signIn: {
+    width: 150,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    flexDirection: 'row'
+  },
+  textGo: {
+    color: 'white'
   }
 })
 export default SplashScreen
