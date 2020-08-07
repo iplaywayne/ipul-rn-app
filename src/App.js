@@ -9,18 +9,22 @@ import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
 
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-
 import { SignIn, SignUp } from './Screens'
 import { domain } from './constants'
+import { Center} from './components/Center'
+
 
 const Stack = createStackNavigator();
 
-
+const Home = () => (
+  <Center>
+    <Text>You are home</Text>
+  </Center>
+)
 
 const App: () => React$Node = () => {
   const [data, setData] = React.useState('Loading . .')
@@ -41,6 +45,7 @@ const App: () => React$Node = () => {
       <Stack.Navigator initialRouteName="Sign In">
         <Stack.Screen name="Sign In" component={SignIn} />
         <Stack.Screen name="Sign Up" component={SignUp} />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
