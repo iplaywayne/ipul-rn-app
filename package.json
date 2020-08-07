@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "clean": "yarn start --reset-cache && rm -rf /tmp/metro-*",
+    "clean": "rm -rf /tmp/metro-*",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start  --reset-cache",
     "test": "jest",
     "lint": "eslint .",
     "commit": "git add . && git commit -m 'yarn commit'",
@@ -14,6 +14,7 @@
     "bigpush": "yarn commit && yarn pushgit"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^8.3.0",
     "@react-native-firebase/auth": "^8.3.1",
