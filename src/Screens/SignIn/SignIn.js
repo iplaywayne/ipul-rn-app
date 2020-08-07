@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  SafeAreaView, StyleSheet, ScrollView, View,
+  SafeAreaView, StyleSheet, ScrollView, View, Image,
   Text, StatusBar, NativeModules, Button, TextInput
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
@@ -12,7 +12,7 @@ import '@react-native-firebase/auth'
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
 import { useStore, useStoreUpdate } from '../../utils/store'
-import { useAuth } from '../../App'
+import { useAuth } from '../../utils'
 
 
 const SignIn = (props) => {
@@ -37,22 +37,31 @@ const SignIn = (props) => {
 
   return (
     <Center>
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Sign in" onPress={() => {
-        auth.signIn({ username, password })
-        console.log(auth)
-      }
-      } />
+      <ScrollView>
+        <View style={{ flex: 1 }}>
+          <Image source={require('../../assets/images/ipul_logo_trans.png')}
+            style={{ width: 200, height: 200, marginTop: 60 }} />
+        </View>
+        <View style={{ flex: 2 }}>
+          <TextInput
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Button title="Sign in" onPress={() => {
+            auth.signIn({ username, password })
+            console.log(auth)
+          }
+          } />
+          <Button title="Sign up" onPress={() => navigation.push('Sign Up')} />
+        </View>
+      </ScrollView>
     </Center>
   )
 

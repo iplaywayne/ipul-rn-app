@@ -14,12 +14,20 @@ import {
 import { Store, useStore } from './utils/store'
 import { Center } from './components/Center'
 
+
 const AuthContext = React.createContext();
 export const useAuth = () => React.useContext(AuthContext)
 
-const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
+const AppStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-const MainNavigator = () => (
+
+const AppNavigator = () => (
+  <AppStack.Navigator>
+    <AppStack.Screen name='Home' component={DrawerNavigator} />
+  </AppStack.Navigator>
+)
+const DrawerNavigator = () => (
   <Drawer.Navigator initialRouteName="Home">
     <Drawer.Screen name="Home" component={HomeScreen} />
     <Drawer.Screen name="Dashboard" component={HomeScreen} />
@@ -28,6 +36,7 @@ const MainNavigator = () => (
     <Drawer.Screen name="Notifications" component={HomeScreen} />
   </Drawer.Navigator>
 )
+
 
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
@@ -77,7 +86,7 @@ export default function App({ navigation }) {
       // screen will be unmounted and thrown away.
       setTimeout(() => {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-      }, 0)
+      }, 250)
     };
 
     bootstrapAsync();
@@ -114,80 +123,22 @@ export default function App({ navigation }) {
     <NavigationContainer>
       <AuthContext.Provider value={authContext}>
         <Store>
-          <Stack.Navigator>
+          <AuthStack.Navigator>
             {state.userToken == null ? (
-              <Stack.Screen name="Sign In" component={SignInScreen}/>
+              <>
+                <AuthStack.Screen name="Sign In" component={SignInScreen} options={{
+                  title: 'Sign In',
+                  headerShown: false,
+                  animationTypeForReplace: state.userToken ? 'pop' : 'push'
+                }} />
+                <AuthStack.Screen name="Sign Up" component={SignUp} />
+              </>
             ) : (
-                <Stack.Screen name="Home" component={MainNavigator} />
+                <AuthStack.Screen name="Home" component={AppNavigator} />
               )}
-          </Stack.Navigator>
+          </AuthStack.Navigator>
         </Store>
       </AuthContext.Provider>
     </NavigationContainer>
   );
 }
-// import React from 'react';
-// import {
-//   SafeAreaView, StyleSheet, ScrollView, View,
-//   Text, StatusBar, NativeModules, Button
-// } from 'react-native';
-// import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
-
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
-
-// import { SignIn, SignUp, Tabs } from './Screens'
-// import { domain } from './constants'
-// import { Center } from './components/Center'
-// import { Store, useStore } from './utils/store'
-
-
-// const Stack = createStackNavigator();
-// const Drawer = createDrawerNavigator();
-
-
-// const Dashboard = () => (
-//   <Center>
-//     <Text>You are in Dashboard</Text>
-//   </Center>
-// )
-// const Explore = () => (
-//   <Center>
-//     <Text>You are in Explore</Text>
-//   </Center>
-// )
-
-
-// const HomeNavigator = () => (
-//   <Drawer.Navigator initialRouteName="Explore">
-//     <Drawer.Screen name="Dashboard" component={Dashboard} />
-//     <Drawer.Screen name="Explore" component={Explore} />
-//     <Drawer.Screen name="Media" component={Explore} />
-//     <Drawer.Screen name="Notifications" component={Explore} />
-//   </Drawer.Navigator>
-// )
-
-// const App = () => {
-//   const [userToken, setUserToken] = React.useState(null)
-
-//   return (
-//     <Store>
-//       <NavigationContainer>
-//         <Stack.Navigator initialRouteName="Sign In">
-//           {userToken == null ?
-//             (
-//               <Stack.Screen name="Sign In" component={SignIn} options={{
-//                 title: 'Sign In',
-//                 animationTypeForReplace: userToken ? 'pop' : 'push'
-//               }} />
-//             ) : (
-//               <Stack.Screen name="Home" component={HomeNavigator} />
-//             )}
-//         </Stack.Navigator>
-//       </NavigationContainer>
-//     </Store>
-//   );
-// };
-
-// export default App
