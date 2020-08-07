@@ -3,8 +3,8 @@
 .DS_Store
 .env
 /ios/iPlayuListenAssets
-/copies
 /ios_
+/copies
 
 # Xcode
 #
