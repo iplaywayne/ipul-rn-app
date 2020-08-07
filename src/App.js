@@ -10,6 +10,8 @@ import { SignIn as SignInScreen } from './screens/SignIn'
 import { SignUp as SignUpScreen } from './screens/SignUp'
 import { Home as HomeScreen } from './screens/Home'
 import { Explore as ExploreScreen } from './screens/Explore'
+import SplashScreen from './screens/SplashScreen/SplashScreen'
+
 
 import { Store, useStore } from './utils/store'
 import { Center } from './components/Center'
@@ -44,6 +46,10 @@ export default function () {
   const [authState, authDispatch] = useAuth()
   const { isLoading, userToken } = authState
 
+
+  return <SplashScreen />
+
+  
   if (isLoading) {
     return <Center><Text>Loading . .</Text></Center>
   }

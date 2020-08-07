@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Image,
-  Text, StatusBar, NativeModules, Button, TextInput
+  Text, StatusBar, NativeModules, Button, TextInput, 
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
