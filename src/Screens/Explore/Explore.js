@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text,SafeAreaView } from 'react-native'
 
 
 function Explore() {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Welcome to Explore</Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

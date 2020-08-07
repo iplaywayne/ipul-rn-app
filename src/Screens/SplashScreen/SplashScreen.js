@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import { Center } from '../../components/Center'
 const { width, height } = Dimensions.get('window')

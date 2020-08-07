@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { SignIn as SignInScreen } from './screens/SignIn'
 import { SignUp as SignUpScreen } from './screens/SignUp'
@@ -23,11 +24,9 @@ const AppStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => (
-  <Drawer.Navigator initialRouteName="Home">
-    <Drawer.Screen name="Home" component={HomeScreen} options={{
-      headerShown: false
-    }} />
-    <Drawer.Screen name="Dashboard" component={HomeScreen} />
+  <Drawer.Navigator>
+    <Drawer.Screen name="Home" component={AppStackNavigator}/>
+    <Drawer.Screen name="Dashboard" component={ExploreScreen} />
     <Drawer.Screen name="Explore" component={ExploreScreen} />
     <Drawer.Screen name="Media" component={ExploreScreen} />
     <Drawer.Screen name="Notifications" component={ExploreScreen} />
@@ -37,11 +36,11 @@ const DrawerNavigator = () => (
 const AppStackNavigator = () => (
   <AppStack.Navigator>
     <AppStack.Screen name="Home" component={HomeScreen} options={{
-      headerShown: false
-    }} />
-    <AppStack.Screen name="Explore" component={ExploreScreen} options={{
-      headerShown: false
-    }} />
+      title: 'Home',
+      headerTransparent: false,
+      // headerLeft: props => (<Icon />)
+    }}/>
+    <AppStack.Screen name="Explore" component={ExploreScreen}/>
   </AppStack.Navigator>
 )
 
@@ -49,12 +48,13 @@ export default function () {
   const [authState, authDispatch] = useAuth()
   const { isLoading, userToken } = authState
 
-  if (isLoading) {
-    return <Center><Text>Loading . .</Text></Center>
-  }
+
+  if (isLoading) return <Center><Text>Loading . .</Text></Center>
+  
 
   return (
     <NavigationContainer>
+
       {userToken == null ?
         <AuthStack.Navigator>
           <AuthStack.Screen name="SplashScreen" component={SplashScreen} options={{
@@ -65,8 +65,15 @@ export default function () {
             headerShown: false,
             animationTypeForReplace: userToken ? 'pop' : 'push'
           }} />
-          <AuthStack.Screen name="Sign Up" component={SignUpScreen} />
-        </AuthStack.Navigator> : <AppStackNavigator />}
+          <AuthStack.Screen name="Sign Up" component={SignUpScreen} options={{
+            // headerShown: false,
+            animationTypeForReplace: userToken ? 'pop' : 'push'
+          }} />
+        </AuthStack.Navigator> :
+
+        <DrawerNavigator />
+
+      }
     </NavigationContainer>
   )
 }
