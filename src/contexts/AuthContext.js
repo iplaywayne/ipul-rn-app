@@ -66,6 +66,9 @@ export default function AuthProvider({ children }) {
         usrRef.on('value', snap => {
           dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: snap.val() });
         })
+      } else {
+        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+
       }
     };
 
