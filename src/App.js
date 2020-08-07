@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View,
@@ -8,7 +9,17 @@ import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
 
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+
+import { SignIn, SignUp } from './Screens'
 import { domain } from './constants'
+
+const Stack = createStackNavigator();
+
 
 
 const App: () => React$Node = () => {
@@ -26,18 +37,12 @@ const App: () => React$Node = () => {
   }, [])
 
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          <Text>{JSON.stringify(data, null, 2)}</Text>
-          <Button title='Get Modules' onPress={getModules} />
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Sign In">
+        <Stack.Screen name="Sign In" component={SignIn} />
+        <Stack.Screen name="Sign Up" component={SignUp} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
