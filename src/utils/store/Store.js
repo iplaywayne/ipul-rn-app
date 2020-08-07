@@ -20,13 +20,9 @@ function reducer(state, action) {
 function Store({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState)
 
-  const test = () => {
-    console.log('Store tested and true.')
-  }
-
   return (
     <StoreContext.Provider value={[state, dispatch]}>
-      <StoreUpdateContext.Provider value={{ test }}>
+      <StoreUpdateContext.Provider value={{}}>
         {children}
       </StoreUpdateContext.Provider>
     </StoreContext.Provider>

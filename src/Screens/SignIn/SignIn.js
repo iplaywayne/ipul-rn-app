@@ -7,7 +7,7 @@ import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
-
+import { useTheme } from 'react-native-paper';
 
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
@@ -22,6 +22,7 @@ const SignIn = (props) => {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const auth = useAuth()
+  const { colors } = useTheme()
   // const [data, setData] = React.useState('Loading . .')
 
   // React.useEffect(() => {
@@ -37,7 +38,8 @@ const SignIn = (props) => {
 
   return (
     <Center>
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: colors.primary, width: '100%' }}
+        contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ flex: 1 }}>
           <Image source={require('../../assets/images/ipul_logo_trans.png')}
             style={{ width: 200, height: 200, marginTop: 60 }} />
