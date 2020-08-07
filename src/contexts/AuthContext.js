@@ -8,6 +8,7 @@ export const useAuth = () => React.useContext(AuthContext)
 
 
 export default function AuthProvider({ children }) {
+  const [authorizedUser, setAuthorizedUser] = React.useState(null)
 
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -17,6 +18,12 @@ export default function AuthProvider({ children }) {
             ...prevState,
             userToken: action.token,
             isLoading: false,
+            user: action.user
+          };
+        case 'SET_USER':
+          return {
+            ...prevState,
+            user: action.val,
           };
         case 'SIGN_IN':
           return {
@@ -29,6 +36,7 @@ export default function AuthProvider({ children }) {
             ...prevState,
             isSignout: true,
             userToken: null,
+            user: null
           };
       }
     },
@@ -46,15 +54,19 @@ export default function AuthProvider({ children }) {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('_iPUser_userToken');
-        if (userToken) console.log(`Registered [`, userToken, ']')
+        userToken = await AsyncStorage.getItem('_iPUser_UserToken');
       } catch (e) {
         // Restoring token failed
         console.warn(e)
       }
-      setTimeout(() => {
-        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-      }, 250)
+
+      if (userToken) {
+        console.log(`Registered [`, userToken, ']')
+        const usrRef = database.ref(`/users/${userToken}`)
+        usrRef.on('value', snap => {
+          dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: snap.val() });
+        })
+      }
     };
 
     bootstrapAsync();
@@ -68,17 +80,23 @@ export default function AuthProvider({ children }) {
           .then(async result => {
             try {
               console.log('ACCOUNT ONLINE [', result.user.uid, ']')
-              await AsyncStorage.setItem('_iPUser_userToken', result.user.uid);
+              await AsyncStorage.setItem('_iPUser_UserToken', result.user.uid);
               dispatch({ type: 'SIGN_IN', token: result.user.uid });
+
+              const usrRef = database.ref(`/users/${result.user.uid}`)
+              usrRef.on('value', snap => {
+                dispatch({ type: 'SET_USER', val: snap.val() })
+              })
             } catch (e) {
               // Restoring token failed
               console.warn(e)
             }
           })
       },
-      signOut: () => {
-        auth.signOut().then(_ => {
+      signOut: async () => {
+        auth.signOut().then(async _ => {
           console.log('ACCOUNT OFFLINE')
+          await AsyncStorage.removeItem('_iPUser_UserToken');
           dispatch({ type: 'SIGN_OUT' })
         })
       },
