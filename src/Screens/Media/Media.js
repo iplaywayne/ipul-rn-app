@@ -1,11 +1,12 @@
 import React from 'react'
 import {
   View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions, VirtualizedList, FlatList
+  Dimensions, VirtualizedList, FlatList, TouchableOpacity,
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
+import { TouchableRipple } from 'react-native-paper'
 import { firebase, database } from '../../utils/firebase'
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
@@ -79,32 +80,36 @@ function Explore() {
       <View style={styles.header}>
         <Image source={logo}
           style={styles.logo} resizeMode='cover' />
+        <Text style={{
+          zIndex: 1, top: 100, fontWeight: '700', color: 'white',
+          position: 'absolute'
+        }} h4>Media</Text>
 
-        <Text>Playground</Text>
+        {/* <MiniCard /> */}
+
+        <View style={styles.footer}>
+          <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text>
+          {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
+
+          <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
+            showsVerticalScrollIndicator={false}>
+            {tracks && tracks.map((itm, idx) => (
+              <TouchableRipple onPress={e => console.log(itm.title)} rippleColor="rgba(0, 0, 0, .32)">
+                <View key={idx}
+                  style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
+                  <Image source={itm.art_link ? { uri: itm.art_link } : logo}
+                    style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
+                    resizeMode='cover' />
+                  <Text style={{ color: 'white', marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
+                  <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
+                </View>
+              </TouchableRipple>
+            ))}
+
+          </ScrollView>
+        </View>
+
       </View>
-
-      {/* <MiniCard /> */}
-
-      <View style={styles.footer}>
-        <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text>
-        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-
-        <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
-          showsVerticalScrollIndicator={false}>
-          {tracks && tracks.map((itm, idx) => (
-            <View key={idx}
-              style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
-              <Image source={itm.art_link ? { uri: itm.art_link } : logo}
-                style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
-                resizeMode='cover' />
-              <Text style={{ color: 'white', marginVertical: 10, marginRight: 10, fontWeight: '700' }}>{itm.artist}</Text>
-              <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
-            </View>
-          ))}
-
-        </ScrollView>
-      </View>
-
 
     </ScrollView>
   )
@@ -127,6 +132,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 20,
     marginTop: 20,
+  },
+  header: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footer: {
     flex: 1,
