@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions, VirtualizedList, FlatList, TouchableOpacity,
+  Dimensions, VirtualizedList, FlatList, TouchableOpacity, StatusBar
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -76,7 +76,8 @@ function Explore() {
   }, [])
 
   return (
-    <ScrollView style={styles.root}>
+    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+
       <View style={styles.header}>
         <Image source={logo}
           style={styles.logo} resizeMode='cover' />
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     width: width,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     padding: 20,
     marginTop: 20,

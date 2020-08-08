@@ -10,6 +10,7 @@ import { SignIn as SignInScreen } from '../../screens/SignIn'
 import { SignUp as SignUpScreen } from '../../screens/SignUp'
 import { Home as HomeScreen } from '../../screens/Home'
 import { Explore as ExploreScreen } from '../../screens/Explore'
+import { Profile as ProfileScreen } from '../../screens/Profile'
 import SplashScreen from '../../screens/SplashScreen/SplashScreen'
 import DrawerContent from './DrawerContent'
 
@@ -30,8 +31,9 @@ const NavigationDrawerStructure = (props) => {
 
 const AppStackNavigator = ({ navigation }) => (
   <AppStack.Navigator>
-    <AppStack.Screen name="Home" component={HomeScreen} options={{
+    <AppStack.Screen name="Home" component={ProfileScreen} options={{
       title: 'iPlayuListen',
+      headerShown: false,
       headerTransparent: false,
       headerLeft: props => (
         <NavigationDrawerStructure

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image } from 'react-native'
+import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image,StatusBar } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 
@@ -15,6 +15,7 @@ function Home({ navigation }) {
 
   return (
     <ScrollView style={styles.root}>
+
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     padding: 20,
     marginTop: 20,

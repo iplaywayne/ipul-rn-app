@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "11": "react-native run-ios --device 'SiPhone11'",
+    "xr": "react-native run-ios --device 'SiPhoneXr'",
     "clean": "rm -rf /tmp/metro-*",
     "android": "react-native run-android",
     "ios": "react-native run-ios",

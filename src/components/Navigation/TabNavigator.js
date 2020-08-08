@@ -10,6 +10,8 @@ import { Explore as ExploreScreen } from '../../screens/Explore'
 import { Media as MediaScreen } from '../../screens/Media'
 import { Profile as ProfileScreen } from '../../screens/Profile'
 import SplashScreen from '../../screens/SplashScreen/SplashScreen'
+import DrawerNavigator from './DrawerNavigator'
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -53,7 +55,7 @@ const TabNavigator = () => (
     />
     <Tab.Screen
       name="Profile"
-      component={ProfileScreen}
+      component={DrawerNavigator}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: ({ color }) => (
