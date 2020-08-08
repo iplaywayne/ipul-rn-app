@@ -86,18 +86,18 @@ function Explore() {
       {/* <MiniCard /> */}
 
       <View style={styles.footer}>
-        <Text style={{ color: 'white' }} h5>Playground</Text>
-        <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
+        <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text>
+        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
 
-        <ScrollView style={{ height: 'auto', paddingVertical: 30 }}
+        <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
           showsVerticalScrollIndicator={false}>
           {tracks && tracks.map((itm, idx) => (
             <View key={idx}
               style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
               <Image source={itm.art_link ? { uri: itm.art_link } : logo}
-                style={{ height: 50, width: 50, marginRight: 15 }}
+                style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
                 resizeMode='cover' />
-              <Text style={{ color: 'white', marginVertical: 10 }}>{itm.artist}</Text>
+              <Text style={{ color: 'white', marginVertical: 10, marginRight: 10, fontWeight: '700' }}>{itm.artist}</Text>
               <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
             </View>
           ))}
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 20,
-    paddingBottom: 50,
+    paddingBottom: 120,
     paddingHorizontal: 30,
     height: height - 200,
     marginTop: -40
