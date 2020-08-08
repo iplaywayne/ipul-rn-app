@@ -1,6 +1,0 @@
-module Pods_iPlayuListen_iPlayuListenTests {
-  umbrella header "Pods-iPlayuListen-iPlayuListenTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
