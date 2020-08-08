@@ -6,6 +6,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
 import MiniCard from '../../components/Media/MiniCard'
+import ExploreCard from '../../components/Explore/ExploreCard'
 
 function Home({ navigation }) {
   const auth = useAuth()
@@ -13,26 +14,41 @@ function Home({ navigation }) {
   const name = (user && user.name) ?? null
 
   return (
-    <SafeAreaView style={styles.root}>
-      <ScrollView>
-        <View>
-          <Text style={styles.title}>Welcome, {name}</Text>
-        </View>
+    <ScrollView style={styles.root}>
+      <View>
+        <Text style={styles.title}>Welcome, {name}</Text>
+      </View>
 
-        <MiniCard />
-
-        <View>
-          {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-          {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-        </View>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginLeft: 15, marginBottom: 15, flexDirection: 'row' }}>
+        {[0, 1, 2, 3, 4].map((itm, idx) => (
+          <MiniCard key={idx}/>
+        ))}
       </ScrollView>
-    </SafeAreaView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginLeft: 15, marginBottom: 15, flexDirection: 'row' }}>
+        {[0, 1, 2, 3, 4].map((itm, idx) => (
+          <MiniCard key={idx} />
+        ))}
+      </ScrollView>
+
+
+
+      <View>
+        <ExploreCard />
+      </View>
+
+      <View>
+        {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
+        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
+      </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
+    paddingVertical: 30,
     flex: 1,
   },
   title: {
@@ -44,8 +60,8 @@ const styles = StyleSheet.create({
   miniCard: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 150,
     marginTop: 10,
     marginLeft: 20,
     borderRadius: 5

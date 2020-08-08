@@ -51,16 +51,6 @@ function MiniCard() {
             <GalText style={{ padding: 15 }}>Artist name</GalText>
           </View>
         </View>
-        <View style={styles.miniCard}>
-          <View style={styles.miniCardImage}>
-            <Image
-              source={require('../../assets/images/iPlay2020Logo.png')}
-              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
-          </View>
-          <View style={styles.miniCardText}>
-            <GalText style={{ padding: 15 }}>Artist name</GalText>
-          </View>
-        </View>
       </ScrollView>
     </View>
   )
@@ -80,15 +70,18 @@ const styles = StyleSheet.create({
   miniCard: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 150,
     marginTop: 10,
-    marginLeft: 20,
-    borderRadius: 5
+    marginLeft: 10,
+    borderRadius: 10
   },
   miniCardImage: {
     flex: 3,
     overflow: 'hidden',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+
   },
   miniCardText: {
     flex: 1

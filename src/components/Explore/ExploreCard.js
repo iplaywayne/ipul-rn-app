@@ -33,26 +33,29 @@ const Swiper = () => (
   </View>
 )
 
-function MiniCard() {
+function ExploreSwiper() {
   const auth = useAuth()
   const [{ user }] = auth
   const { name, avatar, details } = user || 'N/A'
   return (
-    <ScrollView horizontal={true}>
+    <ScrollView>
       <View style={styles.root}>
-        <Card
-          flex
-          borderless
-          shadow={true}
-          style={{ padding: 5 }}
-          title={name}
-          caption="139 minutes ago"
-          location={details.firstName}
-          avatar={avatar}
-          imageStyle={{ borderRadius: 10 }}
-          imageBlockStyle={{ padding: 2 }}
-          image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
-        />
+        {[0, 1].map((itm, idx) => (
+          <Card
+            key={idx}
+            flex
+            borderless
+            shadow={true}
+            style={{ padding: 5, marginBottom: 15 }}
+            title={name}
+            caption="139 minutes ago"
+            location={details.firstName}
+            avatar={avatar}
+            imageStyle={{ borderRadius: 10 }}
+            imageBlockStyle={{ padding: 2 }}
+            image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
+          />
+        ))}
       </View>
     </ScrollView>
   )
@@ -62,7 +65,6 @@ const styles = StyleSheet.create({
   root: {
     padding: 10,
     flex: 1,
-    width: 320,
   },
   title: {
     fontSize: 20,
@@ -87,4 +89,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MiniCard
+export default ExploreSwiper

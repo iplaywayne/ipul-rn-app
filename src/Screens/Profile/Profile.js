@@ -23,8 +23,6 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      {/* <Text style={styles.title}>Profile</Text> */}
-
       <View style={{ flex: 2, marginTop: 10 }}>
         <View style={{ marginVertical: 30, marginLeft: 20, flexDirection: 'row' }}>
           <Avatar.Image size={100} source={logo} />
@@ -34,8 +32,6 @@ function Explore() {
           </View>
         </View>
       </View>
-
-
 
       {/* <View>
           <Text>{JSON.stringify(auth, null, 2)}</Text>

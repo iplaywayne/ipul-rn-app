@@ -5,31 +5,32 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
-import MiniCard from '../../components/Media/MiniCard'
+import ExploreCard from '../../components/Explore/ExploreCard'
 
 
 function Explore() {
+  const [authState, authDispatch] = useAuth()
+
+
   return (
-    <SafeAreaView style={styles.root}>
-      <ScrollView>
+      <ScrollView style={styles.root}>
         <View>
           <Text style={styles.title}>Explore iPlayuListen</Text>
         </View>
 
-        <MiniCard />
+        <ExploreCard />
 
         <View>
           {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
           {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
         </View>
       </ScrollView>
-    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
+    paddingTop: 30,
     flex: 1,
   },
   title: {
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
   miniCard: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 150,
     marginTop: 10,
     marginLeft: 20,
     borderRadius: 5
