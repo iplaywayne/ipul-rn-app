@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    padding: 20
+    padding: 20,
+    marginTop: 20,
   },
   miniCard: {
     borderWidth: 1,

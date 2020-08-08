@@ -1,8 +1,10 @@
 import React from 'react'
-import { View, Text,TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { DrawerItem, createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { SignIn as SignInScreen } from '../../screens/SignIn'
 import { SignUp as SignUpScreen } from '../../screens/SignUp'
@@ -16,20 +18,11 @@ const Drawer = createDrawerNavigator();
 
 const NavigationDrawerStructure = (props) => {
   //Structure for the navigation Drawer
-  const toggleDrawer = () => {
-    //Props to open/close the drawer
-    props.navigationProps.toggleDrawer();
-  };
-
+  const toggleDrawer = () => props.navigationProps.toggleDrawer();
   return (
     <View style={{ flexDirection: 'row' }}>
       <TouchableOpacity onPress={() => toggleDrawer()}>
-        {/*Donute Button Image */}
         {props.icon}
-        {/* <Image
-          source={{ uri: 'https://www.iplayulisten.com/ipul-logo-2020.png' }}
-          style={{ width: 25, height: 25, marginLeft: 5 }}
-        /> */}
       </TouchableOpacity>
     </View>
   );
@@ -49,7 +42,7 @@ const AppStackNavigator = ({ navigation }) => (
       headerRight: props => (
         <NavigationDrawerStructure
           navigationProps={navigation}
-          icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
+          icon={<Icon name='arrow-right' size={25} style={{ marginRight: 20 }} />}
         />
       )
     }} />

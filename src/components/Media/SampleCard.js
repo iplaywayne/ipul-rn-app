@@ -37,33 +37,41 @@ function MiniCard() {
   const auth = useAuth()
   const [{ user }] = auth
   const { name, avatar, details } = user || 'N/A'
-
   return (
-    <View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.miniCard}>
-          <View style={styles.miniCardImage}>
-            <Image
-              source={require('../../assets/images/iPlay2020Logo.png')}
-              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
-          </View>
-          <View style={styles.miniCardText}>
-            <GalText style={{ padding: 15 }}>Artist name</GalText>
-          </View>
-        </View>
-        <View style={styles.miniCard}>
-          <View style={styles.miniCardImage}>
-            <Image
-              source={require('../../assets/images/iPlay2020Logo.png')}
-              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
-          </View>
-          <View style={styles.miniCardText}>
-            <GalText style={{ padding: 15 }}>Artist name</GalText>
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+    <ScrollView horizontal={true}>
+      <View style={styles.root}>
+        <Card
+          flex
+          borderless
+          shadow={true}
+          style={{ padding: 5 }}
+          title={name}
+          caption="139 minutes ago"
+          location={details.firstName}
+          avatar={avatar}
+          imageStyle={{ borderRadius: 10 }}
+          imageBlockStyle={{ padding: 2 }}
+          image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
+        />
+      </View>
+    </ScrollView>
   )
+  // return (
+  //   <View>
+  //     <ScrollView horizontal={true}>
+  //       <View style={styles.miniCard}>
+  //         <View style={styles.miniCardImage}>
+  //           <Image
+  //             source={require('../../assets/images/iPlay2020Logo.png')}
+  //             style={{ height: '100%', width: '100%' }} resizeMode='cover' />
+  //         </View>
+  //         <View style={styles.miniCardText}>
+  //           <GalText>Demooo</GalText>
+  //         </View>
+  //       </View>
+  //     </ScrollView>
+  //   </View>
+  // )
 }
 
 const styles = StyleSheet.create({
