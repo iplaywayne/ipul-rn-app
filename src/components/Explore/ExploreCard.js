@@ -34,9 +34,10 @@ const Swiper = () => (
 )
 
 function ExploreSwiper() {
-  const auth = useAuth()
-  const [{ user }] = auth
-  const { name, avatar, details } = user || 'N/A'
+  const [authState, authDispatch] = useAuth()
+  const { user } = authState
+  const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+
   return (
     <ScrollView>
       <View style={styles.root}>

@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions, VirtualizedList,FlatList
+  Dimensions, VirtualizedList, FlatList
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -34,7 +34,7 @@ const Item = ({ title }) => {
 
 function Explore() {
   const [authState, authDispatch] = useAuth()
-  
+
   return (
     <ScrollView style={styles.root}>
       <View>
@@ -53,19 +53,20 @@ function Explore() {
           getItemCount={getItemCount}
           getItem={getItem}
         /> */}
+        <View>
+          {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
+          <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
+        </View>
       </View>
 
-      <View>
-        {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-        <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
-      </View>
+
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 30,
+    paddingVertical: 30,
     flex: 1,
   },
   title: {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingVertical: 50,
     paddingHorizontal: 30,
-    height: height,
+    height: height - 350,
     marginTop: 40
   },
   miniCard: {

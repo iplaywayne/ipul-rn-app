@@ -17,9 +17,9 @@ const { width, height } = Dimensions.get('window')
 
 
 function Explore() {
-  const [authState,authDispatch] = useAuth()
+  const [authState, authDispatch] = useAuth()
   const { user } = authState
-  const { name, website, avatar } = user
+  const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
@@ -31,6 +31,11 @@ function Explore() {
             <Text>{website || 'Brand'}</Text>
           </View>
         </View>
+      </View>
+
+      <View>
+        <Text style={styles.title}>Your favorites</Text>
+        <Text style={{ fontSize: 20, paddingLeft: 25 }}>is coming . .</Text>
       </View>
 
       {/* <View>
@@ -63,7 +68,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     padding: 20,
-    marginTop: 20,
   },
   miniCard: {
     borderWidth: 1,
