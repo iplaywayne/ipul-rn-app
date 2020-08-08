@@ -1,10 +1,15 @@
+# CUSTOM
+#
+
 # OSX
 #
 .DS_Store
 .env
 /ios/iPlayuListenAssets
 /ios_
-/copies
+
+# Whoa
+
 
 # Xcode
 #
@@ -35,6 +40,7 @@ local.properties
 
 # node.js
 #
+
 node_modules/
 npm-debug.log
 yarn-error.log
@@ -61,3 +67,4 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+/__tests__/
