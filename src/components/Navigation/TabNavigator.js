@@ -10,6 +10,8 @@ import { SignIn as SignInScreen } from '../../screens/SignIn'
 import { SignUp as SignUpScreen } from '../../screens/SignUp'
 import { Home as HomeScreen } from '../../screens/Home'
 import { Explore as ExploreScreen } from '../../screens/Explore'
+import { Media as MediaScreen } from '../../screens/Media'
+import { Profile as ProfileScreen } from '../../screens/Profile'
 import SplashScreen from '../../screens/SplashScreen/SplashScreen'
 
 const Tab = createMaterialBottomTabNavigator();
@@ -44,7 +46,7 @@ const TabNavigator = () => (
     />
     <Tab.Screen
       name="Media"
-      component={ExploreScreen}
+      component={MediaScreen}
       options={{
         tabBarLabel: 'Media',
         tabBarIcon: ({ color }) => (
@@ -54,7 +56,7 @@ const TabNavigator = () => (
     />
     <Tab.Screen
       name="Profile"
-      component={ExploreScreen}
+      component={ProfileScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: ({ color }) => (

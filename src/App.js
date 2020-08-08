@@ -10,7 +10,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import { SignIn as SignInScreen } from './screens/SignIn'
 import { SignUp as SignUpScreen } from './screens/SignUp'
-import DrawerContent from './components/Drawer/DrawerContent'
 import DrawerNavigator from './components/Drawer/DrawerNavigator'
 import TabNavigator from './components/Navigation/TabNavigator'
 

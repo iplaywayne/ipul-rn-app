@@ -13,7 +13,7 @@ function Explore() {
     <SafeAreaView style={styles.root}>
       <ScrollView>
         <View>
-          <Text style={styles.title}>Explore iPlayuListen</Text>
+          <Text style={styles.title}>Playground</Text>
         </View>
 
         <MiniCard />
