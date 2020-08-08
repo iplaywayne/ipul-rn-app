@@ -57,7 +57,7 @@ function Explore() {
 
       <View>
         {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-        <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
+        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
       </View>
     </ScrollView>
   )
