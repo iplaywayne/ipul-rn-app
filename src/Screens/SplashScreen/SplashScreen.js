@@ -13,8 +13,8 @@ function SplashScreen({ navigation }) {
         <Image source={require('../../assets/images/ipul_logo_trans.png')}
           style={styles.logo} />
         <Text style={styles.text}>Welcome to iPlayuListen</Text></View>
+      
       <View style={styles.footer}>
-
         <Text style={styles.title}>New sounds on the rise!</Text>
         <Text style={styles.text}>We're all about creative arts</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Sign In')}>

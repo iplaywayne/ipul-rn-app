@@ -1,11 +1,11 @@
 import React from 'react'
 import {
-  View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image,
+  View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
   Dimensions, VirtualizedList, FlatList
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
-
+import { Text } from 'galio-framework'
 import { firebase, database } from '../../utils/firebase'
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
@@ -76,14 +76,17 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root}>
-      <View>
-        <Text style={styles.title}>Playground</Text>
+      <View style={styles.header}>
+        <Image source={logo}
+          style={styles.logo} resizeMode='cover' />
+
+        <Text>Playground</Text>
       </View>
 
-      <MiniCard />
+      {/* <MiniCard /> */}
 
       <View style={styles.footer}>
-        <Text style={{ color: 'white' }}>Your favorites are coming</Text>
+        <Text style={{ color: 'white' }} h5>Playground</Text>
         <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
 
         <ScrollView style={{ height: 'auto', paddingVertical: 30 }}
@@ -109,8 +112,15 @@ function Explore() {
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: 30,
+    // paddingVertical: 30,
+    backgroundColor: '#121212',
     flex: 1,
+  },
+  logo: {
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    height: height * .3,
+    width: width,
   },
   title: {
     fontSize: 24,
@@ -123,10 +133,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingVertical: 50,
+    paddingTop: 20,
+    paddingBottom: 50,
     paddingHorizontal: 30,
-    height: height - 350,
-    marginTop: 40
+    height: height - 200,
+    marginTop: -40
   },
   miniCard: {
     borderWidth: 1,
