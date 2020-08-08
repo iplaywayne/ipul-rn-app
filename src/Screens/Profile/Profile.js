@@ -1,27 +1,35 @@
 import React from 'react'
-import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image } from 'react-native'
+import { View, Button, SafeAreaView, ScrollView, StyleSheet, Image } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import { Avatar } from 'react-native-paper'
+import { Text } from 'galio-framework'
 
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
 import MiniCard from '../../components/Media/MiniCard'
 
+const logo = require('../../assets/images/iPlay2020Logo.png')
 
 function Explore() {
+  const auth = useAuth()
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView>
-        <View>
-          <Text style={styles.title}>Profile</Text>
+        {/* <Text style={styles.title}>Profile</Text> */}
+
+        <View style={{ marginTop: 30, marginLeft: 20, flexDirection: 'row' }}>
+          <Avatar.Image size={100} source={logo} />
+          <View style={{ marginLeft: 15, marginTop: 21 }}>
+            <Text h5>Name</Text>
+            <Text h6>Website</Text>
+          </View>
         </View>
 
-        <MiniCard />
-
-        <View>
-          {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-          {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-        </View>
+        {/* <View>
+          <Text>{JSON.stringify(auth, null, 2)}</Text>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   )
