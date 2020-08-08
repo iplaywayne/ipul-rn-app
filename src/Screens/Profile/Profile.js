@@ -11,15 +11,27 @@ import { Text } from 'galio-framework'
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
 import MiniCard from '../../components/Media/MiniCard'
+import { firebase, database } from '../../utils/firebase'
 
 const logo = require('../../assets/images/iPlay2020Logo.png')
 const { width, height } = Dimensions.get('window')
 
+const getTracks = cb => {
+  const trkRef = firebase.database().ref(`/mediaTracks`)
+  trkRef.on('value', snap => {
+    cb(snap.val())
+  })
+}
 
 function Explore() {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
+  const [tracks, setTracks] = React.useState(null) 
+  
+  React.useEffect(() => {
+    getTracks(result => setTracks(result))
+  }, [])
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>

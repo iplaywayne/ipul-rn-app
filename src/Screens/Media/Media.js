@@ -6,24 +6,53 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 
+import { firebase, database } from '../../utils/firebase'
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
 import MiniCard from '../../components/Media/MiniCard'
 
 const { width, height } = Dimensions.get('window')
-const DATA = [];
+const logo = require('../../assets/images/iPlay2020Logo.png')
 
+export const trimWWWString = string => {
+  if (!string) return null
+  if (!string.includes('www.iplayulisten')) return string
+  try {
+    let filtered = string.toString().replace(/www\./i, '').toLowerCase()
+    if (string.includes('iplayulisten')) {
+      filtered = string.toString().replace(/www\./i, '').toLowerCase()
+    }
+    return filtered
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+const getTracks = cb => {
+  const trkRef = firebase.database().ref(`/mediaTracks`)
+  trkRef.on('value', snap => {
+    let list = []
+    snap.forEach(child => {
+      list.push({
+        ...child.val(),
+        art_link: trimWWWString(child.val().art_link),
+        song: trimWWWString(child.val().song),
+      })
+    })
+    cb(list)
+  })
+}
+
+const DATA = [];
 const getItem = (data, index) => {
   return {
     id: Math.random().toString(12).substring(0),
     title: `Item ${index + 1}`
   }
 }
-
 const getItemCount = (data) => {
   return 50;
 }
-
 const Item = ({ title }) => {
   return (
     <View style={styles.item}>
@@ -32,8 +61,18 @@ const Item = ({ title }) => {
   );
 }
 
+
 function Explore() {
   const [authState, authDispatch] = useAuth()
+  const [tracks, setTracks] = React.useState(null)
+
+  React.useEffect(() => {
+
+    getTracks(result => {
+      setTracks(result)
+      console.log('boom!', result.length)
+    })
+  }, [])
 
   return (
     <ScrollView style={styles.root}>
@@ -45,18 +84,22 @@ function Explore() {
 
       <View style={styles.footer}>
         <Text style={{ color: 'white' }}>Your favorites are coming</Text>
-        {/* <VirtualizedList
-          data={DATA}
-          initialNumToRender={4}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={item => item.key}
-          getItemCount={getItemCount}
-          getItem={getItem}
-        /> */}
-        <View>
-          {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-          <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
-        </View>
+        <Button title='Sign Out' onPress={() => authDispatch.signOut()} />
+
+        <ScrollView style={{ height: 'auto', paddingVertical: 30 }}
+          showsVerticalScrollIndicator={false}>
+          {tracks && tracks.map((itm, idx) => (
+            <View key={idx}
+              style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
+              <Image source={itm.art_link ? { uri: itm.art_link } : logo}
+                style={{ height: 50, width: 50, marginRight: 15 }}
+                resizeMode='cover' />
+              <Text style={{ color: 'white', marginVertical: 10 }}>{itm.artist}</Text>
+              <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
+            </View>
+          ))}
+
+        </ScrollView>
       </View>
 
 
