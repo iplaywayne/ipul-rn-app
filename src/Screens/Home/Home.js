@@ -1,39 +1,40 @@
 import React from 'react'
-import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image,StatusBar } from 'react-native'
+import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 
-import { Center } from '../../components/Center'
-import { useAuth } from '../../contexts/AuthContext'
-import MiniCard from '../../components/Media/MiniCard'
-import ExploreCard from '../../components/Explore/ExploreCard'
+import { Center, MiniCard, ExploreCard } from '../../components'
+import { useAuth, useStore } from '../../contexts'
+import { MediaService } from '../../utils'
 
 function Home({ navigation }) {
-  const auth = useAuth()
-  const [{ user }, authDispatch] = useAuth()
+  const [authState, authDispatch] = useAuth()
+  const [storeState, storeDispatch] = useStore()
+  const { tracks } = storeState
+  const { user } = authState
   const name = (user && user.name) ?? null
+  const mediaService = MediaService()
 
   return (
-    <ScrollView style={styles.root}>
+    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginLeft: 15, marginBottom: 15, flexDirection: 'row' }}>
-        {[0, 1, 2, 3, 4].map((itm, idx) => (
-          <MiniCard key={idx}/>
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        {tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginLeft: 15, marginBottom: 15, flexDirection: 'row' }}>
-        {[0, 1, 2, 3, 4].map((itm, idx) => (
-          <MiniCard key={idx} />
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        {tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
-
-
 
       <View>
         <ExploreCard />

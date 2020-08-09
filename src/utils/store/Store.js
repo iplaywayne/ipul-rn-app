@@ -1,16 +1,20 @@
 import React from 'react';
 
 const StoreContext = React.createContext({})
-const StoreUpdateContext = React.createContext({})
 export const useStore = () => React.useContext(StoreContext)
-export const useStoreUpdate = () => React.useContext(StoreUpdateContext)
 
-const initialState = { name: 'Stylz' }
+
+const SET_TRACKS = 'SET_TRACKS'
+
+const initialState = {
+  name: 'Stylz',
+  tracks: [],
+}
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'new':
-      return { name: 'Wayne' };
+    case SET_TRACKS:
+      return { ...state, tracks: action.val };
     default:
       throw new Error();
   }
@@ -20,11 +24,15 @@ function reducer(state, action) {
 function StoreProvider({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState)
 
+  const storeDispatch =  {
+    setTracks: tracks => dispatch({ type: SET_TRACKS, val: tracks })
+    
+  }
+
+
   return (
-    <StoreContext.Provider value={[state, dispatch]}>
-      <StoreUpdateContext.Provider value={{}}>
-        {children}
-      </StoreUpdateContext.Provider>
+    <StoreContext.Provider value={[state, storeDispatch]}>
+      {children}
     </StoreContext.Provider>
   )
 }

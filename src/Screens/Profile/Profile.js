@@ -8,62 +8,67 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Avatar } from 'react-native-paper'
 import { Text } from 'galio-framework'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Divider } from 'react-native-paper'
 
+import { Center, MiniCard } from '../../components'
+import { useAuth, useStore } from '../../contexts'
+import { MediaService } from '../../utils'
+import { logo, width, height } from '../../constants'
 
-import { Center } from '../../components/Center'
-import { useAuth } from '../../contexts/AuthContext'
-import MiniCard from '../../components/Media/MiniCard'
-import { firebase, database } from '../../utils/firebase'
-
-const logo = require('../../assets/images/iPlay2020Logo.png')
-const { width, height } = Dimensions.get('window')
-
-const getTracks = cb => {
-  const trkRef = firebase.database().ref(`/mediaTracks`)
-  trkRef.on('value', snap => {
-    cb(snap.val())
-  })
-}
 
 function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
+  const [storeState, storeDispatch] = useStore()
   const { user } = authState
   const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
-  const [tracks, setTracks] = React.useState(null)
+  const [tracks, setTracks] = React.useState({})
+  const [favorites, setFavorites] = React.useState({})
+  const mediaService = MediaService()
 
   React.useEffect(() => {
-    getTracks(result => setTracks(result))
-    // navigation.toggleDrawer()
+    mediaService.getTracks(result => setTracks(result))
+    mediaService.getFavorites(user.uid, result => {
+      console.log('[FAVORITES]', user.uid, result)
+    })
   }, [])
+
+  const getEm = () => {
+    mediaService.debug()
+  }
+
+
+  if (!tracks.length) return null
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <StatusBar barStyle='dark-content' />
 
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}
-        style={{ alignItems: 'flex-end',margin:40 }}>
-        <Text><Icon name='dots-horizontal' size={35} style={{ padding: 5 }}/></Text>
+        style={{ alignItems: 'flex-end', margin: 30 }}>
+        <Text style={{ padding: 10 }}><Icon name='dots-horizontal' size={35} /></Text>
       </TouchableOpacity>
 
-      <View style={{ flex: 2, marginTop: -60 }}>
+      <View style={{ flex: 2, marginTop: -40 }}>
         <View style={{ marginBottom: 30, marginLeft: 20, flexDirection: 'row' }}>
           <Avatar.Image size={100} source={logo} />
           <View style={{ marginLeft: 15, marginTop: 25 }}>
             <Text h6>{name}</Text>
             <Text>{website || 'Brand'}</Text>
           </View>
-
         </View>
       </View>
 
-      <View>
-        <Text style={styles.title}>Your favorites</Text>
-        <Text style={{ fontSize: 20, paddingLeft: 25 }}>is coming . .</Text>
-      </View>
+      <Divider />
+      
+      {favorites && favorites.length > 0 ?
+        <View>
+          <Text style={styles.title}>Your favorites</Text>
+          <Text style={{ fontSize: 20, paddingLeft: 25 }}>You have {tracks.length} favorites</Text>
+        </View> :
+        <Button title='Ready' onPress={() => getEm()} />}
 
-      {/* <View>
-          <Text>{JSON.stringify(auth, null, 2)}</Text>
-        </View> */}
+      <View>
+        <Text>{JSON.stringify(storeState, null, 2)}</Text>
+      </View>
     </ScrollView>
   )
 }

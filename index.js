@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppRegistry,LogBox } from 'react-native';
+import TrackPlayer from 'react-native-track-player'
 
 import App from './src/App';
 import { name as appName } from './app.json';
@@ -20,3 +21,4 @@ export default function Main() {
 }
 
 AppRegistry.registerComponent(appName, () => Main);
+TrackPlayer.registerPlaybackService(() => require('./service.js'));

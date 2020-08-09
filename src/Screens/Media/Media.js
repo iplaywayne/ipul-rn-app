@@ -7,42 +7,13 @@ import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { TouchableRipple } from 'react-native-paper'
-import { firebase, database } from '../../utils/firebase'
-import { Center } from '../../components/Center'
-import { useAuth } from '../../contexts/AuthContext'
-import MiniCard from '../../components/Media/MiniCard'
 
-const { width, height } = Dimensions.get('window')
-const logo = require('../../assets/images/iPlay2020Logo.png')
+import { firebase, database, MediaService } from '../../utils'
+import { Center, MiniCard } from '../../components'
+import { useAuth, useStore } from '../../contexts'
+import { logo, width, height } from '../../constants'
 
-export const trimWWWString = string => {
-  if (!string) return null
-  if (!string.includes('www.iplayulisten')) return string
-  try {
-    let filtered = string.toString().replace(/www\./i, '').toLowerCase()
-    if (string.includes('iplayulisten')) {
-      filtered = string.toString().replace(/www\./i, '').toLowerCase()
-    }
-    return filtered
-  } catch (e) {
-    console.log(e)
-  }
-}
 
-const getTracks = cb => {
-  const trkRef = firebase.database().ref(`/mediaTracks`)
-  trkRef.on('value', snap => {
-    let list = []
-    snap.forEach(child => {
-      list.push({
-        ...child.val(),
-        art_link: trimWWWString(child.val().art_link),
-        song: trimWWWString(child.val().song),
-      })
-    })
-    cb(list)
-  })
-}
 
 const DATA = [];
 const getItem = (data, index) => {
@@ -65,18 +36,12 @@ const Item = ({ title }) => {
 
 function Explore() {
   const [authState, authDispatch] = useAuth()
-  const [tracks, setTracks] = React.useState(null)
+  const [storeState, storeDispatch] = useStore()
+  const { tracks } = storeState
 
-  React.useEffect(() => {
-    if (!tracks) {
-      getTracks(result => {
-        setTracks(result)
-        console.log('boom!', result.length)
-      })
-    }
-  }, [])
-
-  if (!tracks) return <ActivityIndicator />
+  if (!tracks) return <ActivityIndicator
+    style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
+  />
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
@@ -97,8 +62,8 @@ function Explore() {
           <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
             showsVerticalScrollIndicator={false}>
             {tracks && tracks.map((itm, idx) => (
-              <TouchableOpacity onPress={e => console.log(itm.title)} rippleColor="rgba(0, 0, 0, .32)">
-                <View key={idx}
+              <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
+                <View
                   style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
                   <Image source={itm.art_link ? { uri: itm.art_link } : logo}
                     style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
@@ -108,7 +73,6 @@ function Explore() {
                 </View>
               </TouchableOpacity>
             ))}
-
           </ScrollView>
         </View>
 

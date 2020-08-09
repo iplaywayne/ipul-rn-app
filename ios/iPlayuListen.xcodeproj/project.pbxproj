@@ -61,6 +61,7 @@
 		086A79CA24DE06FB0055D4F7 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		086A79CB24DE06FB0055D4F7 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		086A79CC24DE06FB0055D4F7 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		08E66C5E24DF976E00D150C0 /* iPlayuListen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iPlayuListen.entitlements; path = iPlayuListen/iPlayuListen.entitlements; sourceTree = "<group>"; };
 		08FBC53B24DDDE05005BDC41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "iPlayuListenAssets/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		120D421D8F71C3B47CD5C6A2 /* Pods-iPlayuListen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPlayuListen.debug.xcconfig"; path = "Target Support Files/Pods-iPlayuListen/Pods-iPlayuListen.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* iPlayuListen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPlayuListen.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +183,7 @@
 		13B07FAE1A68108700A75B9A /* iPlayuListen */ = {
 			isa = PBXGroup;
 			children = (
+				08E66C5E24DF976E00D150C0 /* iPlayuListen.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -777,7 +779,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = iPlayuListen/iPlayuListen.entitlements;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = HZ2U998S54;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iPlayuListen/Info.plist;
@@ -789,8 +792,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iplayulisten.app;
 				PRODUCT_NAME = iPlayuListen;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -801,7 +806,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = iPlayuListen/iPlayuListen.entitlements;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = HZ2U998S54;
 				INFOPLIST_FILE = iPlayuListen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -812,7 +818,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iplayulisten.app;
 				PRODUCT_NAME = iPlayuListen;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

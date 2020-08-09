@@ -5,7 +5,9 @@ import {
   DeckSwiper
 } from 'galio-framework';
 
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../contexts'
+import { siteLogo } from '../../constants'
+
 
 const elements = [
   <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
@@ -33,26 +35,27 @@ const Swiper = () => (
   </View>
 )
 
-function MiniCard() {
+function MiniCard({ item }) {
   const auth = useAuth()
   const [{ user }] = auth
-  const { name, avatar, details } = user || 'N/A'
+  const { avatar, details } = user || 'N/A'
+
+  if (!item) item = {}
 
   return (
-    <View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.miniCard}>
-          <View style={styles.miniCardImage}>
-            <Image
-              source={require('../../assets/images/iPlay2020Logo.png')}
-              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
-          </View>
-          <View style={styles.miniCardText}>
-            <GalText style={{ padding: 15 }}>Artist name</GalText>
-          </View>
+    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <View style={styles.miniCard}>
+        <View style={styles.miniCardImage}>
+          <Image
+            source={{ uri: item.art_link || siteLogo}}
+            style={{ height: '100%', width: '100%' }} resizeMode='cover' />
         </View>
-      </ScrollView>
-    </View>
+        <View style={styles.miniCardText}>
+          <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>
+          <GalText>{item.title}</GalText>
+        </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -70,11 +73,11 @@ const styles = StyleSheet.create({
   miniCard: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 150,
-    width: 150,
+    height: 175,
+    width: 175,
     marginTop: 10,
     marginLeft: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   miniCardImage: {
     flex: 3,
@@ -84,7 +87,9 @@ const styles = StyleSheet.create({
 
   },
   miniCardText: {
-    flex: 1
+    flex: 1,
+    paddingTop: 7,
+    paddingLeft: 7,
   }
 })
 
