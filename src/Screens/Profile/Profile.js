@@ -9,12 +9,12 @@ import { Avatar } from 'react-native-paper'
 import { Text } from 'galio-framework'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider } from 'react-native-paper'
+import BottomSheet from 'reanimated-bottom-sheet'
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { MediaService } from '../../utils'
 import { logo, width, height } from '../../constants'
-
 
 function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -82,9 +82,23 @@ function Explore({ navigation }) {
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
-          <Text style={{ fontSize: 20, paddingLeft: 25 }}>You have {tracks.length} favorites</Text>
-        </View> :
-        <Button title='Ready' onPress={() => readyTapped()} />}
+          <Text style={{ fontSize: 20, padding: 25 }}>You have {tracks.length} favorites</Text>
+        </View>
+        :
+        <View>
+          <Text style={{ fontSize: 20, padding: 25 }}>You have no favorites</Text>
+        </View>
+      }
+
+      <Divider />
+
+      <Button title='Ready' onPress={() => readyTapped()} />
+
+      {/* <BottomSheet
+        snapPoints={[450, 300, 0]}
+        renderContent={() => <View style={{ backgroundColor: 'black', height: height }}><Text>Content</Text></View>}
+        renderHeader={() => <View><Text>Header</Text></View>}
+      /> */}
 
       {/* <View>
         <Text>{JSON.stringify(storeState, null, 2)}</Text>
