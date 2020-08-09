@@ -1,12 +1,14 @@
 import React from 'react'
 import {
   View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions
+  Dimensions, TouchableOpacity, StatusBar
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Avatar } from 'react-native-paper'
 import { Text } from 'galio-framework'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
 
 import { Center } from '../../components/Center'
 import { useAuth } from '../../contexts/AuthContext'
@@ -23,25 +25,34 @@ const getTracks = cb => {
   })
 }
 
-function Explore() {
+function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
-  const [tracks, setTracks] = React.useState(null) 
-  
+  const [tracks, setTracks] = React.useState(null)
+
   React.useEffect(() => {
     getTracks(result => setTracks(result))
+    // navigation.toggleDrawer()
   }, [])
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <View style={{ flex: 2, marginTop: 10 }}>
-        <View style={{ marginVertical: 30, marginLeft: 20, flexDirection: 'row' }}>
+      <StatusBar barStyle='dark-content' />
+
+      <TouchableOpacity onPress={() => navigation.toggleDrawer()}
+        style={{ alignItems: 'flex-end',margin:40 }}>
+        <Text><Icon name='dots-horizontal' size={35} style={{ padding: 5 }}/></Text>
+      </TouchableOpacity>
+
+      <View style={{ flex: 2, marginTop: -60 }}>
+        <View style={{ marginBottom: 30, marginLeft: 20, flexDirection: 'row' }}>
           <Avatar.Image size={100} source={logo} />
           <View style={{ marginLeft: 15, marginTop: 25 }}>
             <Text h6>{name}</Text>
             <Text>{website || 'Brand'}</Text>
           </View>
+
         </View>
       </View>
 

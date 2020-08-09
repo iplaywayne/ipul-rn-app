@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
+  View, Button, SafeAreaView, ScrollView, StyleSheet, Image, ActivityIndicator,
   Dimensions, VirtualizedList, FlatList, TouchableOpacity, StatusBar
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -68,16 +68,18 @@ function Explore() {
   const [tracks, setTracks] = React.useState(null)
 
   React.useEffect(() => {
-
-    getTracks(result => {
-      setTracks(result)
-      console.log('boom!', result.length)
-    })
+    if (!tracks) {
+      getTracks(result => {
+        setTracks(result)
+        console.log('boom!', result.length)
+      })
+    }
   }, [])
+
+  if (!tracks) return <ActivityIndicator />
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-
       <View style={styles.header}>
         <Image source={logo}
           style={styles.logo} resizeMode='cover' />
@@ -95,7 +97,7 @@ function Explore() {
           <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
             showsVerticalScrollIndicator={false}>
             {tracks && tracks.map((itm, idx) => (
-              <TouchableRipple onPress={e => console.log(itm.title)} rippleColor="rgba(0, 0, 0, .32)">
+              <TouchableOpacity onPress={e => console.log(itm.title)} rippleColor="rgba(0, 0, 0, .32)">
                 <View key={idx}
                   style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
                   <Image source={itm.art_link ? { uri: itm.art_link } : logo}
@@ -104,7 +106,7 @@ function Explore() {
                   <Text style={{ color: 'white', marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
                   <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
                 </View>
-              </TouchableRipple>
+              </TouchableOpacity>
             ))}
 
           </ScrollView>
