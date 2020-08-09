@@ -65,6 +65,19 @@ function Explore({ navigation }) {
 
       <Divider />
 
+
+      {favorites && favorites.length > 0 ?
+        <View>
+          <Text style={styles.title}>Your favorites</Text>
+          <Text style={{ fontSize: 20, padding: 25 }}>You have {tracks.length} favorites</Text>
+        </View>
+        :
+        <View>
+          <Text style={{ fontSize: 20, padding: 25 }}>You have no favorites</Text>
+        </View>
+      }
+      <Divider />
+      
       <View>
         <Text style={styles.title}>Recent Releases</Text>
       </View>
@@ -79,16 +92,6 @@ function Explore({ navigation }) {
 
       <Divider />
 
-      {favorites && favorites.length > 0 ?
-        <View>
-          <Text style={styles.title}>Your favorites</Text>
-          <Text style={{ fontSize: 20, padding: 25 }}>You have {tracks.length} favorites</Text>
-        </View>
-        :
-        <View>
-          <Text style={{ fontSize: 20, padding: 25 }}>You have no favorites</Text>
-        </View>
-      }
 
       <Divider />
 

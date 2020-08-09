@@ -1,7 +1,8 @@
 import React from 'react'
-import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
+import { View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import { Text } from 'galio-framework'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -14,6 +15,11 @@ function Home({ navigation }) {
   const { user } = authState
   const name = (user && user.name) ?? null
   const mediaService = MediaService()
+
+  if (!name) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+    <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
+  </View>
+
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
