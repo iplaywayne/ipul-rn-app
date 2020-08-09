@@ -2,10 +2,12 @@ import React from 'react'
 import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
+import { Divider } from 'react-native-paper'
 
 import { ExploreCard, Center } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { MediaService } from '../../utils'
+
 
 function Explore() {
   const [authState, authDispatch] = useAuth()
@@ -20,6 +22,8 @@ function Explore() {
       <View>
         <Text style={styles.title}>Explore iPlayuListen</Text>
       </View>
+
+      <Divider />
 
       <ExploreCard />
 

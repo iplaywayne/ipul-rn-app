@@ -12,13 +12,17 @@ import { MediaService } from '../../utils'
 function Home({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
-  const { tracks } = storeState
+  const { tracks } = storeState ?? { tracks: [] }
   const { user } = authState
-  const name = (user && user.name) ?? null
+  const name = (user && user.name) ?? { name: '' }
   const mediaService = MediaService()
 
   if (!name) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
+  </View>
+
+  if (!tracks) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+    <Text style={{ fontSize: 15 }}>We are waiting for tracks</Text>
   </View>
 
 
@@ -29,20 +33,20 @@ function Home({ navigation }) {
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
-
+{/* 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
+        {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
-      </ScrollView>
+      </ScrollView> */}
 
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+      {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
+        {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
-      </ScrollView>
+      </ScrollView> */}
 
       <Divider />
 

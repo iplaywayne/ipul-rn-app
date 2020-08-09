@@ -6,6 +6,7 @@ import {
 } from 'galio-framework';
 import TouchableScale from 'react-native-touchable-scale'
 import TrackPlayer from 'react-native-track-player'
+import { IconButton } from 'react-native-paper';
 
 import { useAuth, useStore } from '../../contexts'
 import { siteLogo } from '../../constants'
@@ -38,20 +39,17 @@ const Swiper = () => (
   </View>
 )
 
-function MiniCard({ item }) {
+function MiniCard({ item, addControl, removeControl }) {
   const auth = useAuth()
   const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
-  const { avatar, details } = user || 'N/A'
+  const { avatar, details } = user ?? { avatar: '', details: {} }
 
   if (!item) item = {}
 
   return (
     <TouchableScale onPress={() => {
       storeDispatch.addToQueue(item)
-      setTimeout(() => {
-        storeDispatch.removeFromQueue(item)
-      }, 3000)
       // TrackPlayer.add({
       //   id: item.acid,
       //   title: item.title,
@@ -61,7 +59,26 @@ function MiniCard({ item }) {
       // })
       // TrackPlayer.skip(item.acid)
     }}>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ flexDirection: 'column' }}>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          {addControl &&
+            <IconButton
+              icon="plus"
+              color={'#121212'}
+              size={20}
+              onPress={() => storeDispatch.addToQueue(item)}
+            />}
+          {removeControl &&
+            <IconButton
+              icon="minus"
+              color={'#121212'}
+              size={20}
+              onPress={() => storeDispatch.removeFromQueue(item)}
+            />}
+        </View>
+
         <View style={styles.miniCard}>
           <View style={styles.miniCardImage}>
             <Image
@@ -73,6 +90,7 @@ function MiniCard({ item }) {
             <GalText>{item.title}</GalText>
           </View>
         </View>
+
       </ScrollView>
     </TouchableScale>
   )
@@ -94,7 +112,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     height: 175,
     width: 175,
-    marginTop: 10,
+    // marginTop: 10,
     marginLeft: 10,
     borderRadius: 10,
   },

@@ -1,4 +1,5 @@
 import React from 'react';
+import TrackPlayer from 'react-native-track-player'
 
 const StoreContext = React.createContext({})
 export const useStore = () => React.useContext(StoreContext)
@@ -22,6 +23,7 @@ function reducer(state, action) {
     case SET_QUEUED:
       return { ...state, queued: action.val };
     case ADD_TO_QUEUE:
+      if (state.queued.includes(action.val)) return state
       return { ...state, queued: state.queued.concat(action.val) };
     case REMOVE_FROM_QUEUE:
       return { ...state, queued: state.queued.filter((itm => itm.acid !== action.val.acid)) };
@@ -40,6 +42,14 @@ function StoreProvider({ children }) {
     addToQueue: track => dispatch({ type: ADD_TO_QUEUE, val: track }),
     removeFromQueue: track => dispatch({ type: REMOVE_FROM_QUEUE, val: track })
   }
+
+  React.useEffect(() => {
+    (async function () {
+      const queued = await TrackPlayer.getQueue()
+      console.log(queued)
+    })()
+  }, [storeDispatch.addToQueue])
+
 
   return (
     <StoreContext.Provider value={[state, storeDispatch]}>

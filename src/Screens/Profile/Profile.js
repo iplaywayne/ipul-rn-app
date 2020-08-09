@@ -77,28 +77,27 @@ function Explore({ navigation }) {
 
       {queued && queued.length > 0 ?
         <View>
-          <Text style={styles.title}>Your playlist</Text>
-          <Text style={{ paddingTop: 20, paddingLeft: 20 }}>You have {queued.length} queued</Text>
+          <Text style={styles.title}>You have {queued.length} queued</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-            style={{ marginBottom: 0, flexDirection: 'row' }}>
+            style={{ flexDirection: 'row' }}>
             {queued.map((itm, idx) => (
-              <MiniCard key={idx} item={itm} />
+              <MiniCard key={idx} item={itm} removeControl />
             ))}
           </ScrollView>
           <Button
-            style={{ fontSize: 20, color: 'white' }}
+            style={{ fontSize: 15, color: 'white' }}
             styleDisabled={{ color: 'white' }}
             disabled={false}
-            containerStyle={{ padding: 10, margin: 10, height: 45, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
+            containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
             disabledContainerStyle={{ backgroundColor: 'pink' }}
             onPress={() => readyTapped()}
           >
-            Play
-      </Button>
+            Play Now
+          </Button>
         </View>
         :
         <View>
-          <Text style={{ fontSize: 20, padding: 25 }}>You have nothing queued</Text>
+          <Text style={styles.title}>You have nothing queued</Text>
         </View>
       }
 
@@ -107,11 +106,11 @@ function Explore({ navigation }) {
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
-          <Text style={{ fontSize: 20, padding: 25 }}>You have {tracks.length} favorites</Text>
+          <Text style={styles.title}>You have {favorites.length} favorites</Text>
         </View>
         :
         <View>
-          <Text style={{ fontSize: 20, padding: 25 }}>You have no favorites</Text>
+          <Text style={styles.title}>You have no favorites</Text>
         </View>
       }
 
@@ -123,7 +122,7 @@ function Explore({ navigation }) {
 
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 15, marginBottom: 25, flexDirection: 'row' }}>
+        style={{ marginBottom: 25, flexDirection: 'row' }}>
         {tracks.slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
@@ -145,9 +144,9 @@ function Explore({ navigation }) {
       </Button> */}
       </View>
 
-      <Text>
+      {/* <Text>
         {JSON.stringify(storeState.queued, null, 2)}
-      </Text>
+      </Text> */}
     </ScrollView>
   )
 }
@@ -172,9 +171,8 @@ const styles = StyleSheet.create({
     height: height
   },
   title: {
-    fontSize: 20,
-    paddingTop: 25,
-    paddingLeft: 20,
+    fontSize: 15,
+    padding: 20,
   },
   miniCard: {
     borderWidth: 1,
