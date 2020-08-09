@@ -52,11 +52,12 @@ function ExploreSwiper() {
             caption="139 minutes ago"
             location={details.firstName}
             avatar={avatar}
+            // style={{paddingTop: 5}}
             imageStyle={{ borderRadius: 10 }}
-            imageBlockStyle={{ padding: 2 }}
+            imageBlockStyle={{}}
             image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
           />
-          <Divider />
+          <Divider style={{ marginBottom: 15 }} />
         </View>
       ))}
     </ScrollView>
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     padding: 5,
+    marginTop: 10,
     marginBottom: 50,
   },
   title: {

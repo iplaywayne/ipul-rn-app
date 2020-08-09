@@ -52,7 +52,10 @@ function StoreProvider({ children }) {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
       TrackPlayer.reset()
     },
-    setPlaying: val => dispatch({ type: SET_PLAYING, val }),
+    setPlaying: val => {
+      dispatch({ type: SET_LOADING, val: true })
+      dispatch({ type: SET_PLAYING, val })
+    },
     setLoading: val => dispatch({ type: SET_LOADING, val })
   }
 

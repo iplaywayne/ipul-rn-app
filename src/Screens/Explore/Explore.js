@@ -25,7 +25,7 @@ function Explore() {
 
       <Divider />
 
-      <View style={{ marginTop: 9 }}>
+      <View style={{ marginTop: 0 }}>
         <ExploreCard />
       </View>
 

@@ -27,7 +27,8 @@ function MediaService() {
       case TrackPlayerEvents.PLAYBACK_STATE:
         console.log('[MEDIASERVICE]', event.state, queued.length)
         storeDispatch.setPlaying(event.state === 'playing' ? true : false)
-        storeDispatch.setLoading(event.state === 'loading' ? true : false)
+        storeDispatch.setLoading(event.state !== 'loading' ? true : false)
+        storeDispatch.setLoading(event.state === 'idle' ? true : false)
         return
       default:
         console.log('Unknown State', event.type)
