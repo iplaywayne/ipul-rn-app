@@ -59,6 +59,14 @@ function Explore({ navigation }) {
 
       <Divider />
       
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginVertical: 15, flexDirection: 'row' }}>
+        {tracks.slice(0, 5).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
+        ))}
+      </ScrollView>
+
+      
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>

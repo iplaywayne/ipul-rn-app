@@ -17,7 +17,8 @@ function Home({ navigation }) {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-
+      <StatusBar barStyle='dark-content' />
+      
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>

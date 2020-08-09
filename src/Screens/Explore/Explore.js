@@ -16,7 +16,7 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root}>
-      <StatusBar barStyle='dark-content' />
+
       <View>
         <Text style={styles.title}>Explore iPlayuListen</Text>
       </View>

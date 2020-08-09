@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, Vibration } from 'react-native'
 import {
   Block, Button, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
 } from 'galio-framework';
+import TouchableScale from 'react-native-touchable-scale'
+
 
 import { useAuth } from '../../contexts'
 import { siteLogo } from '../../constants'
@@ -43,19 +45,21 @@ function MiniCard({ item }) {
   if (!item) item = {}
 
   return (
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <View style={styles.miniCard}>
-        <View style={styles.miniCardImage}>
-          <Image
-            source={{ uri: item.art_link || siteLogo}}
-            style={{ height: '100%', width: '100%' }} resizeMode='cover' />
+    <TouchableScale onPress={() => Vibration.vibrate(10 * 1000)}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.miniCard}>
+          <View style={styles.miniCardImage}>
+            <Image
+              source={{ uri: item.art_link || siteLogo }}
+              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
+          </View>
+          <View style={styles.miniCardText}>
+            <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>
+            <GalText>{item.title}</GalText>
+          </View>
         </View>
-        <View style={styles.miniCardText}>
-          <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>
-          <GalText>{item.title}</GalText>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </TouchableScale>
   )
 }
 
