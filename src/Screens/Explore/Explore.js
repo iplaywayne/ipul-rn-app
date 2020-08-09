@@ -39,7 +39,7 @@ function Explore() {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 30,
+    paddingVertical: 30,
     flex: 1,
   },
   title: {

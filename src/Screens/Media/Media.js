@@ -43,6 +43,18 @@ function Explore() {
     style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
   />
 
+  const sheetHeader = () => (
+    <View style={styles.sheetHeader}><Text>Header</Text></View>
+  )
+
+  const sheetContent = () => (
+    <View style={styles.sheetContent}>
+      <View style={styles.handlerBar}>
+        {/* <Text style={{ color: '#fff' }}>Idle . .</Text> */}
+      </View>
+    </View>
+  )
+
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
@@ -55,11 +67,11 @@ function Explore() {
 
         {/* <MiniCard /> */}
 
-        <View style={styles.footer}>
-          <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text>
-          {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
+        {/* <View style={styles.footer}>
+          <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text> */}
+        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
 
-          <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
+        {/* <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
             showsVerticalScrollIndicator={false}>
             {tracks && tracks.map((itm, idx) => (
               <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
@@ -73,17 +85,19 @@ function Explore() {
                 </View>
               </TouchableOpacity>
             ))}
-          </ScrollView>
-        </View>
+          </ScrollView> */}
+        {/* </View> */}
       </View>
 
 
 
-      {/* <BottomSheet
-        snapPoints={[450, 300, 0]}
-        renderContent={() => <View style={{ backgroundColor: 'black', height: height }}><Text>Content</Text></View>}
-        renderHeader={() => <View><Text>Header</Text></View>}
-      /> */}
+      <BottomSheet
+        borderRadius={25}
+        initialSnap={2}
+        snapPoints={[800, 220, -380]}
+        // renderHeader={sheetHeader}
+        renderContent={sheetContent}
+      />
     </ScrollView>
   )
 }
@@ -95,8 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logo: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderRadius: 30,
     height: height * .3,
     width: width,
   },
@@ -137,7 +150,28 @@ const styles = StyleSheet.create({
   },
   miniCardText: {
     flex: 1
-  }
+  },
+  sheetHeader: {
+    backgroundColor: '#fff',
+    height: 100,
+  },
+  sheetContent: {
+    marginTop: 100,
+    backgroundColor: '#444',
+    height: 700,
+    borderRadius: 25,
+    // borderTopLeftRadius: 25,
+    alignItems: 'center',
+    paddingTop: 10
+  },
+  handlerBar: {
+    position: 'absolute',
+    backgroundColor: '#D1D1D6',
+    top: 10,
+    borderRadius: 3,
+    height: 5,
+    width: 30,
+  },
 })
 
 
