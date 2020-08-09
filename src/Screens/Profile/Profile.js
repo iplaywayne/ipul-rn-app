@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions, TouchableOpacity, StatusBar
+  Dimensions, TouchableOpacity, StatusBar, Animated
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -24,6 +24,7 @@ function Explore({ navigation }) {
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
+  const spinner = React.useRef(new Animated.Value(0)).current
 
   React.useEffect(() => {
     mediaService.getTracks(result => setTracks(result))
@@ -33,9 +34,16 @@ function Explore({ navigation }) {
   }, [])
 
   const getEm = () => {
-    mediaService.debug()
+    // mediaService.debug()
+    growIn()
   }
 
+  const growIn = () => {
+    Animated.timing(spinner, {
+      toValue: 1,
+      duration: 5000
+    }).start()
+  }
 
   if (!tracks.length) return null
 
@@ -49,7 +57,13 @@ function Explore({ navigation }) {
 
       <View style={{ flex: 2, marginTop: -40 }}>
         <View style={{ marginBottom: 30, marginLeft: 20, flexDirection: 'row' }}>
-          <Avatar.Image size={100} source={logo} />
+          {avatar ?
+            <Avatar.Image size={100} source={{ uri: avatar }}
+              style={{ backgroundColor: '#444' }} />
+            :
+            <Avatar.Text size={100} label={name.substring(0, 2)}
+              style={{ backgroundColor: '#444' }} />}
+
           <View style={{ marginLeft: 15, marginTop: 25 }}>
             <Text h6>{name}</Text>
             <Text>{website || 'Brand'}</Text>
@@ -58,7 +72,7 @@ function Explore({ navigation }) {
       </View>
 
       <Divider />
-      
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginVertical: 15, flexDirection: 'row' }}>
         {tracks.slice(0, 5).map((itm, idx) => (
@@ -66,7 +80,7 @@ function Explore({ navigation }) {
         ))}
       </ScrollView>
 
-      
+
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
@@ -74,9 +88,9 @@ function Explore({ navigation }) {
         </View> :
         <Button title='Ready' onPress={() => getEm()} />}
 
-      <View>
+      {/* <View>
         <Text>{JSON.stringify(storeState, null, 2)}</Text>
-      </View>
+      </View> */}
     </ScrollView>
   )
 }
