@@ -9,11 +9,13 @@ const SET_TRACKS = 'SET_TRACKS'
 const SET_QUEUED = 'SET_QUEUED'
 const ADD_TO_QUEUE = 'ADD_TO_QUEUE'
 const REMOVE_FROM_QUEUE = 'REMOVE_FROM_QUEUE'
+const SET_PLAYING = 'SET_PLAYING'
 
 const initialState = {
   name: 'Stylz',
   tracks: [],
   queued: [],
+  isPlaying: false,
 }
 
 function reducer(state, action) {
@@ -27,6 +29,8 @@ function reducer(state, action) {
       return { ...state, queued: state.queued.concat(action.val) };
     case REMOVE_FROM_QUEUE:
       return { ...state, queued: state.queued.filter((itm => itm.acid !== action.val.acid)) };
+    case SET_PLAYING:
+      return { ...state, isPlaying: action.val };
     default:
       return state
   }
@@ -52,6 +56,9 @@ function StoreProvider({ children }) {
     removeFromQueue: track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
       TrackPlayer.remove(track.acid)
+    },
+    setPlaying: val => {
+      dispatch({ type: SET_PLAYING, val })
     }
   }
 

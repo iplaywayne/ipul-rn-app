@@ -22,7 +22,8 @@ function MediaService() {
       console.warn('An error occurred while playing the current track.');
     }
     if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
-      console.log('[MEDIASERVICE]', event.type, queued.length)
+      console.log('[MEDIASERVICE]', event.state, queued.length)
+      storeDispatch.setPlaying(event.state === 'playing' ? true : false)
     }
   });
 

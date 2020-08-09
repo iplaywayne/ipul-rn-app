@@ -34,8 +34,10 @@ function Home({ navigation }) {
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
 
+      <Divider />
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        style={{ marginTop: 15,marginBottom: 15, flexDirection: 'row' }}>
         {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}

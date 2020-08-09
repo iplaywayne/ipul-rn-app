@@ -25,7 +25,9 @@ function Explore() {
 
       <Divider />
 
-      <ExploreCard />
+      <View style={{ marginTop: 9 }}>
+        <ExploreCard />
+      </View>
 
       <View>
         {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}

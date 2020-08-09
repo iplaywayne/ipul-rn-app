@@ -6,7 +6,7 @@ import {
 } from 'galio-framework';
 import TouchableScale from 'react-native-touchable-scale'
 import TrackPlayer from 'react-native-track-player'
-import { IconButton } from 'react-native-paper';
+import { IconButton, Colors } from 'react-native-paper';
 
 import { useAuth, useStore } from '../../contexts'
 import { siteLogo } from '../../constants'
@@ -58,14 +58,14 @@ function MiniCard({ item, addControl, removeControl }) {
           {addControl &&
             <IconButton
               icon="plus"
-              color={'#121212'}
+              color={Colors.red500}
               size={20}
               onPress={() => storeDispatch.addToQueue(item)}
             />}
           {removeControl &&
             <IconButton
               icon="minus"
-              color={'#121212'}
+              color={Colors.red500}
               size={20}
               onPress={() => storeDispatch.removeFromQueue(item)}
             />}

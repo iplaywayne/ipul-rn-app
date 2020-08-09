@@ -23,7 +23,7 @@ function Explore({ navigation }) {
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
   const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
-  const { queued } = storeState
+  const { queued, isPlaying } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
@@ -32,30 +32,16 @@ function Explore({ navigation }) {
   React.useEffect(() => {
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
-      console.log('[FAVORITES]', user.uid, result)
+      console.log('[FAVORITES]', result.length)
     })
-    // mediaService.setup()
     return () => { }
   }, [])
 
-  // const init = async () => {
-  //   const queue = await TrackPlayer.getQueue()
-  //   setQueued(queue)
-  // }
   const readyTapped = async () => {
     const track = await TrackPlayer.getCurrentTrack()
     const state = await TrackPlayer.getState()
     console.log('[PROFILE] queued', queued.length)
     mediaService.setup()
-    // TrackPlayer.add(queued.map((itm, idx) => {
-    //   return {
-    //     id: itm.acid,
-    //     title: itm.title,
-    //     artist: itm.artist,
-    //     artwork: trimWWWString(itm.art_link),
-    //     url: trimWWWString(itm.song),
-    //   }
-    // }))
     if (state === 'paused') {
       TrackPlayer.play()
     } else {
@@ -109,7 +95,7 @@ function Explore({ navigation }) {
             disabledContainerStyle={{ backgroundColor: 'pink' }}
             onPress={() => readyTapped()}
           >
-            Play Now
+            {isPlaying ? 'Pause Now' : 'Play Now'}
           </Button>
         </View>
         :

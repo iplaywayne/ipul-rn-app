@@ -48,7 +48,6 @@ function ExploreSwiper() {
             flex
             borderless
             shadow={true}
-            style={{ marginTop: 20 }}
             title={name}
             caption="139 minutes ago"
             location={details.firstName}
@@ -67,8 +66,8 @@ function ExploreSwiper() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    padding: 5,
     marginBottom: 50,
-    padding: 5
   },
   title: {
     fontSize: 20,
