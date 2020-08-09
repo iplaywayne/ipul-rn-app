@@ -1,60 +1,85 @@
 import React from 'react'
 import { Player } from '@react-native-community/audio-toolkit'
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
 
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 const tracksPath = `/mediaTracks`
 const favsPath = `/favorites/`
 
+// Subscribing to the following events inside MyComponent
+const events = [
+  TrackPlayerEvents.PLAYBACK_STATE,
+  TrackPlayerEvents.PLAYBACK_ERROR
+];
 
 function MediaService() {
   const [state, dispatch] = useStore()
+
+  useTrackPlayerEvents(events, (event) => {
+    if (event.type === TrackPlayerEvents.PLAYBACK_ERROR) {
+      console.warn('An error occurred while playing the current track.');
+    }
+    if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
+      console.log(event)
+    }
+  });
 
   React.useEffect(() => {
     getTracks(result => dispatch.setTracks(result))
     console.log('[MEDIASERVICE] [', auth.currentUser.displayName, ']')
   }, [])
 
-  React.useEffect(() => {
-    if (state.tracks.length) {
-      console.log('[MEDIASERVICE] Loaded', state.tracks.length)
-      TrackPlayer.addEventListener('playback-track-changed', async (data) => {
-        const track = await TrackPlayer.getTrack(data.nextTrack);
-        console.log({ trackTitle: track });
-      })
-    }
-  }, [state.tracks])
+  // React.useEffect(() => {
+  //   if (state.tracks.length) {
+  //     console.log('[MEDIASERVICE] Loaded', state.tracks.length)
+  //     const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
+  //       const track = await TrackPlayer.getTrack(data.nextTrack);
+  //       console.log(`[MEDIASERVICE] You are playing ${track.title}`);
+  //     })
+  //     const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
+  //       console.log(`[MEDIASERVICE] Your playlist has ended`);
+  //       TrackPlayer.reset()
+  //     })
+  //   }
+  // }, [state.tracks])
 
 
-  const debug = () => {
+  const setup = () => {
     TrackPlayer.setupPlayer().then(() => {
-      // Player setup
-      TrackPlayer.add(state.tracks.map((trk) => {
-        return {
-          id: trk.acid,
-          title: trk.title,
-          artist: trk.artist,
-          url: trimWWWString(trk.song),
-          artwork: trimWWWString(trk.art_link)
-        }
-      }))
-        .then(res => {
-          // Player options
-          TrackPlayer.updateOptions({
-            capabilities: [
-              TrackPlayer.CAPABILITY_PLAY,
-              TrackPlayer.CAPABILITY_PAUSE,
-              TrackPlayer.CAPABILITY_STOP,
-              TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-              TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-            ],
-          })
-          // Player activated
-          TrackPlayer.play()
-        })
-        .catch(err => console.warn('error', err))
+      // Player setup with options
+      TrackPlayer.updateOptions({
+        capabilities: [
+          TrackPlayer.CAPABILITY_PLAY,
+          TrackPlayer.CAPABILITY_PAUSE,
+          TrackPlayer.CAPABILITY_STOP,
+          TrackPlayer.CAPABILITY_SKIP,
+          TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+          TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+          TrackPlayer.CAPABILITY_JUMP_FORWARD,
+          TrackPlayer.CAPABILITY_JUMP_BACKWARD,
+          TrackPlayer.RATING_THUMBS_UP_DOWN,
+        ],
+      })
     })
+  }
+
+  const addAllToQueue = async () => {
+    TrackPlayer.add(state.tracks.map((trk) => {
+      return {
+        id: trk.acid,
+        title: trk.title,
+        artist: trk.artist,
+        url: trimWWWString(trk.song),
+        artwork: trimWWWString(trk.art_link)
+      }
+    }))
+      .then(res => {
+        TrackPlayer.play()
+          .then(r => console.log(r))
+          .catch(e => console.log(e))
+      })
+      .catch(err => console.warn('error', err))
   }
 
   const getTracks = cb => {
@@ -91,7 +116,7 @@ function MediaService() {
   }
 
 
-  return { debug, getTracks, getFavorites }
+  return { setup, addAllToQueue, getTracks, getFavorites }
 }
 
 export default MediaService

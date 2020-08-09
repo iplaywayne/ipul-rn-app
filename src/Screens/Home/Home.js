@@ -43,10 +43,10 @@ function Home({ navigation }) {
           <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
-      
+
       <Divider />
 
-      <View>
+      <View style={{ flex: 1 }}>
         <ExploreCard />
       </View>
 

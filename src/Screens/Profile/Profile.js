@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Button, SafeAreaView, ScrollView, StyleSheet, Image,
+  View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image,
   Dimensions, TouchableOpacity, StatusBar, Animated
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -9,18 +9,21 @@ import { Avatar } from 'react-native-paper'
 import { Text } from 'galio-framework'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider } from 'react-native-paper'
-import BottomSheet from 'reanimated-bottom-sheet'
+import TrackPlayer from 'react-native-track-player'
+import Button from 'react-native-button'
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { MediaService } from '../../utils'
 import { logo, width, height } from '../../constants'
 
+
 function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
   const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
+  const { queued } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
@@ -31,10 +34,16 @@ function Explore({ navigation }) {
     mediaService.getFavorites(user.uid, result => {
       console.log('[FAVORITES]', user.uid, result)
     })
+    mediaService.setup()
+    return () => { }
   }, [])
 
-  const readyTapped = () => {
-    // mediaService.debug()
+  // const init = async () => {
+  //   const queue = await TrackPlayer.getQueue()
+  //   setQueued(queue)
+  // }
+  const readyTapped = async () => {
+    TrackPlayer.play()
   }
 
   if (!tracks.length) return null
@@ -66,6 +75,35 @@ function Explore({ navigation }) {
       <Divider />
 
 
+      {queued && queued.length > 0 ?
+        <View>
+          <Text style={styles.title}>Your playlist</Text>
+          <Text style={{ paddingTop: 20, paddingLeft: 20 }}>You have {queued.length} queued</Text>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+            style={{ marginBottom: 0, flexDirection: 'row' }}>
+            {queued.map((itm, idx) => (
+              <MiniCard key={idx} item={itm} />
+            ))}
+          </ScrollView>
+          <Button
+            style={{ fontSize: 20, color: 'white' }}
+            styleDisabled={{ color: 'white' }}
+            disabled={false}
+            containerStyle={{ padding: 10, margin: 10, height: 45, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
+            disabledContainerStyle={{ backgroundColor: 'pink' }}
+            onPress={() => readyTapped()}
+          >
+            Play
+      </Button>
+        </View>
+        :
+        <View>
+          <Text style={{ fontSize: 20, padding: 25 }}>You have nothing queued</Text>
+        </View>
+      }
+
+      <Divider />
+
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
@@ -76,8 +114,9 @@ function Explore({ navigation }) {
           <Text style={{ fontSize: 20, padding: 25 }}>You have no favorites</Text>
         </View>
       }
+
       <Divider />
-      
+
       <View>
         <Text style={styles.title}>Recent Releases</Text>
       </View>
@@ -93,26 +132,29 @@ function Explore({ navigation }) {
       <Divider />
 
 
-      <Divider />
+      <View style={{ flex: 1, marginBottom: 100 }}>
+        {/* <Button
+          style={{ fontSize: 20, color: 'white' }}
+          styleDisabled={{ color: 'white' }}
+          disabled={false}
+          containerStyle={{ padding: 10, margin: 10, height: 45, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
+          disabledContainerStyle={{ backgroundColor: 'pink' }}
+          onPress={() => readyTapped()}
+        >
+          Play
+      </Button> */}
+      </View>
 
-      <Button title='Ready' onPress={() => readyTapped()} />
-
-      {/* <BottomSheet
-        snapPoints={[450, 300, 0]}
-        renderContent={() => <View style={{ backgroundColor: 'black', height: height }}><Text>Content</Text></View>}
-        renderHeader={() => <View><Text>Header</Text></View>}
-      /> */}
-
-      {/* <View>
-        <Text>{JSON.stringify(storeState, null, 2)}</Text>
-      </View> */}
+      <Text>
+        {JSON.stringify(storeState.queued, null, 2)}
+      </Text>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 30,
+    paddingVertical: 30,
     flex: 1,
   },
   header: {

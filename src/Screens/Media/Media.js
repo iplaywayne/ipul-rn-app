@@ -6,7 +6,7 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
-import { TouchableRipple } from 'react-native-paper'
+import BottomSheet from 'reanimated-bottom-sheet'
 
 import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
@@ -75,9 +75,15 @@ function Explore() {
             ))}
           </ScrollView>
         </View>
-
       </View>
 
+
+
+      {/* <BottomSheet
+        snapPoints={[450, 300, 0]}
+        renderContent={() => <View style={{ backgroundColor: 'black', height: height }}><Text>Content</Text></View>}
+        renderHeader={() => <View><Text>Header</Text></View>}
+      /> */}
     </ScrollView>
   )
 }

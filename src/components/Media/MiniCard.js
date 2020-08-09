@@ -5,10 +5,11 @@ import {
   DeckSwiper
 } from 'galio-framework';
 import TouchableScale from 'react-native-touchable-scale'
+import TrackPlayer from 'react-native-track-player'
 
-
-import { useAuth } from '../../contexts'
+import { useAuth, useStore } from '../../contexts'
 import { siteLogo } from '../../constants'
+import { firebase, database, auth, trimWWWString } from '../../utils'
 
 
 const elements = [
@@ -39,13 +40,27 @@ const Swiper = () => (
 
 function MiniCard({ item }) {
   const auth = useAuth()
+  const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
   const { avatar, details } = user || 'N/A'
 
   if (!item) item = {}
 
   return (
-    <TouchableScale>
+    <TouchableScale onPress={() => {
+      storeDispatch.addToQueue(item)
+      setTimeout(() => {
+        storeDispatch.removeFromQueue(item)
+      }, 3000)
+      // TrackPlayer.add({
+      //   id: item.acid,
+      //   title: item.title,
+      //   artist: item.artist,
+      //   artwork: trimWWWString(item.art_link),
+      //   url: trimWWWString(item.song),
+      // })
+      // TrackPlayer.skip(item.acid)
+    }}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.miniCard}>
           <View style={styles.miniCardImage}>
