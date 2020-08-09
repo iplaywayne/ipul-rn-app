@@ -4,6 +4,8 @@ import {
   Block, Button, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
 } from 'galio-framework';
+import { Divider } from 'react-native-paper'
+
 
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -39,15 +41,14 @@ function ExploreSwiper() {
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
 
   return (
-    <ScrollView>
-      <View style={styles.root}>
-        {[0, 1].map((itm, idx) => (
+    <ScrollView style={styles.root}>
+      {[0, 1].map((itm, idx) => (
+        <View key={idx}>
           <Card
-            key={idx}
             flex
             borderless
             shadow={true}
-            style={{ padding: 5, marginBottom: 15 }}
+            style={{ marginTop: 20 }}
             title={name}
             caption="139 minutes ago"
             location={details.firstName}
@@ -56,16 +57,18 @@ function ExploreSwiper() {
             imageBlockStyle={{ padding: 2 }}
             image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
           />
-        ))}
-      </View>
+          <Divider />
+        </View>
+      ))}
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
     flex: 1,
+    marginBottom: 50,
+    padding: 5
   },
   title: {
     fontSize: 20,

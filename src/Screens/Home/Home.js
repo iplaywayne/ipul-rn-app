@@ -3,6 +3,7 @@ import { View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } 
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
+import { Divider } from 'react-native-paper'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -42,6 +43,8 @@ function Home({ navigation }) {
           <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
+      
+      <Divider />
 
       <View>
         <ExploreCard />
