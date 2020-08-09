@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image,
-  Dimensions, TouchableOpacity, StatusBar, Animated
+  Dimensions, TouchableOpacity, StatusBar, Animated, ActivityIndicator
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -23,7 +23,7 @@ function Explore({ navigation }) {
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
   const { name, website, avatar, bio } = user ?? { name: '', website: '', avatar: '', bio: '' }
-  const { queued, isPlaying } = storeState
+  const { queued, isPlaying, isLoading } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
@@ -36,6 +36,18 @@ function Explore({ navigation }) {
     })
     return () => { }
   }, [])
+
+  React.useEffect(() => {
+    TrackPlayer.add(queued.map(trk => {
+      return {
+        id: trk.acid,
+        title: trk.title,
+        artist: trk.artist,
+        artwork: trimWWWString(trk.art_link),
+        url: trimWWWString(trk.song),
+      }
+    }))
+  }, [queued])
 
   const readyTapped = async () => {
     const track = await TrackPlayer.getCurrentTrack()
@@ -111,12 +123,13 @@ function Explore({ navigation }) {
           <Button
             style={{ fontSize: 15, color: 'white' }}
             styleDisabled={{ color: 'white' }}
-            disabled={false}
+            disabled={isLoading}
             containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
-            disabledContainerStyle={{ backgroundColor: 'pink' }}
+            disabledContainerStyle={{ backgroundColor: '#ddd' }}
             onPress={() => readyTapped()}
           >
-            {isPlaying ? 'Pause Now' : 'Play Now'}
+
+            {isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
           </Button>
         </View>
         :

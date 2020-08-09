@@ -20,13 +20,29 @@ function MediaService() {
   const { queued } = storeState
 
   useTrackPlayerEvents(events, (event) => {
-    if (event.type === TrackPlayerEvents.PLAYBACK_ERROR) {
-      console.warn('An error occurred while playing the current track.');
+    switch (event.type) {
+      case TrackPlayerEvents.PLAYBACK_ERROR:
+        console.warn('An error occurred while playing the current track.');
+        return
+      case TrackPlayerEvents.PLAYBACK_STATE:
+        console.log('[MEDIASERVICE]', event.state, queued.length)
+        storeDispatch.setPlaying(event.state === 'playing' ? true : false)
+        storeDispatch.setLoading(event.state === 'loading' ? true : false)
+        return
+      default:
+        console.log('Unknown State', event.type)
+        return
     }
-    if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
-      console.log('[MEDIASERVICE]', event.state, queued.length)
-      storeDispatch.setPlaying(event.state === 'playing' ? true : false)
-    }
+    // if (event.type === TrackPlayerEvents.PLAYBACK_ERROR) {
+    //   console.warn('An error occurred while playing the current track.');
+    // }
+    // if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
+    //   console.log('[MEDIASERVICE]', event.state, queued.length)
+    //   storeDispatch.setPlaying(event.state === 'playing' ? true : false)
+    //   if (event.state == 'loading') {
+    //     console.log('Hol up, this track seems to still be loading . .')
+    //   }
+    // }
     if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED) {
       TrackPlayer.reset()
     }
