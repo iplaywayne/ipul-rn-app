@@ -50,7 +50,7 @@ function Explore() {
           style={styles.logo} resizeMode='cover' />
         <Text style={{
           zIndex: 1, top: 100, fontWeight: '700', color: 'white',
-          position: 'absolute'
+          position: 'absolute', left: 30
         }} h4>Media</Text>
 
         {/* <MiniCard /> */}
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   footer: {
     flex: 1,

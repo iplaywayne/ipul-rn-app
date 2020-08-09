@@ -18,7 +18,7 @@ function Home({ navigation }) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle='dark-content' />
-      
+
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     padding: 20,
-    marginTop: 20,
+    marginTop: 50,
   },
   miniCard: {
     borderWidth: 1,

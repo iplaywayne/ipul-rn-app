@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     padding: 20,
-    marginTop: 20,
+    marginTop: 50,
   },
   miniCard: {
     borderWidth: 1,

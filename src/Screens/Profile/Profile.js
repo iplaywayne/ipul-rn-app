@@ -65,7 +65,7 @@ function Explore({ navigation }) {
               style={{ backgroundColor: '#444' }} />}
 
           <View style={{ marginLeft: 15, marginTop: 25 }}>
-            <Text h6>{name}</Text>
+            <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
             <Text>{website || 'Brand'}</Text>
           </View>
         </View>
@@ -73,13 +73,19 @@ function Explore({ navigation }) {
 
       <Divider />
 
+      <View>
+        <Text style={styles.title}>Recent Releases</Text>
+      </View>
+
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginVertical: 15, flexDirection: 'row' }}>
+        style={{ marginTop: 15, marginBottom: 25, flexDirection: 'row' }}>
         {tracks.slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
 
+      <Divider />
 
       {favorites && favorites.length > 0 ?
         <View>
@@ -115,9 +121,9 @@ const styles = StyleSheet.create({
     height: height
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 20,
+    fontSize: 20,
+    paddingTop: 25,
+    paddingLeft: 20,
   },
   miniCard: {
     borderWidth: 1,

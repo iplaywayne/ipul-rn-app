@@ -45,7 +45,7 @@ function MiniCard({ item }) {
   if (!item) item = {}
 
   return (
-    <TouchableScale onPress={() => Vibration.vibrate(10 * 1000)}>
+    <TouchableScale>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.miniCard}>
           <View style={styles.miniCardImage}>
