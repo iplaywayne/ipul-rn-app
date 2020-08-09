@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 20,
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
   },
   sheetContent: {
     marginTop: 100,
-    backgroundColor: '#444',
-    height: 700,
+    backgroundColor: '#fff',
+    height: 600,
     borderRadius: 25,
     // borderTopLeftRadius: 25,
     alignItems: 'center',
