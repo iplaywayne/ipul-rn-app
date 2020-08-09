@@ -33,16 +33,8 @@ function Explore({ navigation }) {
     })
   }, [])
 
-  const getEm = () => {
+  const readyTapped = () => {
     // mediaService.debug()
-    growIn()
-  }
-
-  const growIn = () => {
-    Animated.timing(spinner, {
-      toValue: 1,
-      duration: 5000
-    }).start()
   }
 
   if (!tracks.length) return null
@@ -92,7 +84,7 @@ function Explore({ navigation }) {
           <Text style={styles.title}>Your favorites</Text>
           <Text style={{ fontSize: 20, paddingLeft: 25 }}>You have {tracks.length} favorites</Text>
         </View> :
-        <Button title='Ready' onPress={() => getEm()} />}
+        <Button title='Ready' onPress={() => readyTapped()} />}
 
       {/* <View>
         <Text>{JSON.stringify(storeState, null, 2)}</Text>
