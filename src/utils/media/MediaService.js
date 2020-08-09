@@ -10,7 +10,9 @@ const favsPath = `/favorites/`
 // Subscribing to the following events inside MyComponent
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE,
-  TrackPlayerEvents.PLAYBACK_ERROR
+  TrackPlayerEvents.PLAYBACK_ERROR,
+  TrackPlayerEvents.PLAYBACK_QUEUE_ENDED
+
 ];
 
 function MediaService() {
@@ -24,6 +26,9 @@ function MediaService() {
     if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
       console.log('[MEDIASERVICE]', event.state, queued.length)
       storeDispatch.setPlaying(event.state === 'playing' ? true : false)
+    }
+    if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED) {
+      TrackPlayer.reset()
     }
   });
 

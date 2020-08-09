@@ -43,32 +43,13 @@ function StoreProvider({ children }) {
   const storeDispatch = {
     setTracks: tracks => dispatch({ type: SET_TRACKS, val: tracks }),
     setQueued: track => dispatch({ type: SET_QUEUED, val: track }),
-    addToQueue: track => {
-      dispatch({ type: ADD_TO_QUEUE, val: track })
-      TrackPlayer.add({
-        id: track.acid,
-        title: track.title,
-        artist: track.artist,
-        artwork: trimWWWString(track.art_link),
-        url: trimWWWString(track.song),
-      })
-    },
+    addToQueue: track => dispatch({ type: ADD_TO_QUEUE, val: track }),
     removeFromQueue: track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
-      TrackPlayer.remove(track.acid)
+      TrackPlayer.reset()
     },
-    setPlaying: val => {
-      dispatch({ type: SET_PLAYING, val })
-    }
+    setPlaying: val => dispatch({ type: SET_PLAYING, val })
   }
-
-  React.useEffect(() => {
-    (async function () {
-      const queued = await TrackPlayer.getQueue()
-      console.log('[STOREQUEUED]', queued.length)
-    })()
-  }, [storeDispatch.addToQueue])
-
 
   return (
     <StoreContext.Provider value={[state, storeDispatch]}>

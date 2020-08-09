@@ -44,11 +44,16 @@ function MiniCard({ item, addControl, removeControl }) {
   const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
   const { avatar, details } = user ?? { avatar: '', details: {} }
+  const { queued } = storeState
 
   if (!item) item = {}
 
   return (
     <TouchableScale onPress={() => {
+      if (queued.includes(item)) {
+        console.log('This track exits')
+        return
+      }
       storeDispatch.addToQueue(item)
     }}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}

@@ -22,7 +22,7 @@ function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
-  const { name, website, avatar } = user ?? { name: '', website: '', avatar: '' }
+  const { name, website, avatar, bio } = user ?? { name: '', website: '', avatar: '', bio: '' }
   const { queued, isPlaying } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
@@ -42,10 +42,31 @@ function Explore({ navigation }) {
     const state = await TrackPlayer.getState()
     console.log('[PROFILE] queued', queued.length)
     mediaService.setup()
-    if (state === 'paused') {
-      TrackPlayer.play()
-    } else {
-      TrackPlayer.pause()
+    console.log(state)
+    switch (state) {
+      case 'idle':
+        TrackPlayer.add(queued.map(trk => {
+          return {
+            id: trk.acid,
+            title: trk.title,
+            artist: trk.artist,
+            artwork: trimWWWString(trk.art_link),
+            url: trimWWWString(trk.song),
+          }
+        }))
+        return
+      case 'ready':
+        TrackPlayer.play()
+        return
+      case 'playing':
+        TrackPlayer.pause()
+        return
+      case 'paused':
+        TrackPlayer.play()
+        return
+      case 'loading':
+        console.log('Track is loading, try again in a few.')
+        return
     }
   }
 
@@ -70,7 +91,7 @@ function Explore({ navigation }) {
 
           <View style={{ marginLeft: 15, marginTop: 25 }}>
             <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-            <Text>{website || 'Brand'}</Text>
+            <Text>{bio || 'Brand'}</Text>
           </View>
         </View>
       </View>
