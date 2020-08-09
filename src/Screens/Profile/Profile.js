@@ -14,7 +14,7 @@ import Button from 'react-native-button'
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
-import { MediaService } from '../../utils'
+import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
 
 
@@ -34,7 +34,7 @@ function Explore({ navigation }) {
     mediaService.getFavorites(user.uid, result => {
       console.log('[FAVORITES]', user.uid, result)
     })
-    mediaService.setup()
+    // mediaService.setup()
     return () => { }
   }, [])
 
@@ -43,7 +43,24 @@ function Explore({ navigation }) {
   //   setQueued(queue)
   // }
   const readyTapped = async () => {
-    TrackPlayer.play()
+    const track = await TrackPlayer.getCurrentTrack()
+    const state = await TrackPlayer.getState()
+    console.log('[PROFILE] queued', queued.length)
+    mediaService.setup()
+    // TrackPlayer.add(queued.map((itm, idx) => {
+    //   return {
+    //     id: itm.acid,
+    //     title: itm.title,
+    //     artist: itm.artist,
+    //     artwork: trimWWWString(itm.art_link),
+    //     url: trimWWWString(itm.song),
+    //   }
+    // }))
+    if (state === 'paused') {
+      TrackPlayer.play()
+    } else {
+      TrackPlayer.pause()
+    }
   }
 
   if (!tracks.length) return null

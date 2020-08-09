@@ -7,7 +7,7 @@ import { Divider } from 'react-native-paper'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
-import { MediaService } from '../../utils'
+import MediaService from '../../utils/media/MediaService'
 
 function Home({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -33,20 +33,20 @@ function Home({ navigation }) {
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
-{/* 
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 15, flexDirection: 'row' }}>
         {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
-      </ScrollView> */}
+      </ScrollView>
 
-      {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 15, flexDirection: 'row' }}>
         {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
-      </ScrollView> */}
+      </ScrollView>
 
       <Divider />
 

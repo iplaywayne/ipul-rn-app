@@ -6,7 +6,7 @@ import { Divider } from 'react-native-paper'
 
 import { ExploreCard, Center } from '../../components'
 import { useAuth, useStore } from '../../contexts'
-import { MediaService } from '../../utils'
+import MediaService from '../../utils/media/MediaService'
 
 
 function Explore() {

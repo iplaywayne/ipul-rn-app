@@ -14,19 +14,20 @@ const events = [
 ];
 
 function MediaService() {
-  const [state, dispatch] = useStore()
+  const [storeState, storeDispatch] = useStore()
+  const { queued } = storeState
 
   useTrackPlayerEvents(events, (event) => {
     if (event.type === TrackPlayerEvents.PLAYBACK_ERROR) {
       console.warn('An error occurred while playing the current track.');
     }
     if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
-      console.log(event)
+      console.log('[MEDIASERVICE]', event.type, queued.length)
     }
   });
 
   React.useEffect(() => {
-    getTracks(result => dispatch.setTracks(result))
+    getTracks(result => storeDispatch.setTracks(result))
     console.log('[MEDIASERVICE] [', auth.currentUser.displayName, ']')
   }, [])
 
@@ -53,12 +54,8 @@ function MediaService() {
           TrackPlayer.CAPABILITY_PLAY,
           TrackPlayer.CAPABILITY_PAUSE,
           TrackPlayer.CAPABILITY_STOP,
-          TrackPlayer.CAPABILITY_SKIP,
           TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
           TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-          TrackPlayer.CAPABILITY_JUMP_FORWARD,
-          TrackPlayer.CAPABILITY_JUMP_BACKWARD,
-          TrackPlayer.RATING_THUMBS_UP_DOWN,
         ],
       })
     })
@@ -76,6 +73,7 @@ function MediaService() {
     }))
       .then(res => {
         TrackPlayer.play()
+          .then(r => r.json())
           .then(r => console.log(r))
           .catch(e => console.log(e))
       })

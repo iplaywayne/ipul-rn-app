@@ -50,14 +50,6 @@ function MiniCard({ item, addControl, removeControl }) {
   return (
     <TouchableScale onPress={() => {
       storeDispatch.addToQueue(item)
-      // TrackPlayer.add({
-      //   id: item.acid,
-      //   title: item.title,
-      //   artist: item.artist,
-      //   artwork: trimWWWString(item.art_link),
-      //   url: trimWWWString(item.song),
-      // })
-      // TrackPlayer.skip(item.acid)
     }}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'column' }}>
