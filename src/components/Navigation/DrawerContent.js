@@ -1,19 +1,19 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
 import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
-
-import { useAuth } from '../../contexts/AuthContext'
 
 
 const DrawerContent = (props) => {
-  const { navigation } = props
+  const { navigation, user } = props
+  const { name, avatar } = user
 
   return (
     <View>
       <View style={styles.root} >
-        <Text style={{ color: 'white', fontSize: 15 }}>
-          Header
-      </Text>
+        <Image source={{ uri: avatar }} style={{ height: 70, width: 70, borderRadius: 70 / 2, marginTop: 35 }} />
+        <Text style={{ color: 'white', fontSize: 15, marginTop: 10 }}>
+          {name}
+        </Text>
       </View>
 
       <ScrollView style={styles.container}>
@@ -36,16 +36,17 @@ const DrawerContent = (props) => {
           }}
         />
       </ScrollView>
-    </View>
+    </View >
   )
 }
 
 const styles = StyleSheet.create({
   root: {
     backgroundColor: '#f50057',
-    height: 140,
+    height: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 15
   }
 })
 export default DrawerContent

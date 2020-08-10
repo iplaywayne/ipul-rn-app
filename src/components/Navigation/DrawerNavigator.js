@@ -14,6 +14,9 @@ import { Profile as ProfileScreen } from '../../screens/Profile'
 import SplashScreen from '../../screens/SplashScreen/SplashScreen'
 import DrawerContent from './DrawerContent'
 
+import { useAuth, useStore } from '../../utils'
+
+
 const AppStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -52,14 +55,20 @@ const AppStackNavigator = ({ navigation }) => (
   </AppStack.Navigator>
 )
 
-const DrawerNavigator = () => (
-  <Drawer.Navigator drawerContent={DrawerContent}>
-    <Drawer.Screen name="Home" component={AppStackNavigator} />
-    <Drawer.Screen name="Dashboard" component={ExploreScreen} />
-    <Drawer.Screen name="Explore" component={ExploreScreen} />
-    <Drawer.Screen name="Media" component={ExploreScreen} />
-    <Drawer.Screen name="Notifications" component={ExploreScreen} />
-  </Drawer.Navigator>
-)
+const DrawerNavigator = () => {
+  const [storeState] = useStore()
+  const [authState] = useAuth()
+  const { user } = authState
+
+  return (
+    <Drawer.Navigator drawerContent={() => <DrawerContent user={user} />}>
+      <Drawer.Screen name="Home" component={AppStackNavigator} />
+      <Drawer.Screen name="Dashboard" component={ExploreScreen} />
+      <Drawer.Screen name="Explore" component={ExploreScreen} />
+      <Drawer.Screen name="Media" component={ExploreScreen} />
+      <Drawer.Screen name="Notifications" component={ExploreScreen} />
+    </Drawer.Navigator>
+  )
+}
 
 export default DrawerNavigator
