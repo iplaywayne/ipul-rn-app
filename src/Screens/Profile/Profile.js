@@ -16,7 +16,7 @@ import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
-
+import { styles } from './styles'
 
 function Explore({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -31,59 +31,52 @@ function Explore({ navigation }) {
   const [ready, setReady] = React.useState(false)
 
   React.useEffect(() => {
+    mediaService.setup()
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
-      console.log('[FAVORITES]', result.length)
+      console.log('[FAVORITES] Loaded', result.length)
     })
+    if (tracks.length > 0) setReady(true)
+    storeDispatch.setLoading(false)
     return () => { }
   }, [])
 
-  React.useEffect(() => {
-    mediaService.setup()
-    TrackPlayer.add(queued.map(trk => {
-      return {
-        id: trk.acid,
-        title: trk.title,
-        artist: trk.artist,
-        artwork: trimWWWString(trk.art_link),
-        url: trimWWWString(trk.song),
-      }
-    }))
-    if (queued.length > 0) setReady(true)
-  }, [queued])
 
   const readyTapped = async () => {
-    const track = await TrackPlayer.getCurrentTrack()
-    const state = await TrackPlayer.getState()
-    console.log('[PROFILE] queued', queued.length)
-
-    console.log(state)
-
-    switch (state) {
-      case 'idle':
-        TrackPlayer.add(queued.map(trk => {
-          return {
-            id: trk.acid,
-            title: trk.title,
-            artist: trk.artist,
-            artwork: trimWWWString(trk.art_link),
-            url: trimWWWString(trk.song),
-          }
-        }))
-        return
-      case 'ready':
-        TrackPlayer.play()
-        return
-      case 'playing':
-        TrackPlayer.pause()
-        return
-      case 'paused':
-        TrackPlayer.play()
-        return
-      case 'loading':
-        console.log('Track is loading, try again in a few.')
-        return
+    const queue = await TrackPlayer.getQueue()
+    
+    if (queued.length > 0) {
+      TrackPlayer.play()
+      console.log(queued.length)
+    } else {
+      console.log('Please add something to your queue~')
     }
+
+    // switch (state) {
+    //   case 'idle':
+    //     TrackPlayer.add(queued.map(trk => {
+    //       return {
+    //         id: trk.acid,
+    //         title: trk.title,
+    //         artist: trk.artist,
+    //         artwork: trimWWWString(trk.art_link),
+    //         url: trimWWWString(trk.song),
+    //       }
+    //     }))
+    //     return
+    //   case 'ready':
+    //     TrackPlayer.play()
+    //     return
+    //   case 'playing':
+    //     TrackPlayer.pause()
+    //     return
+    //   case 'paused':
+    //     TrackPlayer.play()
+    //     return
+    //   case 'loading':
+    //     console.log('Track is loading, try again in a few.')
+    //     return
+    // }
   }
 
   if (!tracks.length) return null
@@ -106,7 +99,6 @@ function Explore({ navigation }) {
     </View>
   )
 
-
   const ProfileQueued = () => (
     <View>
       {queued && queued.length > 0 ?
@@ -121,7 +113,7 @@ function Explore({ navigation }) {
           <Button
             style={{ fontSize: 15, color: 'white' }}
             styleDisabled={{ color: 'white' }}
-            disabled={!ready}
+            disabled={isLoading}
             containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
             disabledContainerStyle={{ backgroundColor: '#ddd' }}
             onPress={() => readyTapped()}
@@ -185,53 +177,9 @@ function Explore({ navigation }) {
 
       <ProfileFavorites />
 
-      {/* <Text>
-        {JSON.stringify(storeState.queued, null, 2)}
-      </Text> */}
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  root: {
-    paddingTop: 20,
-    flex: 1,
-  },
-  header: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footer: {
-    flex: 1,
-    backgroundColor: '#121212',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingVertical: 50,
-    paddingHorizontal: 30,
-    height: height
-  },
-  title: {
-    fontSize: 15,
-    padding: 20,
-  },
-  miniCard: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    height: 200,
-    width: 200,
-    marginTop: 10,
-    marginLeft: 20,
-    borderRadius: 5
-  },
-  miniCardImage: {
-    flex: 3,
-    overflow: 'hidden',
-  },
-  miniCardText: {
-    flex: 1
-  }
-})
 
 
 export default Explore

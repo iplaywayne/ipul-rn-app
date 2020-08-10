@@ -44,18 +44,56 @@ function MiniCard({ item, addControl, removeControl }) {
   const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
   const { avatar, details } = user ?? { avatar: '', details: {} }
-  const { queued } = storeState
+  const { queued, tracks, isPlaying } = storeState
 
   if (!item) item = {}
 
+
+  const addQueue = async () => {
+    if (queued.includes(item)) {
+      console.log('This track exits')
+      return
+    }
+    console.log(isPlaying)
+    if (isPlaying !== true) {
+      await TrackPlayer.reset();
+      await TrackPlayer.add(queued)
+      await TrackPlayer.add({
+        id: item.acid,
+        title: item.title,
+        artist: item.artist,
+        artwork: trimWWWString(item.art_link),
+        url: trimWWWString(item.song),
+      })
+      // await TrackPlayer.play()
+    } else {
+      TrackPlayer.pause()
+    }
+    getQueued()
+  }
+
+  const getQueued = async () => {
+    const queued = await TrackPlayer.getQueue()
+    storeDispatch.setQueued(queued)
+  }
+
+  const removeQueue = async () => {
+    await storeDispatch.removeFromQueue(item)
+    // await TrackPlayer.reset();
+    // await TrackPlayer.add(queued)
+    // await TrackPlayer.add({
+    //   id: queued[0].acid,
+    //   title: queued[0].title,
+    //   artist: queued[0].artist,
+    //   artwork: trimWWWString(queued[0].art_link),
+    //   url: trimWWWString(queued[0].song),
+    // })
+    // await TrackPlayer.play()
+    // getQueued()
+  }
+
   return (
-    <TouchableScale onPress={() => {
-      if (queued.includes(item)) {
-        console.log('This track exits')
-        return
-      }
-      storeDispatch.addToQueue(item)
-    }}>
+    <TouchableScale onPress={addQueue}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'column' }}>
 
@@ -69,14 +107,14 @@ function MiniCard({ item, addControl, removeControl }) {
               icon="plus"
               color={Colors.red500}
               size={20}
-              onPress={() => storeDispatch.addToQueue(item)}
+              onPress={addQueue}
             />}
           {removeControl &&
             <IconButton
               icon="minus"
               color={Colors.red500}
               size={20}
-              onPress={() => storeDispatch.removeFromQueue(item)}
+              onPress={removeQueue}
             />}
         </View>
 
