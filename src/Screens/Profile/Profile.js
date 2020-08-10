@@ -29,7 +29,7 @@ function Explore({ navigation }) {
   const mediaService = MediaService()
   const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
-  
+
   React.useEffect(() => {
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
@@ -88,33 +88,27 @@ function Explore({ navigation }) {
 
   if (!tracks.length) return null
 
-  return (
-    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+  const ProfileHeader = () => (
+    <View style={{ flex: 2 }}>
+      <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
+        {avatar ?
+          <Avatar.Image size={100} source={{ uri: avatar }}
+            style={{ backgroundColor: '#444' }} />
+          :
+          <Avatar.Text size={100} label={name.substring(0, 2)}
+            style={{ backgroundColor: '#444' }} />}
 
-      <TouchableOpacity onPress={() => navigation.toggleDrawer()}
-        style={{ alignItems: 'flex-end', margin: 30 }}>
-        <Text style={{ paddingTop: 10 }}><Icon name='dots-horizontal' size={35} /></Text>
-      </TouchableOpacity>
-
-      <View style={{ flex: 2, marginTop: -40 }}>
-        <View style={{ marginBottom: 30, marginLeft: 20, flexDirection: 'row' }}>
-          {avatar ?
-            <Avatar.Image size={100} source={{ uri: avatar }}
-              style={{ backgroundColor: '#444' }} />
-            :
-            <Avatar.Text size={100} label={name.substring(0, 2)}
-              style={{ backgroundColor: '#444' }} />}
-
-          <View style={{ marginLeft: 15, marginTop: 25 }}>
-            <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-            <Text>{bio || 'Brand'}</Text>
-          </View>
+        <View style={{ marginLeft: 15, marginTop: 25 }}>
+          <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
+          <Text>{bio || 'Brand'}</Text>
         </View>
       </View>
+    </View>
+  )
 
-      <Divider />
 
-
+  const ProfileQueued = () => (
+    <View>
       {queued && queued.length > 0 ?
         <View>
           <Text style={styles.title}>You have {queued.length} queued</Text>
@@ -141,9 +135,11 @@ function Explore({ navigation }) {
           <Text style={styles.title}>You have nothing queued</Text>
         </View>
       }
+    </View>
+  )
 
-      <Divider />
-
+  const ProfileFavorites = () => (
+    <View style={{ marginBottom: 50 }}>
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
@@ -154,13 +150,14 @@ function Explore({ navigation }) {
           <Text style={styles.title}>You have no favorites</Text>
         </View>
       }
+    </View>
+  )
 
-      <Divider />
-
+  const ProfileRecent = () => (
+    <View>
       <View>
         <Text style={styles.title}>Recent Releases</Text>
       </View>
-
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 25, flexDirection: 'row' }}>
@@ -168,22 +165,25 @@ function Explore({ navigation }) {
           <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
+    </View>
+  )
+
+  return (
+    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+
+      <ProfileHeader />
 
       <Divider />
 
+      <ProfileRecent />
 
-      <View style={{ flex: 1, marginBottom: 100 }}>
-        {/* <Button
-          style={{ fontSize: 20, color: 'white' }}
-          styleDisabled={{ color: 'white' }}
-          disabled={false}
-          containerStyle={{ padding: 10, margin: 10, height: 45, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
-          disabledContainerStyle={{ backgroundColor: 'pink' }}
-          onPress={() => readyTapped()}
-        >
-          Play
-      </Button> */}
-      </View>
+      <Divider />
+
+      <ProfileQueued />
+
+      <Divider />
+
+      <ProfileFavorites />
 
       {/* <Text>
         {JSON.stringify(storeState.queued, null, 2)}
@@ -194,7 +194,7 @@ function Explore({ navigation }) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: 30,
+    paddingTop: 20,
     flex: 1,
   },
   header: {

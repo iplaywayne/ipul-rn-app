@@ -26,7 +26,6 @@ const TabNavigator = () => (
       name="Home"
       component={HomeScreen}
       options={{
-        headerShown: true,
         tabBarLabel: 'Home',
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="home" color={color} size={26} />

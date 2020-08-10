@@ -6,15 +6,15 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
-// import BottomSheet from 'reanimated-bottom-sheet'
 import { List, Divider } from 'react-native-paper';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { logo, width, height } from '../../constants'
-import BottomSheet from 'react-native-simple-bottom-sheet';
 import { Modalize } from 'react-native-modalize';
+import BottomSheet from 'react-native-simple-bottom-sheet';
+import { BottomSheet as BSheet } from 'reanimated-bottom-sheet'
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const DATA = [];
 const getItem = (data, index) => {
@@ -51,28 +51,32 @@ function Explore() {
   };
 
   const MediaContent = () => (
-    <View style={styles.sheetContent}>
+    <View>
       {/* <View style={styles.handlerBar}></View> */}
 
-      <View style={{ alignItems: 'center', marginBottom: 5 }}>
-        <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
-          style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
-          resizeMode='cover' />
-        {currentTrack && <Text style={{ fontWeight: '700', color: '#fff' }}>{currentTrack.title}</Text>}
-      </View>
+      {currentTrack &&
+        <View style={{ alignItems: 'center', marginBottom: 5 }}>
+          <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
+            style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
+            resizeMode='cover' />
+          {currentTrack && <Text style={{ fontWeight: '700', color: '#fff' }}>{currentTrack.title}</Text>}
+        </View>}
 
-      <ScrollView style={{ height: 'auto', marginBottom: 70 }}
+      <ScrollView style={{ height: 'auto', marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
-        <Divider style={{ marginBottom: 15 }} />
+
         {tracks && tracks.slice(0, 11).map((itm, idx) => (
           <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
             <View
-              style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
+              style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
               <Image source={itm.art_link ? { uri: itm.art_link } : logo}
-                style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
+                style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
                 resizeMode='cover' />
-              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700', color: '#fff' }}>{itm.artist}</Text>
-              <Text style={{ marginVertical: 10, color: '#fff' }}>{itm.title}</Text>
+              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
+              <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
+              <View style={{ flexDirection: 'row', position: 'absolute', right: 30 }}>
+                <Button title='Play' />
+              </View>
             </View>
             <Divider />
           </TouchableOpacity>
@@ -82,53 +86,47 @@ function Explore() {
   )
 
   return (
-    <View style={styles.root} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
         <Image source={logo}
           style={styles.logo} resizeMode='cover' />
-        <Text style={{
-          zIndex: 1, top: 100, fontWeight: '700', color: 'white',
-          position: 'absolute', left: 30
-        }} h4>Media</Text>
+        <Text style={styles.title} h4>Media</Text>
 
         <MediaContent />
-        {/* <ScrollView>
-          {tracks && tracks.map((itm) => (
-            <TouchableOpacity onPress={()=>onOpen()}>
-              <Text style={{ color: '#fff', padding: 20 }}>{itm.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView> */}
       </View>
 
-      <Modalize
+      {/* <Modalize
         ref={modalizeRef}
         modalHeight={600}
         alwaysOpen={true}
       >
-        {/* <MediaContent /> */}
-      </Modalize>
-    </View>
+        <MediaContent />
+      </Modalize> */}
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
     // paddingVertical: 30,
-    backgroundColor: '#fff',
     flex: 1,
   },
   logo: {
     borderRadius: 30,
-    height: height * .3,
+    height: height * .4,
     width: width,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    padding: 20,
-    marginTop: 20,
+  title:
+  {
+    zIndex: 1, top: 100, fontWeight: '700', color: 'white',
+    position: 'absolute', left: 30
   },
+  // {
+  //   fontSize: 28,
+  //   fontWeight: 'bold',
+  //   padding: 20,
+  //   marginTop: 20,
+  // }
   header: {
     flex: 2,
     // justifyContent: 'center',
