@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
+import FastImage from 'react-native-fast-image'
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -44,12 +45,12 @@ function Explore({ navigation }) {
 
   const readyTapped = async () => {
     const queue = await TrackPlayer.getQueue()
-    
+
     if (queued.length > 0) {
       TrackPlayer.play()
       console.log(queued.length)
     } else {
-      console.log('Please add something to your queue~')
+      console.log('Please add something to your queue!')
     }
 
     // switch (state) {
@@ -85,8 +86,16 @@ function Explore({ navigation }) {
     <View style={{ flex: 2 }}>
       <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
         {avatar ?
-          <Avatar.Image size={100} source={{ uri: avatar }}
-            style={{ backgroundColor: '#444' }} />
+          <FastImage
+            style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
+            source={{
+              uri: avatar,
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+          // <Avatar.Image size={100} source={{ uri: avatar }}
+          //   style={{ backgroundColor: '#444' }} />
           :
           <Avatar.Text size={100} label={name.substring(0, 2)}
             style={{ backgroundColor: '#444' }} />}
@@ -118,7 +127,6 @@ function Explore({ navigation }) {
             disabledContainerStyle={{ backgroundColor: '#ddd' }}
             onPress={() => readyTapped()}
           >
-
             {isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
           </Button>
         </View>
@@ -154,7 +162,7 @@ function Explore({ navigation }) {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 25, flexDirection: 'row' }}>
         {tracks.slice(0, 5).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
+          <MiniCard key={idx} item={itm} idx={idx}/>
         ))}
       </ScrollView>
     </View>

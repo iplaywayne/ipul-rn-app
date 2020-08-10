@@ -7,9 +7,11 @@ import {
 import TouchableScale from 'react-native-touchable-scale'
 import TrackPlayer from 'react-native-track-player'
 import { IconButton, Colors } from 'react-native-paper';
+import FastImage from 'react-native-fast-image'
+import { v4 as uuidv4 } from 'uuid';
 
 import { useAuth, useStore } from '../../contexts'
-import { siteLogo } from '../../constants'
+import { logo, siteLogo } from '../../constants'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 
 
@@ -39,7 +41,7 @@ const Swiper = () => (
   </View>
 )
 
-function MiniCard({ item, addControl, removeControl }) {
+function MiniCard({ idx, item, addControl, removeControl }) {
   const auth = useAuth()
   const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
@@ -54,21 +56,31 @@ function MiniCard({ item, addControl, removeControl }) {
       console.log('This track exits')
       return
     }
-    console.log(isPlaying)
-    if (isPlaying !== true) {
-      await TrackPlayer.reset();
-      await TrackPlayer.add(queued)
-      await TrackPlayer.add({
-        id: item.acid,
-        title: item.title,
-        artist: item.artist,
-        artwork: trimWWWString(item.art_link),
-        url: trimWWWString(item.song),
-      })
-      // await TrackPlayer.play()
-    } else {
-      TrackPlayer.pause()
+    if (idx < 0) {
+      console.log('Missing media index', item, idx)
+      return
     }
+
+    try {
+      if (isPlaying !== true) {
+        await TrackPlayer.reset();
+        await TrackPlayer.add(queued)
+        await TrackPlayer.add({
+          idx: Math.random(item.acid * 1100),
+          id: item.acid,
+          title: item.title,
+          artist: item.artist,
+          artwork: trimWWWString(item.art_link),
+          url: trimWWWString(item.song),
+        })
+        await TrackPlayer.play()
+      } else {
+        TrackPlayer.pause()
+      }
+    } catch (e) {
+      console.log('Something went wrong inside MiniCard', e)
+    }
+
     getQueued()
   }
 
@@ -79,17 +91,6 @@ function MiniCard({ item, addControl, removeControl }) {
 
   const removeQueue = async () => {
     await storeDispatch.removeFromQueue(item)
-    // await TrackPlayer.reset();
-    // await TrackPlayer.add(queued)
-    // await TrackPlayer.add({
-    //   id: queued[0].acid,
-    //   title: queued[0].title,
-    //   artist: queued[0].artist,
-    //   artwork: trimWWWString(queued[0].art_link),
-    //   url: trimWWWString(queued[0].song),
-    // })
-    // await TrackPlayer.play()
-    // getQueued()
   }
 
   return (
@@ -102,6 +103,7 @@ function MiniCard({ item, addControl, removeControl }) {
           justifyContent: 'center',
           marginLeft: 10
         }}>
+          
           {addControl &&
             <IconButton
               icon="plus"
@@ -120,9 +122,14 @@ function MiniCard({ item, addControl, removeControl }) {
 
         <View style={styles.miniCard}>
           <View style={styles.miniCardImage}>
-            <Image
-              source={{ uri: item.art_link || siteLogo }}
-              style={{ height: '100%', width: '100%' }} resizeMode='cover' />
+            <FastImage
+              style={{ width: '100%', height: '100%' }}
+              source={{
+                uri: item.art_link || siteLogo,
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
           </View>
           <View style={styles.miniCardText}>
             <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>

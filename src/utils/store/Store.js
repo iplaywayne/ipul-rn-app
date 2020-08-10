@@ -34,7 +34,7 @@ function reducer(state, action) {
       if (state.queued.includes(action.val)) return state
       return { ...state, queued: state.queued.concat(action.val) };
     case REMOVE_FROM_QUEUE:
-      return { ...state, queued: state.queued.filter((itm => itm.id !== action.val.id)) };
+      return { ...state, queued: state.queued.filter((itm => itm.idx !== action.val.idx)) };
     case SET_PLAYING:
       return { ...state, isPlaying: action.val };
     case SET_LOADING:
@@ -57,13 +57,6 @@ function StoreProvider({ children }) {
     },
     removeFromQueue: async track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
-      TrackPlayer.remove(track.id)
-        .then(res => console.log('Remove Success!', res))
-        .catch(err => console.log('Remove Failure!', err))
-      // setTimeout(async () => {
-      //   const dd = await TrackPlayer.getQueue()
-      //   console.log(dd)
-      // }, 3000)
     },
     setPlaying: val => {
       dispatch({ type: SET_PLAYING, val })

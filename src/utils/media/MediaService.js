@@ -32,6 +32,7 @@ function MediaService() {
           // console.log('[MEDIASERVICE]', event.state, queued.length)
           storeDispatch.setPlaying(isPlaying)
           storeDispatch.setLoading(isLoading)
+
           return
         default:
           console.log('Unknown State', event.type)
@@ -46,17 +47,18 @@ function MediaService() {
   }, [])
 
   React.useEffect(() => {
-    if (storeState.tracks.length) {
-      console.log('[MEDIASERVICE] Loaded', storeState.tracks.length)
+    let mounted = false
+    if (storeState.tracks.length && mounted !== true) {
       const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
         const track = await TrackPlayer.getTrack(data.nextTrack);
-        console.log(`[MEDIASERVICE] Ready to play ${track.title}`);
+        // await TrackPlayer.play()
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[MEDIASERVICE] Your playlist has ended`);
         TrackPlayer.reset()
       })
     }
+    return () => mounted = true
   }, [storeState.tracks])
 
 
