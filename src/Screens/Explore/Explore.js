@@ -14,7 +14,7 @@ function Explore() {
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
   const mediaService = MediaService()
-
+  const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase() === 'remix')
 
   return (
     <ScrollView style={styles.root}>
@@ -25,8 +25,10 @@ function Explore() {
 
       <Divider />
 
-      <View style={{ marginTop: 0 }}>
-        <ExploreCard />
+      <View style={{ paddingBottom: 50 }}>
+        {topRemixes.map((itm, idx) => (
+          <ExploreCard key={idx} item={itm} />
+        ))}
       </View>
 
       <View>
@@ -39,7 +41,7 @@ function Explore() {
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: 30,
+    paddingTop: 30,
     flex: 1,
   },
   title: {

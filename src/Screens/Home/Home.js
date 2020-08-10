@@ -12,10 +12,11 @@ import MediaService from '../../utils/media/MediaService'
 function Home({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
-  const { tracks } = storeState ?? { tracks: [] }
+  const { tracks } = storeState
   const { user } = authState
   const name = (user && user.name) ?? { name: '' }
   const mediaService = MediaService()
+  const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase().includes('r&'))
 
   if (!name) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
@@ -52,12 +53,14 @@ function Home({ navigation }) {
 
       <Divider />
 
-      <View style={{ flex: 1 }}>
-        <ExploreCard />
+      <View style={{ flex: 1,marginBottom:50 }}>
+        {topRemixes.map((itm, idx) => (
+          <ExploreCard key={idx} item={itm} />
+        ))}
       </View>
 
       <View>
-        {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
+        {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
         {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
       </View>
     </ScrollView>
@@ -66,8 +69,9 @@ function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: 30,
+    paddingTop: 30,
     flex: 1,
+    paddingBottom: 50
   },
   title: {
     fontSize: 28,

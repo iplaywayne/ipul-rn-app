@@ -34,7 +34,7 @@ const NavigationDrawerStructure = (props) => {
 
 const AppStackNavigator = ({ navigation }) => (
   <AppStack.Navigator>
-    <AppStack.Screen name="Home" component={ProfileScreen} options={{
+    <AppStack.Screen name="Profile" component={ProfileScreen} options={{
       title: 'iPlayuListen',
       headerShown: false,
       headerTransparent: false,
@@ -55,19 +55,29 @@ const AppStackNavigator = ({ navigation }) => (
   </AppStack.Navigator>
 )
 
+const SettingsScreen = () => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Settings Coming</Text></View>
+)
+const NotifsScreen = () => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Notifications Coming</Text></View>
+)
+const AdsScreen = () => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Ads Coming</Text></View>
+)
+
 const DrawerNavigator = () => {
   const [storeState] = useStore()
   const [authState] = useAuth()
   const { user } = authState
 
   return (
-    <Drawer.Navigator drawerContent={() => <DrawerContent user={user} />}>
-      <Drawer.Screen name="Home" component={AppStackNavigator} />
-      <Drawer.Screen name="Dashboard" component={ExploreScreen} />
-      <Drawer.Screen name="Explore" component={ExploreScreen} />
-      <Drawer.Screen name="Media" component={ExploreScreen} />
-      <Drawer.Screen name="Notifications" component={ExploreScreen} />
-    </Drawer.Navigator>
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} user={user} />}>
+      <Drawer.Screen name="Profile" component={AppStackNavigator} />
+      <Drawer.Screen name="Settings" children={props => <SettingsScreen {...props} />} />
+      <Drawer.Screen name="Notifications" children={props => <NotifsScreen {...props} />} />
+      <Drawer.Screen name="Ads" children={props => <AdsScreen {...props} />} />
+
+    </Drawer.Navigator >
   )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import {
   Block, Button, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
@@ -8,6 +8,8 @@ import { Divider } from 'react-native-paper'
 
 
 import { useAuth } from '../../contexts/AuthContext'
+import { trimWWWString } from '../../utils'
+import { siteLogo } from '../../constants'
 
 const elements = [
   <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
@@ -35,31 +37,33 @@ const Swiper = () => (
   </View>
 )
 
-function ExploreSwiper() {
+function ExploreCard({ item }) {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
 
+
   return (
     <ScrollView style={styles.root}>
-      {[0, 1].map((itm, idx) => (
-        <View key={idx}>
+      <TouchableOpacity onPress={() => console.log(item.acid)}>
+        <View>
           <Card
             flex
             borderless
             shadow={true}
-            title={name}
-            caption="139 minutes ago"
-            location={details.firstName}
-            avatar={avatar}
+            title={item && item.title || 'n/a'}
+            caption={item && item.artist || '6 mo'}
+            location={item && item.genre || 'n/a'}
+            avatar={item && item.art_link || siteLogo}
             // style={{paddingTop: 5}}
-            imageStyle={{ borderRadius: 10 }}
-            imageBlockStyle={{}}
-            image="https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300"
+            imageStyle={{ borderRadius: 10, height: 300 }}
+            // imageBlockStyle={{height:400}}
+            image={item && trimWWWString(item.art_link) || siteLogo}
           />
-          <Divider style={{ marginBottom: 15 }} />
+          {/* <Text>{JSON.stringify(item, null, 2)}</Text> */}
+          <Divider />
         </View>
-      ))}
+      </TouchableOpacity>
     </ScrollView>
   )
 }
@@ -69,7 +73,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     marginTop: 10,
-    marginBottom: 50,
   },
   title: {
     fontSize: 20,
@@ -83,7 +86,9 @@ const styles = StyleSheet.create({
     width: 200,
     marginTop: 10,
     marginLeft: 20,
-    borderRadius: 5
+    borderRadius: 5,
+    paddingBottom: 50,
+
   },
   miniCardImage: {
     flex: 3,
@@ -94,4 +99,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ExploreSwiper
+export default ExploreCard

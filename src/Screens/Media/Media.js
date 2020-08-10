@@ -58,21 +58,21 @@ function Explore() {
         <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
           style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
           resizeMode='cover' />
-        {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
+        {currentTrack && <Text style={{ fontWeight: '700', color: '#fff' }}>{currentTrack.title}</Text>}
       </View>
 
       <ScrollView style={{ height: 'auto', marginBottom: 70 }}
         showsVerticalScrollIndicator={false}>
         <Divider style={{ marginBottom: 15 }} />
-        {tracks && tracks.slice(0, 7).map((itm, idx) => (
+        {tracks && tracks.slice(0, 11).map((itm, idx) => (
           <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
             <View
               style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
               <Image source={itm.art_link ? { uri: itm.art_link } : logo}
                 style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
                 resizeMode='cover' />
-              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
-              <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
+              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700', color: '#fff' }}>{itm.artist}</Text>
+              <Text style={{ marginVertical: 10, color: '#fff' }}>{itm.title}</Text>
             </View>
             <Divider />
           </TouchableOpacity>
@@ -101,13 +101,13 @@ function Explore() {
         </ScrollView> */}
       </View>
 
-      {/* <Modalize
+      <Modalize
         ref={modalizeRef}
-        modalHeight={500}
+        modalHeight={600}
         alwaysOpen={true}
       >
-        <MediaContent />
-      </Modalize> */}
+        {/* <MediaContent /> */}
+      </Modalize>
     </View>
   )
 }
@@ -115,7 +115,7 @@ function Explore() {
 const styles = StyleSheet.create({
   root: {
     // paddingVertical: 30,
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     flex: 1,
   },
   logo: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   sheetContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
     borderRadius: 25,
     alignItems: 'center',
     marginTop: -100,

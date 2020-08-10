@@ -93,7 +93,7 @@ function Explore({ navigation }) {
 
       <TouchableOpacity onPress={() => navigation.toggleDrawer()}
         style={{ alignItems: 'flex-end', margin: 30 }}>
-        <Text style={{ padding: 10 }}><Icon name='dots-horizontal' size={35} /></Text>
+        <Text style={{ paddingTop: 10 }}><Icon name='dots-horizontal' size={35} /></Text>
       </TouchableOpacity>
 
       <View style={{ flex: 2, marginTop: -40 }}>

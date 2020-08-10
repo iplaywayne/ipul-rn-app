@@ -48,6 +48,7 @@
     "react-native-touchable-scale": "^2.1.1",
     "react-native-track-player": "^1.2.3",
     "react-native-vector-icons": "^7.0.0",
+    "react-reveal": "^1.2.2",
     "reanimated-bottom-sheet": "^1.0.0-alpha.20",
     "styled-components": "^5.1.1"
   },

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
 import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
+import { Divider } from 'react-native-paper'
 
 
 const DrawerContent = (props) => {
@@ -14,19 +15,35 @@ const DrawerContent = (props) => {
         <Text style={{ color: 'white', fontSize: 15, marginTop: 10 }}>
           {name}
         </Text>
+        <Divider />
+        <Text style={{ color: '#ddd', fontSize: 15, marginTop: 10 }}>
+          FREE PLAN
+        </Text>
       </View>
 
       <ScrollView style={styles.container}>
         <DrawerItem
-          label="Home"
+          label="Profile"
           onPress={(): void => {
-            navigation.navigate('Home');
+            navigation.navigate('Profile');
           }}
         />
         <DrawerItem
-          label="Explore"
+          label="Notifications"
           onPress={(): void => {
-            navigation.navigate('Explore');
+            navigation.navigate('Notifications');
+          }}
+        />
+        <DrawerItem
+          label="Advertisements"
+          onPress={(): void => {
+            navigation.navigate('Ads');
+          }}
+        />
+        <DrawerItem
+          label="Settings"
+          onPress={(): void => {
+            navigation.navigate('Settings');
           }}
         />
         <DrawerItem
