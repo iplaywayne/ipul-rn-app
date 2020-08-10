@@ -28,7 +28,8 @@ function Explore({ navigation }) {
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
   const spinner = React.useRef(new Animated.Value(0)).current
-
+  const [ready, setReady] = React.useState(false)
+  
   React.useEffect(() => {
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
@@ -38,6 +39,7 @@ function Explore({ navigation }) {
   }, [])
 
   React.useEffect(() => {
+    mediaService.setup()
     TrackPlayer.add(queued.map(trk => {
       return {
         id: trk.acid,
@@ -47,14 +49,16 @@ function Explore({ navigation }) {
         url: trimWWWString(trk.song),
       }
     }))
+    if (queued.length > 0) setReady(true)
   }, [queued])
 
   const readyTapped = async () => {
     const track = await TrackPlayer.getCurrentTrack()
     const state = await TrackPlayer.getState()
     console.log('[PROFILE] queued', queued.length)
-    mediaService.setup()
+
     console.log(state)
+
     switch (state) {
       case 'idle':
         TrackPlayer.add(queued.map(trk => {
@@ -115,7 +119,7 @@ function Explore({ navigation }) {
         <View>
           <Text style={styles.title}>You have {queued.length} queued</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-            style={{ flexDirection: 'row' }}>
+            style={{ flexDirection: 'row', marginTop: -15 }}>
             {queued.map((itm, idx) => (
               <MiniCard key={idx} item={itm} removeControl />
             ))}
@@ -123,7 +127,7 @@ function Explore({ navigation }) {
           <Button
             style={{ fontSize: 15, color: 'white' }}
             styleDisabled={{ color: 'white' }}
-            disabled={isLoading}
+            disabled={!ready}
             containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
             disabledContainerStyle={{ backgroundColor: '#ddd' }}
             onPress={() => readyTapped()}

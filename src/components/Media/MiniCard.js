@@ -59,7 +59,11 @@ function MiniCard({ item, addControl, removeControl }) {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'column' }}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginLeft: 10
+        }}>
           {addControl &&
             <IconButton
               icon="plus"
@@ -95,7 +99,6 @@ function MiniCard({ item, addControl, removeControl }) {
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
     flex: 1,
     width: 320,
   },

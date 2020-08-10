@@ -7,6 +7,7 @@ export const useStore = () => React.useContext(StoreContext)
 
 const SET_TRACKS = 'SET_TRACKS'
 const SET_QUEUED = 'SET_QUEUED'
+const SET_CURRENT = 'SET_CURRENT'
 const ADD_TO_QUEUE = 'ADD_TO_QUEUE'
 const REMOVE_FROM_QUEUE = 'REMOVE_FROM_QUEUE'
 const SET_PLAYING = 'SET_PLAYING'
@@ -16,8 +17,9 @@ const initialState = {
   name: 'Stylz',
   tracks: [],
   queued: [],
+  currentTrack: null,
   isPlaying: false,
-  isLoading: false,
+  isLoading: true,
 }
 
 function reducer(state, action) {
@@ -26,6 +28,8 @@ function reducer(state, action) {
       return { ...state, tracks: action.val };
     case SET_QUEUED:
       return { ...state, queued: action.val };
+    case SET_CURRENT:
+      return { ...state, currentTrack: action.val };
     case ADD_TO_QUEUE:
       if (state.queued.includes(action.val)) return state
       return { ...state, queued: state.queued.concat(action.val) };
@@ -47,7 +51,11 @@ function StoreProvider({ children }) {
   const storeDispatch = {
     setTracks: tracks => dispatch({ type: SET_TRACKS, val: tracks }),
     setQueued: track => dispatch({ type: SET_QUEUED, val: track }),
-    addToQueue: track => dispatch({ type: ADD_TO_QUEUE, val: track }),
+    setCurrentTrack: track => dispatch({ type: SET_CURRENT, val: track }),
+    addToQueue: track => {
+      dispatch({ type: ADD_TO_QUEUE, val: track })
+      storeDispatch.setCurrentTrack(track)
+    },
     removeFromQueue: track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
       TrackPlayer.reset()

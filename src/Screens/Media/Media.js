@@ -6,14 +6,15 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
-import BottomSheet from 'reanimated-bottom-sheet'
-
+// import BottomSheet from 'reanimated-bottom-sheet'
+import { List, Divider } from 'react-native-paper';
+import RBSheet from "react-native-raw-bottom-sheet";
 import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { logo, width, height } from '../../constants'
-
-
+import BottomSheet from 'react-native-simple-bottom-sheet';
+import { Modalize } from 'react-native-modalize';
 
 const DATA = [];
 const getItem = (data, index) => {
@@ -37,26 +38,51 @@ const Item = ({ title }) => {
 function Explore() {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
-  const { tracks } = storeState
+  const { tracks, currentTrack, queued } = storeState
+  const refRBSheet = React.useRef();
+  const modalizeRef = React.useRef(null);
 
   if (!tracks) return <ActivityIndicator
     style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
   />
 
-  const sheetHeader = () => (
-    <View style={styles.sheetHeader}><Text>Header</Text></View>
-  )
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
 
-  const sheetContent = () => (
+  const MediaContent = () => (
     <View style={styles.sheetContent}>
-      <View style={styles.handlerBar}>
-        {/* <Text style={{ color: '#fff' }}>Idle . .</Text> */}
+      {/* <View style={styles.handlerBar}></View> */}
+
+      <View style={{ alignItems: 'center', marginBottom: 5 }}>
+        <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
+          style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
+          resizeMode='cover' />
+        {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
       </View>
+
+      <ScrollView style={{ height: 'auto', marginBottom: 70 }}
+        showsVerticalScrollIndicator={false}>
+        <Divider style={{ marginBottom: 15 }} />
+        {tracks && tracks.slice(0, 7).map((itm, idx) => (
+          <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
+            <View
+              style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
+              <Image source={itm.art_link ? { uri: itm.art_link } : logo}
+                style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
+                resizeMode='cover' />
+              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
+              <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
+            </View>
+            <Divider />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   )
 
   return (
-    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+    <View style={styles.root} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
         <Image source={logo}
           style={styles.logo} resizeMode='cover' />
@@ -65,40 +91,24 @@ function Explore() {
           position: 'absolute', left: 30
         }} h4>Media</Text>
 
-        {/* <MiniCard /> */}
-
-        {/* <View style={styles.footer}>
-          <Text style={{ color: 'white', marginBottom: 10 }} h5>Playground</Text> */}
-        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-
-        {/* <ScrollView style={{ height: 'auto', paddingBottom: 30 }}
-            showsVerticalScrollIndicator={false}>
-            {tracks && tracks.map((itm, idx) => (
-              <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
-                <View
-                  style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
-                  <Image source={itm.art_link ? { uri: itm.art_link } : logo}
-                    style={{ height: 50, width: 50, marginRight: 15, borderRadius: 5 }}
-                    resizeMode='cover' />
-                  <Text style={{ color: 'white', marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
-                  <Text style={{ color: 'white', marginVertical: 10 }}>{itm.title}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView> */}
-        {/* </View> */}
+        <MediaContent />
+        {/* <ScrollView>
+          {tracks && tracks.map((itm) => (
+            <TouchableOpacity onPress={()=>onOpen()}>
+              <Text style={{ color: '#fff', padding: 20 }}>{itm.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView> */}
       </View>
 
-
-
-      <BottomSheet
-        borderRadius={25}
-        initialSnap={2}
-        snapPoints={[800, 220, -380]}
-        // renderHeader={sheetHeader}
-        renderContent={sheetContent}
-      />
-    </ScrollView>
+      {/* <Modalize
+        ref={modalizeRef}
+        modalHeight={500}
+        alwaysOpen={true}
+      >
+        <MediaContent />
+      </Modalize> */}
+    </View>
   )
 }
 
@@ -156,13 +166,11 @@ const styles = StyleSheet.create({
     height: 100,
   },
   sheetContent: {
-    marginTop: 100,
     backgroundColor: '#fff',
-    height: 600,
     borderRadius: 25,
-    // borderTopLeftRadius: 25,
     alignItems: 'center',
-    paddingTop: 10
+    marginTop: -100,
+    height: 700,
   },
   handlerBar: {
     position: 'absolute',
@@ -171,6 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 5,
     width: 30,
+    flex: 1,
   },
 })
 
