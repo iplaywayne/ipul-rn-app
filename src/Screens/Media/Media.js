@@ -65,7 +65,7 @@ function Explore() {
           {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 50, marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 20, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
 
         {tracks && tracks.slice(0, 11).map((itm, idx) => (
