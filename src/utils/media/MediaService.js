@@ -19,27 +19,23 @@ function MediaService() {
   const [storeState, storeDispatch] = useStore()
   const { queued } = storeState
 
-  React.useCallback(() => {
-    useTrackPlayerEvents(events, async (event) => {
-      switch (event.type) {
-        case TrackPlayerEvents.PLAYBACK_ERROR:
-          console.warn('An error occurred while playing the current track.');
-          return
-        case TrackPlayerEvents.PLAYBACK_STATE:
-          const isPlaying = event.state === 'playing'
-          const isLoading = event.state === 'loading'
-          const isIdle = event.state === 'idle'
-          // console.log('[MEDIASERVICE]', event.state, queued.length)
-          storeDispatch.setPlaying(isPlaying)
-          storeDispatch.setLoading(isLoading)
-
-          return
-        default:
-          console.log('Unknown State', event.type)
-          return
-      }
-    });
-  })
+  useTrackPlayerEvents(events, async (event) => {
+    switch (event.type) {
+      case TrackPlayerEvents.PLAYBACK_ERROR:
+        console.warn('An error occurred while playing the current track.');
+        return
+      case TrackPlayerEvents.PLAYBACK_STATE:
+        const isPlaying = event.state === 'playing'
+        const isLoading = event.state === 'loading'
+        const isIdle = event.state === 'idle'
+        storeDispatch.setPlaying(isPlaying)
+        storeDispatch.setLoading(isLoading)
+        return
+      default:
+        console.log('Unknown State', event.type)
+        return
+    }
+  });
 
   React.useEffect(() => {
     getTracks(result => storeDispatch.setTracks(result))
@@ -48,18 +44,16 @@ function MediaService() {
 
   React.useEffect(() => {
     let mounted = false
-    if (storeState.tracks.length && mounted !== true) {
+    if (storeState.tracks.length && mounted === false) {
       const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
         const track = await TrackPlayer.getTrack(data.nextTrack);
-        // await TrackPlayer.play()
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[MEDIASERVICE] Your playlist has ended`);
-        TrackPlayer.reset()
       })
     }
     return () => mounted = true
-  }, [storeState.tracks])
+  }, [storeState.queued])
 
 
   const setup = () => {

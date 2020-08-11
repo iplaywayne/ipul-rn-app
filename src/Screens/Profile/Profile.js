@@ -43,41 +43,14 @@ function Explore({ navigation }) {
   }, [])
 
 
-  const readyTapped = async () => {
+  const playNowTapped = async () => {
     const queue = await TrackPlayer.getQueue()
 
     if (queued.length > 0) {
       TrackPlayer.play()
-      console.log(queued.length)
     } else {
       console.log('Please add something to your queue!')
     }
-
-    // switch (state) {
-    //   case 'idle':
-    //     TrackPlayer.add(queued.map(trk => {
-    //       return {
-    //         id: trk.acid,
-    //         title: trk.title,
-    //         artist: trk.artist,
-    //         artwork: trimWWWString(trk.art_link),
-    //         url: trimWWWString(trk.song),
-    //       }
-    //     }))
-    //     return
-    //   case 'ready':
-    //     TrackPlayer.play()
-    //     return
-    //   case 'playing':
-    //     TrackPlayer.pause()
-    //     return
-    //   case 'paused':
-    //     TrackPlayer.play()
-    //     return
-    //   case 'loading':
-    //     console.log('Track is loading, try again in a few.')
-    //     return
-    // }
   }
 
   if (!tracks.length) return null
@@ -94,8 +67,6 @@ function Explore({ navigation }) {
             }}
             resizeMode={FastImage.resizeMode.cover}
           />
-          // <Avatar.Image size={100} source={{ uri: avatar }}
-          //   style={{ backgroundColor: '#444' }} />
           :
           <Avatar.Text size={100} label={name.substring(0, 2)}
             style={{ backgroundColor: '#444' }} />}
@@ -125,7 +96,7 @@ function Explore({ navigation }) {
             disabled={isLoading}
             containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
             disabledContainerStyle={{ backgroundColor: '#ddd' }}
-            onPress={() => readyTapped()}
+            onPress={() => playNowTapped()}
           >
             {isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
           </Button>
@@ -162,7 +133,7 @@ function Explore({ navigation }) {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 25, flexDirection: 'row' }}>
         {tracks.slice(0, 5).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} idx={idx}/>
+          <MiniCard key={idx} item={itm} idx={idx} />
         ))}
       </ScrollView>
     </View>

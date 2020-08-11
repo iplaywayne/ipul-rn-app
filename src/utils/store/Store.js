@@ -17,7 +17,7 @@ const initialState = {
   name: 'Stylz',
   tracks: [],
   queued: [],
-  currentTrack: null,
+  currentTrack: {},
   isPlaying: false,
   isLoading: true,
 }
@@ -57,6 +57,12 @@ function StoreProvider({ children }) {
     },
     removeFromQueue: async track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
+      await TrackPlayer.reset()
+        if (state.queued.length > 0) {
+          const updatedQueue = state.queued.filter(t => t.idx !== track.idx)
+          await TrackPlayer.add(updatedQueue)
+          await TrackPlayer.play()
+        }
     },
     setPlaying: val => {
       dispatch({ type: SET_PLAYING, val })

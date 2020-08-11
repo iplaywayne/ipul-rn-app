@@ -46,45 +46,37 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const [storeState, storeDispatch] = useStore()
   const [{ user }] = auth
   const { avatar, details } = user ?? { avatar: '', details: {} }
-  const { queued, tracks, isPlaying } = storeState
+  const { queued, tracks, isPlaying, currentTrack } = storeState
 
   if (!item) item = {}
-
+  let newItem = { ...item, id: item.acid }
 
   const addQueue = async () => {
-    if (queued.includes(item)) {
-      console.log('This track exits')
-      return
-    }
+    storeDispatch.setLoading(true)
+
     if (idx < 0) {
-      console.log('Missing media index', item, idx)
+      console.log('Missing media index', item.title, idx)
       return
     }
-
-    try {
-      if (isPlaying !== true) {
-        await TrackPlayer.reset();
-        await TrackPlayer.add(queued)
-        await TrackPlayer.add({
-          idx: Math.random(item.acid * 1100),
-          id: item.acid,
-          title: item.title,
-          artist: item.artist,
-          artwork: trimWWWString(item.art_link),
-          url: trimWWWString(item.song),
-        })
-        await TrackPlayer.play()
-      } else {
-        TrackPlayer.pause()
-      }
-    } catch (e) {
-      console.log('Something went wrong inside MiniCard', e)
-    }
-
-    getQueued()
+    sendPlayer(item)
   }
 
-  const getQueued = async () => {
+  const sendPlayer = async item => {
+    await TrackPlayer.add({
+      idx: Math.random(item.acid * 1100),
+      id: item.acid,
+      title: item.title,
+      artist: item.artist,
+      artwork: trimWWWString(item.art_link),
+      url: trimWWWString(item.song),
+    })
+    await updateStoreQueued(item)
+    await TrackPlayer.play()
+    storeDispatch.setCurrentTrack(item)
+    storeDispatch.setLoading(false)
+  }
+
+  const updateStoreQueued = async () => {
     const queued = await TrackPlayer.getQueue()
     storeDispatch.setQueued(queued)
   }
@@ -103,7 +95,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
           justifyContent: 'center',
           marginLeft: 10
         }}>
-          
+
           {addControl &&
             <IconButton
               icon="plus"
