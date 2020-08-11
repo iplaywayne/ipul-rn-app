@@ -52,13 +52,15 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   let newItem = { ...item, id: item.acid }
 
   const addQueue = async () => {
-    storeDispatch.setLoading(true)
+    setTimeout(() => {
+      storeDispatch.setLoading(true)
 
-    if (idx < 0) {
-      console.log('Missing media index', item.title, idx)
-      return
-    }
-    sendPlayer(item)
+      if (idx < 0) {
+        console.log('Missing media index', item.title, idx)
+        return
+      }
+      sendPlayer(item)
+    }, 500)
   }
 
   const sendPlayer = async item => {
@@ -77,12 +79,16 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   }
 
   const updateStoreQueued = async () => {
-    const queued = await TrackPlayer.getQueue()
-    storeDispatch.setQueued(queued)
+    setTimeout(async () => {
+      const queued = await TrackPlayer.getQueue()
+      storeDispatch.setQueued(queued)
+    }, 500)
   }
 
   const removeQueue = async () => {
-    await storeDispatch.removeFromQueue(item)
+    setTimeout(async () => {
+      await storeDispatch.removeFromQueue(item)
+    }, 500)
   }
 
   return (

@@ -10,11 +10,14 @@ import { List, Divider } from 'react-native-paper';
 import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
-import { logo, width, height } from '../../constants'
+import { siteLogo, logo, width, height } from '../../constants'
 import { Modalize } from 'react-native-modalize';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { BottomSheet as BSheet } from 'reanimated-bottom-sheet'
 import RBSheet from "react-native-raw-bottom-sheet";
+import FastImage from 'react-native-fast-image'
+import TrackPlayer from 'react-native-track-player'
+
 
 const DATA = [];
 const getItem = (data, index) => {
@@ -42,7 +45,7 @@ function Explore() {
   const refRBSheet = React.useRef();
   const modalizeRef = React.useRef(null);
 
-  if (!tracks) return <ActivityIndicator
+  if (!tracks.length) return <ActivityIndicator
     style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
   />
 
@@ -54,24 +57,45 @@ function Explore() {
     <View>
       {/* <View style={styles.handlerBar}></View> */}
 
-      {currentTrack &&
-        <View style={{ alignItems: 'center', marginBottom: 5 }}>
-          <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
-            style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
+      {'acid' in currentTrack &&
+        <View style={{ alignItems: 'center'}}>
+          <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
+            style={{ flex: 0, height: 200, width: 200, marginTop: 60, marginBottom: 20, borderRadius: 5 }}
             resizeMode='cover' />
           {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 50, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
 
         {tracks && tracks.slice(0, 11).map((itm, idx) => (
-          <TouchableOpacity key={idx} onPress={e => console.log(itm.title)}>
+          <TouchableOpacity key={idx} onPress={async e => {
+            setTimeout(async () => {
+              storeDispatch.setCurrentTrack(itm)
+              await TrackPlayer.reset()
+              await TrackPlayer.add({
+                id: itm.acid,
+                title: itm.title,
+                artist: itm.artist,
+                url: trimWWWString(itm.song),
+                artwork: trimWWWString(itm.art_link)
+              })
+              await TrackPlayer.play()
+            }, 500)
+          }}>
             <View
               style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
-              <Image source={itm.art_link ? { uri: itm.art_link } : logo}
+              <FastImage
                 style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
-                resizeMode='cover' />
+                source={{
+                  uri: itm.art_link || siteLogo,
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+              {/* <Image source={itm.art_link ? { uri: itm.art_link } : logo}
+                style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
+                resizeMode='cover' /> */}
               <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
               <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
               <View style={{ flexDirection: 'row', position: 'absolute', right: 30 }}>
@@ -88,10 +112,19 @@ function Explore() {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Image source={logo}
-          style={styles.logo} resizeMode='cover' />
-        <Text style={styles.title} h4>Media</Text>
+        {/* <View style={{ alignItems: 'center', marginTop: 50, marginBottom: 20 }}>
+          <FastImage
+            style={{
+              width: 150, height: 150, borderRadius: 5, margin: 'auto',
+            }}
+            source={{
+              uri: siteLogo,
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
 
+        </View> */}
         <MediaContent />
       </View>
 
@@ -108,7 +141,6 @@ function Explore() {
 
 const styles = StyleSheet.create({
   root: {
-    // paddingVertical: 30,
     flex: 1,
   },
   logo: {
@@ -121,16 +153,8 @@ const styles = StyleSheet.create({
     zIndex: 1, top: 100, fontWeight: '700', color: 'white',
     position: 'absolute', left: 30
   },
-  // {
-  //   fontSize: 28,
-  //   fontWeight: 'bold',
-  //   padding: 20,
-  //   marginTop: 20,
-  // }
   header: {
-    flex: 2,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    flex: 1,
   },
   footer: {
     flex: 1,

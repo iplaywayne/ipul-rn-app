@@ -38,7 +38,7 @@ function Home({ navigation }) {
       <Divider />
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 15,marginBottom: 15, flexDirection: 'row' }}>
+        style={{ marginTop: 15, marginBottom: 15, flexDirection: 'row' }}>
         {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
@@ -53,7 +53,7 @@ function Home({ navigation }) {
 
       <Divider />
 
-      <View style={{ flex: 1,marginBottom:50 }}>
+      <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
           <ExploreCard key={idx} item={itm} />
         ))}

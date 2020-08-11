@@ -25,7 +25,7 @@ function Explore() {
 
       <Divider />
 
-      <View style={{ paddingBottom: 50 }}>
+      <View style={{ paddingBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
           <ExploreCard key={idx} item={itm} />
         ))}

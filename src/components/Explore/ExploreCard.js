@@ -55,12 +55,9 @@ function ExploreCard({ item }) {
             caption={item && item.artist || '6 mo'}
             location={item && item.genre || 'n/a'}
             avatar={item && item.art_link || siteLogo}
-            // style={{paddingTop: 5}}
             imageStyle={{ borderRadius: 10, height: 300 }}
-            // imageBlockStyle={{height:400}}
             image={item && trimWWWString(item.art_link) || siteLogo}
           />
-          {/* <Text>{JSON.stringify(item, null, 2)}</Text> */}
           <Divider />
         </View>
       </TouchableOpacity>
@@ -73,6 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     marginTop: 10,
+    width:'100%',
+    maxWidth: 500,
   },
   title: {
     fontSize: 20,
