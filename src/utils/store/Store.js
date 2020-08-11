@@ -63,6 +63,7 @@ function StoreProvider({ children }) {
           await TrackPlayer.add(updatedQueue)
           await TrackPlayer.play()
         }
+      storeDispatch.setLoading(false)
     },
     setPlaying: val => {
       dispatch({ type: SET_PLAYING, val })

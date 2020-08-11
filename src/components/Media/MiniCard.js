@@ -52,15 +52,14 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   let newItem = { ...item, id: item.acid }
 
   const addQueue = async () => {
-    setTimeout(() => {
-      storeDispatch.setLoading(true)
-
+    setTimeout(() => storeDispatch.setLoading(true),250)
+    setTimeout(async () => {
       if (idx < 0) {
         console.log('Missing media index', item.title, idx)
         return
       }
       sendPlayer(item)
-    }, 500)
+    }, 250)
   }
 
   const sendPlayer = async item => {
@@ -75,8 +74,8 @@ function MiniCard({ idx, item, addControl, removeControl }) {
     await updateStoreQueued(item)
     await TrackPlayer.play()
     storeDispatch.setCurrentTrack(item)
-    storeDispatch.setLoading(false)
-  }
+    setTimeout(() => storeDispatch.setLoading(false), 250)
+ }
 
   const updateStoreQueued = async () => {
     setTimeout(async () => {
@@ -86,6 +85,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   }
 
   const removeQueue = async () => {
+    setTimeout(() => storeDispatch.setLoading(true),250)
     setTimeout(async () => {
       await storeDispatch.removeFromQueue(item)
     }, 500)
@@ -102,12 +102,14 @@ function MiniCard({ idx, item, addControl, removeControl }) {
           marginLeft: 10
         }}>
           {removeControl &&
-            <IconButton
-              icon="minus"
-              color={Colors.red500}
-              size={20}
-              onPress={removeQueue}
-            />}
+            <TouchableScale onPress={removeQueue}>
+              {/* <IconButton
+                icon="minus"
+                color={Colors.red500}
+                size={20}
+            /> */}
+              <Text style={{ margin: 5, color: Colors.red500 }}>Remove</Text>
+            </TouchableScale>}
         </View>
 
         <View style={styles.miniCard}>

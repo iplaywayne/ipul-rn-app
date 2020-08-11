@@ -28,8 +28,6 @@ function MediaService() {
         const isPlaying = event.state === 'playing'
         const isLoading = event.state === 'loading'
         const isIdle = event.state === 'idle'
-        storeDispatch.setPlaying(isPlaying)
-        storeDispatch.setLoading(isLoading)
         return
       default:
         console.log('Unknown State', event.type)
