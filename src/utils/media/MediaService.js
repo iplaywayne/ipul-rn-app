@@ -2,6 +2,7 @@ import React from 'react'
 import { Player } from '@react-native-community/audio-toolkit'
 import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
 
+import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 const tracksPath = `/mediaTracks`
@@ -29,6 +30,11 @@ function MediaService() {
         const isLoading = event.state === 'loading'
         const isIdle = event.state === 'idle'
         return
+      case TrackPlayerEvents.PLAYBACK_QUEUE_ENDED:
+        console.log(currentTrack, 'has ended')
+        storeDispatch.setQueued([])
+        storeDispatch.setPlaying(false)
+        return
       default:
         console.log('Unknown State', event.type)
         return
@@ -41,20 +47,19 @@ function MediaService() {
   }, [])
 
   React.useEffect(() => {
-    let mounted = false
-    if (storeState.tracks.length && mounted === false) {
+    if (storeState.tracks.length && storeDispatch.isPlaying) {
       const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
         const track = await TrackPlayer.getTrack(data.nextTrack);
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[MEDIASERVICE] Your playlist has ended`);
-        TrackPlayer.reset()
+        // TrackPlayer.reset()
         storeDispatch.setQueued([])
         storeDispatch.setPlaying(false)
       })
     }
-    return () => mounted = true
-  }, [storeState.queued])
+    return () => { }
+  }, [storeDispatch.isPlaying])
 
 
   const setup = () => {
@@ -91,21 +96,8 @@ function MediaService() {
       .catch(err => console.warn('error', err))
   }
 
-  const getTracks = cb => {
-    const trkRef = firebase.database().ref(tracksPath)
-    trkRef.on('value', snap => {
-      let list = []
-      snap.forEach(child => {
-        list.push({
-          ...child.val(),
-          art_link: trimWWWString(child.val().art_link),
-          song: trimWWWString(child.val().song),
-        })
-      })
-      if (cb) cb(list)
-      if (!cb) console.log('Callback Missing', list.length)
-    })
-  }
+  const getTracks = cb => ReadTracks(cb)
+
   const getFavorites = (uid, cb) => {
     if (!uid) return cb('Missing UID Param')
 
