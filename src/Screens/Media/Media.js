@@ -113,30 +113,8 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <View style={styles.header}>
-        {/* <View style={{ alignItems: 'center', marginTop: 50, marginBottom: 20 }}>
-          <FastImage
-            style={{
-              width: 150, height: 150, borderRadius: 5, margin: 'auto',
-            }}
-            source={{
-              uri: siteLogo,
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-
-        </View> */}
-        <MediaContent />
-      </View>
-
-      {/* <Modalize
-        ref={modalizeRef}
-        modalHeight={600}
-        alwaysOpen={true}
-      >
-        <MediaContent />
-      </Modalize> */}
+      <MediaContent />
+<RBSheet />
     </ScrollView>
   )
 }

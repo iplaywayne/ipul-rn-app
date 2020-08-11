@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image as Img, StyleSheet, TouchableOpacity } from 'react-native'
 import {
   Block, Button, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
 } from 'galio-framework';
 import { Divider } from 'react-native-paper'
-
+import { FastImage as Image } from 'react-native-fast-image'
 
 import { useAuth } from '../../contexts/AuthContext'
 import { trimWWWString } from '../../utils'
