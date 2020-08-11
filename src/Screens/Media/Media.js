@@ -6,7 +6,7 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
-import { List, Divider } from 'react-native-paper';
+import { List, Divider, Searchbar } from 'react-native-paper';
 import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -44,6 +44,9 @@ function Explore() {
   const { tracks, currentTrack, queued } = storeState
   const refRBSheet = React.useRef();
   const modalizeRef = React.useRef(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
 
   if (!tracks.length) return <ActivityIndicator
     style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
@@ -60,14 +63,14 @@ function Explore() {
       {'acid' in currentTrack &&
         <View style={{ alignItems: 'center', marginBottom: -25 }}>
           <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
-            style={{ flex: 0, height: 200, width: 200, marginTop: 50, marginBottom: 20, borderRadius: 5 }}
+            style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
             resizeMode='cover' />
           {currentTrack && <Text>
             <Text style={{ fontWeight: '700' }}>{currentTrack.artist}</Text> <Text>{currentTrack.title}</Text>
           </Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 50, marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 40, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
 
         {tracks && tracks.slice(0, 11).map((itm, idx) => (
@@ -113,8 +116,16 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+      <View style={{ marginTop: 80, marginHorizontal: 30 }}>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
+      </View>
+
       <MediaContent />
-<RBSheet />
+
     </ScrollView>
   )
 }
