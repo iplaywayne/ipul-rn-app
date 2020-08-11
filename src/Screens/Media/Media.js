@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Button, SafeAreaView, ScrollView, StyleSheet, Image, ActivityIndicator,
+  View, Button, SafeAreaView, ScrollView, StyleSheet, Image as Img, ActivityIndicator,
   Dimensions, VirtualizedList, FlatList, TouchableOpacity, StatusBar
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -54,7 +54,11 @@ function Explore() {
 
   const onOpen = () => {
     modalizeRef.current?.open();
-  };
+  }
+
+  React.useEffect(() => {
+    console.log(storeState.isPlaying)
+  }, [storeState.isPlaying])
 
   const MediaContent = () => (
     <View>
@@ -98,9 +102,6 @@ function Explore() {
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
-              {/* <Image source={itm.art_link ? { uri: itm.art_link } : logo}
-                style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
-                resizeMode='cover' /> */}
               <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
               <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
               <View style={{ flexDirection: 'row', position: 'absolute', right: 30 }}>
@@ -116,9 +117,9 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <View style={{ marginTop: 80, marginHorizontal: 30 }}>
+      <View style={{ marginTop: 70, marginHorizontal: 30 }}>
         <Searchbar
-          placeholder="Search"
+          placeholder="Search iPlayuListen"
           onChangeText={onChangeSearch}
           value={searchQuery}
         />

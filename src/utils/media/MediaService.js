@@ -48,6 +48,9 @@ function MediaService() {
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[MEDIASERVICE] Your playlist has ended`);
+        TrackPlayer.reset()
+        storeDispatch.setQueued([])
+        storeDispatch.setPlaying(false)
       })
     }
     return () => mounted = true

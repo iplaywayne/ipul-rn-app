@@ -74,6 +74,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
     await updateStoreQueued(item)
     await TrackPlayer.play()
     storeDispatch.setCurrentTrack(item)
+    storeDispatch.setPlaying(true)
     setTimeout(() => storeDispatch.setLoading(false), 250)
   }
 

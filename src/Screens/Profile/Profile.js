@@ -47,8 +47,10 @@ function Explore({ navigation }) {
     setTimeout(() => {
       if (!isPlaying) {
         TrackPlayer.play()
+        storeDispatch.setPlaying(true)
       } else {
         TrackPlayer.pause()
+        storeDispatch.setPlaying(false)
       }
     }, 500)
   }
