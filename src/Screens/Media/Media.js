@@ -59,7 +59,7 @@ function Explore() {
           <Image source={currentTrack ? { uri: currentTrack.art_link } : logo}
             style={{ flex: 0, height: 200, width: 200, marginTop: 25, marginBottom: 20, borderRadius: 5 }}
             resizeMode='cover' />
-          {currentTrack && <Text style={{ fontWeight: '700', color: '#fff' }}>{currentTrack.title}</Text>}
+          {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
         </View>}
 
       <ScrollView style={{ height: 'auto', marginBottom: 25 }}

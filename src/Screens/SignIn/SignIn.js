@@ -11,7 +11,7 @@ import { Card } from 'galio-framework';
 
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
-import { useStore, useStoreUpdate } from '../../utils/store'
+import { useStore } from '../../utils/store'
 import { useAuth } from '../../contexts/AuthContext'
 
 const { width, height } = Dimensions.get('window')
@@ -19,7 +19,6 @@ const { width, height } = Dimensions.get('window')
 const SignIn = (props) => {
   const { signIn, navigation } = props
   const [state, dispatch] = useStore()
-  const { test } = useStoreUpdate()
   const [username, setUsername] = React.useState('dev@iplayulisten.com')
   const [password, setPassword] = React.useState('admin20')
   const [authState, authDispatch] = useAuth()

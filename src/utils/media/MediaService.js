@@ -17,7 +17,7 @@ const events = [
 
 function MediaService() {
   const [storeState, storeDispatch] = useStore()
-  const { queued } = storeState
+  const { queued, currentTrack } = storeState
 
   useTrackPlayerEvents(events, async (event) => {
     switch (event.type) {
@@ -30,6 +30,7 @@ function MediaService() {
         const isIdle = event.state === 'idle'
         storeDispatch.setPlaying(isPlaying)
         storeDispatch.setLoading(isLoading)
+        console.log(currentTrack,'is the track that has the attention right now')
         return
       default:
         console.log('Unknown State', event.type)
