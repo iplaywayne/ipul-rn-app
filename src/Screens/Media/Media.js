@@ -58,14 +58,14 @@ function Explore() {
       {/* <View style={styles.handlerBar}></View> */}
 
       {'acid' in currentTrack &&
-        <View style={{ alignItems: 'center'}}>
+        <View style={{ alignItems: 'center',marginBottom: -25}}>
           <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
             style={{ flex: 0, height: 200, width: 200, marginTop: 60, marginBottom: 20, borderRadius: 5 }}
             resizeMode='cover' />
           {currentTrack && <Text style={{ fontWeight: '700' }}>{currentTrack.title}</Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 20, marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 50, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
 
         {tracks && tracks.slice(0, 11).map((itm, idx) => (
