@@ -44,13 +44,13 @@ function Explore({ navigation }) {
 
 
   const playNowTapped = async () => {
-    const queue = await TrackPlayer.getQueue()
-
-    if (queued.length > 0) {
-      TrackPlayer.play()
-    } else {
-      console.log('Please add something to your queue!')
-    }
+    setTimeout(() => {
+      if (!isPlaying) {
+        TrackPlayer.play()
+      } else {
+        TrackPlayer.pause()
+      }
+    }, 500)
   }
 
   if (!tracks.length) return null

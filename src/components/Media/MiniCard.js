@@ -95,14 +95,6 @@ function MiniCard({ idx, item, addControl, removeControl }) {
           justifyContent: 'center',
           marginLeft: 10
         }}>
-
-          {addControl &&
-            <IconButton
-              icon="plus"
-              color={Colors.red500}
-              size={20}
-              onPress={addQueue}
-            />}
           {removeControl &&
             <IconButton
               icon="minus"
