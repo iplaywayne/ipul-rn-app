@@ -26,8 +26,8 @@ async function openLink() {
         preferredControlTintColor: 'white',
         readerMode: false,
         animated: true,
-        modalPresentationStyle: 'overFullScreen',
-        modalTransitionStyle: 'pageSheet',
+        modalPresentationStyle: 'popover',
+        modalTransitionStyle: 'coverVertical',
         modalEnabled: true,
         enableBarCollapsing: false,
         // Android Properties
