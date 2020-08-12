@@ -45,7 +45,7 @@ function ExploreCard({ item }) {
 
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={() => console.log(item.acid)}>
+      <TouchableOpacity onPress={() => console.log(user.uid)}>
         <View>
           <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: '700' }}>
             Sponsored
@@ -57,9 +57,9 @@ function ExploreCard({ item }) {
             title={'Stock up on your travel essentials!'}
             caption={'Zorei Brand'}
             location={'Zorei.co'}
-            avatar={item && item.art_link || siteLogo}
+            avatar={'https://iplayulisten.com/zorei-logo.png'}
             imageStyle={{ borderRadius: 10, height: 300 }}
-            image={item && trimWWWString(item.art_link) || siteLogo}
+            image={'https://iplayulisten.com/zorei-logo.png'}
           />
           <Divider />
         </View>
