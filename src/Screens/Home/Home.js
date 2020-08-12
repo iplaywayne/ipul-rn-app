@@ -1,14 +1,61 @@
 import React from 'react'
-import { View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar } from 'react-native'
+import {
+  View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
+  Alert
+} from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { Divider } from 'react-native-paper'
+import InAppBrowser from 'react-native-inappbrowser-reborn'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
+
+
+async function openLink() {
+  try {
+    const url = 'https://www.zorei.co'
+    if (await InAppBrowser.isAvailable()) {
+      const result = await InAppBrowser.open(url, {
+        // iOS Properties
+        dismissButtonStyle: 'cancel',
+        preferredBarTintColor: '#121212',
+        preferredControlTintColor: 'white',
+        readerMode: false,
+        animated: true,
+        modalPresentationStyle: 'overFullScreen',
+        modalTransitionStyle: 'pageSheet',
+        modalEnabled: true,
+        enableBarCollapsing: false,
+        // Android Properties
+        showTitle: true,
+        toolbarColor: '#6200EE',
+        secondaryToolbarColor: 'black',
+        enableUrlBarHiding: true,
+        enableDefaultShare: true,
+        forceCloseOnRedirection: false,
+        // Specify full animation resource identifier(package:anim/name)
+        // or only resource name(in case of animation bundled with app).
+        animations: {
+          startEnter: 'slide_in_right',
+          startExit: 'slide_out_left',
+          endEnter: 'slide_in_left',
+          endExit: 'slide_out_right'
+        },
+        headers: {
+          'my-custom-header': 'my custom header value'
+        }
+      })
+      // Alert.alert(JSON.stringify(result))
+    }
+    else Linking.openURL(url)
+  } catch (error) {
+    Alert.alert(error.message)
+  }
+}
 
 
 function Home({ navigation }) {
@@ -19,6 +66,11 @@ function Home({ navigation }) {
   const name = (user && user.name) ?? { name: '' }
   const mediaService = MediaService()
   const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase().includes('r&'))
+  const modalizeRef = React.useRef(null);
+
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
 
   if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
@@ -55,18 +107,17 @@ function Home({ navigation }) {
 
       <Divider />
 
-      <SponsoredCard />
-        
+      <SponsoredCard onOpen={openLink} />
+
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
           <ExploreCard key={idx} item={itm} />
         ))}
       </View>
 
-      <View>
-        {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
-        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-      </View>
+
+      {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
+      {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
     </ScrollView>
   )
 }

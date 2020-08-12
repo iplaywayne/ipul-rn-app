@@ -388,6 +388,8 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.7.0):
     - React
+  - RNInAppBrowser (3.4.0):
+    - React
   - RNReanimated (1.10.2):
     - React
   - RNScreens (2.10.1):
@@ -464,6 +466,7 @@ DEPENDENCIES:
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -575,6 +578,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/database"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNInAppBrowser:
+    :path: "../node_modules/react-native-inappbrowser-reborn"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -646,6 +651,7 @@ SPEC CHECKSUMS:
   RNFBAuth: 8cdec65b3c88e8f5b2aa0109d8cbfbaaa73fb379
   RNFBDatabase: 2de49cc2b01698412b231b2e369af88c33465d73
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNInAppBrowser: 6097fbc6b09051b40a6a9ec22caf7af40b115ec0
   RNReanimated: 7de2dca51deacff78bb880f63c1389a24311b376
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976

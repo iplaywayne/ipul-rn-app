@@ -11,7 +11,6 @@ import { firebase, database, MediaService } from '../../utils'
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import { siteLogo, logo, width, height } from '../../constants'
-import { Modalize } from 'react-native-modalize';
 import BottomSheet from 'react-native-simple-bottom-sheet';
 import { BottomSheet as BSheet } from 'reanimated-bottom-sheet'
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -23,6 +22,7 @@ import Spinner from 'react-native-spinkit'
 import { SendPlayerDetails } from '../../utils/media/functions'
 import { MediaListItem } from './MediaListItem'
 import { styles } from './styles'
+
 
 
 const DATA = [];

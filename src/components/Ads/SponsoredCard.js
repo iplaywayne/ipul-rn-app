@@ -37,7 +37,7 @@ const Swiper = () => (
   </View>
 )
 
-function ExploreCard({ item }) {
+function ExploreCard({ item, onOpen }) {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
@@ -45,7 +45,7 @@ function ExploreCard({ item }) {
 
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={() => console.log(user.uid)}>
+      <TouchableOpacity onPress={() => onOpen()}>
         <View>
           <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: '700' }}>
             Sponsored
