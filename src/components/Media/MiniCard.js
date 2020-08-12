@@ -16,6 +16,9 @@ import { logo, siteLogo } from '../../constants'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { SendPlayerDetails } from '../../utils/media/functions'
 
+const truncate = (val, size) => {
+  return val.length > size ? val.slice(0, size) + '...' : val
+}
 
 const elements = [
   <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
@@ -105,7 +108,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
           </View>
           <View style={styles.miniCardText}>
             <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>
-            <GalText>{item.title}</GalText>
+            <GalText>{truncate(item.title,20)}</GalText>
           </View>
         </View>
 
