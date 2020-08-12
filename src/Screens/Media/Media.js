@@ -66,8 +66,8 @@ function Explore() {
   };
 
   const addQueue = async (item) => {
-    SendPlayerDetails(item, storeDispatch)
     setTimeout(() => storeDispatch.setLoading(true), 250)
+    SendPlayerDetails(item, storeDispatch)
   }
 
   const handleListTapped = async (item) => {
@@ -118,7 +118,6 @@ function Explore() {
           value={searchQuery}
         />
       </View>
-
       <MediaContent />
     </ScrollView>
   )

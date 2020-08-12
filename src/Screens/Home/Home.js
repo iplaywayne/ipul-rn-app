@@ -8,6 +8,8 @@ import { Divider } from 'react-native-paper'
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
+import SponsoredCard from '../../components/Ads/SponsoredCard'
+
 
 function Home({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -53,6 +55,8 @@ function Home({ navigation }) {
 
       <Divider />
 
+      <SponsoredCard />
+        
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
           <ExploreCard key={idx} item={itm} />
