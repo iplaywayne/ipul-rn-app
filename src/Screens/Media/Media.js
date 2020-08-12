@@ -49,8 +49,18 @@ function Explore() {
   const refRBSheet = React.useRef();
   const modalizeRef = React.useRef(null);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [trackQuery, setTrackQuery] = React.useState([])
+  const tracksToDisplay = trackQuery.length ? trackQuery : []
 
-  const onChangeSearch = query => setSearchQuery(query);
+  const onChangeSearch = query => {
+    setSearchQuery(query)
+    setTrackQuery(
+      tracks.filter(t => t.artist.toString().toLowerCase().includes(query.toLowerCase())) ||
+      // tracks.filter(t => t.title.toString().toLowerCase().includes(query.toLowerCase())) ||
+      tracks.filter(t => t.genre.toString().toLowerCase().includes(query.toLowerCase())) ||
+      tracks.filter(t => t.bio.toString().toLowerCase().includes(query.toLowerCase()))
+    )
+  };
 
   const addQueue = async (item) => {
     SendPlayerDetails(item, storeDispatch)
@@ -61,8 +71,9 @@ function Explore() {
     addQueue(item)
   }
 
-
-  if (isLoading) return <Center><Spinner /></Center>
+  React.useEffect(() => {
+    storeDispatch.setLoading(false)
+  }, [])
 
   if (!tracks.length) return <ActivityIndicator
     style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
@@ -70,7 +81,7 @@ function Explore() {
 
   const MediaContent = () => (
     <View>
-      {'acid' in currentTrack &&
+      {'acid' in currentTrack && !searchQuery &&
         <View style={{ alignItems: 'center', marginBottom: -25 }}>
           <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
             style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
@@ -83,7 +94,7 @@ function Explore() {
       <ScrollView style={{ height: 'auto', marginTop: 40, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
 
-        {tracks && tracks.slice(0, 11).map((itm, idx) => (
+        {tracksToDisplay && tracksToDisplay.slice(0, 11).map((itm, idx) => (
           <TouchableOpacity key={idx} onPress={() => handleListTapped(itm)}>
             <View
               style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
@@ -97,12 +108,12 @@ function Explore() {
               />
               <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
               <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
-              <View style={{ flexDirection: 'row', position: 'absolute', right: 30 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
                 <Button style={{ padding: 10, color: Colors.red500 }}
-
                   onPress={() => addQueue(itm)}>
-                  {isLoading ? <ActivityIndicator /> : 'Add'}
+                  {isLoading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
                 </Button>
+                {/* <Text>{currentTrack === itm ? 'true' : 'false'}</Text> */}
               </View>
             </View>
             <Divider />
