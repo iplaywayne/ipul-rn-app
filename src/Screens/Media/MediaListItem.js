@@ -25,10 +25,11 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
       <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{item.artist}</Text>
       <Text style={{ marginVertical: 10 }}>{item.title}</Text>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-        <Button style={{ padding: 10, color: Colors.red500 }}
-          onPress={() => addQueue(item)}>
-          {isLoading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
-        </Button>
+        {currentTrack !== item &&
+          <Button style={{ padding: 10, color: Colors.red500 }}
+            onPress={() => addQueue(item)}>
+            {isLoading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
+          </Button>}
       </View>
     </View>
     {currentTrack === item ?
@@ -36,7 +37,7 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
         flex: 1, justifyContent: 'center', alignItems: 'center',
         paddingBottom: 10
       }}>
-        <Text style={{ fontWeight: '700' }}>Now Playing</Text></View> : null}
+        <Text style={{ fontWeight: '700', color: Colors.red500 }}>Now Queued</Text></View> : null}
     <Divider />
   </TouchableOpacity>
 )
