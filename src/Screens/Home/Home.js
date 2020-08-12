@@ -89,23 +89,41 @@ function Home({ navigation }) {
         <Text style={styles.title}>Welcome, {name}</Text>
       </View>
 
-      <Divider />
+      <Divider style={{ marginBottom: 20 }} />
 
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 15, marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
-
+      <Text style={{ paddingTop: 5, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Remixes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.reverse(tracks).slice(0, 5).map((itm, idx) => (
+        {tracks && tracks.filter(t => t.bio.toLowerCase().includes('remix')).map((itm, idx) => (
           <MiniCard key={idx} item={itm} />
         ))}
       </ScrollView>
 
-      <Divider />
+      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Hip Hop</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('hip')).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
+        ))}
+      </ScrollView>
+
+      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top R & B</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('r&')).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
+        ))}
+      </ScrollView>
+
+      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Reggae</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('regg')).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
+        ))}
+      </ScrollView>
+
+      <Divider style={{ marginTop: 15 }} />
 
       <SponsoredCard onOpen={openLink} />
 

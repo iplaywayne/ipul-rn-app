@@ -30,6 +30,12 @@ const AppStackNavigator = ({ navigation }) => {
         title: user.name || 'iPlayuListen',
         headerShown: true,
         headerTransparent: false,
+        headerLeft: props => (
+          <NavigationDrawerStructure
+            navigationProps={navigation}
+            icon={<Icon name='plus' size={25} style={{ marginLeft: 20 }} />}
+          />
+        ),
         headerRight: props => (
           <NavigationDrawerStructure
             navigationProps={navigation}

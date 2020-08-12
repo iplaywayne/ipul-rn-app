@@ -66,5 +66,5 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
 .vscode
+/ios/Pods/

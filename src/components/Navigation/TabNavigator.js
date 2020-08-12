@@ -25,7 +25,7 @@ const TabNavigator = () => (
       name="Home"
       component={HomeScreen}
       options={{
-        tabBarLabel: 'Home',
+        tabBarLabel: '',
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="home" color={color} size={26} />
         ),
@@ -35,7 +35,7 @@ const TabNavigator = () => (
       name="Explore"
       component={ExploreScreen}
       options={{
-        tabBarLabel: 'Explore',
+        tabBarLabel: '',
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="airplane-takeoff" color={color} size={26} />
         ),
@@ -45,7 +45,7 @@ const TabNavigator = () => (
       name="Media"
       component={MediaScreen}
       options={{
-        tabBarLabel: 'Media',
+        tabBarLabel: '',
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="theater" color={color} size={26} />
         ),
@@ -55,7 +55,7 @@ const TabNavigator = () => (
       name="Profile"
       component={DrawerNavigator}
       options={{
-        tabBarLabel: 'Profile',
+        tabBarLabel: '',
         tabBarIcon: ({ color }) => (
           <MaterialCommunityIcons name="account" color={color} size={26} />
         ),

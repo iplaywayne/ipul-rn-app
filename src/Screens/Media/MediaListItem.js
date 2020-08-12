@@ -12,6 +12,8 @@ import { siteLogo, logo, width, height } from '../../constants'
 
 export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) => (
   <TouchableOpacity key={idx} onPress={() => addQueue(item)}>
+    <Divider />
+
     <View
       style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
       <FastImage
@@ -38,6 +40,5 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
         paddingBottom: 10
       }}>
         <Text style={{ fontWeight: '700', color: Colors.red500 }}>Now Queued</Text></View> : null}
-    <Divider />
   </TouchableOpacity>
 )

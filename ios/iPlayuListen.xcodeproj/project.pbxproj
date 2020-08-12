@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* iPlayuListenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* iPlayuListenTests.m */; };
-		08A079B424E3A94800164CF6 /* libRNInAppBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A079B324E3A94800164CF6 /* libRNInAppBrowser.a */; };
 		08FBC53C24DDDE05005BDC41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08FBC53B24DDDE05005BDC41 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -103,7 +102,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08A079B424E3A94800164CF6 /* libRNInAppBrowser.a in Frameworks */,
 				CF3689CFC408112CFB8D1FBA /* libPods-iPlayuListen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

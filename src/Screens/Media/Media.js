@@ -53,7 +53,7 @@ function Explore() {
   const modalizeRef = React.useRef(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [trackQuery, setTrackQuery] = React.useState([])
-  const tracksToDisplay = trackQuery.length ? trackQuery : tracks
+  const tracksToDisplay = trackQuery.length ? trackQuery : []
 
   const onChangeSearch = query => {
     setSearchQuery(query)
@@ -76,6 +76,9 @@ function Explore() {
 
   React.useEffect(() => {
     storeDispatch.setLoading(false)
+    if (!searchQuery) {
+      setTrackQuery(tracks)
+    }
   }, [])
 
   if (!tracks.length) return <ActivityIndicator
@@ -85,7 +88,7 @@ function Explore() {
   const MediaContent = () => (
     <View>
       {'acid' in currentTrack && !searchQuery &&
-        <View style={{ alignItems: 'center', marginBottom: -25 }}>
+        <View style={{ alignItems: 'center', marginBottom: -10 }}>
           <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
             style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
             resizeMode='cover' />
@@ -94,9 +97,9 @@ function Explore() {
           </Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 40, marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 30, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
-        {tracksToDisplay && tracksToDisplay.slice(0, 11).map((itm, idx) => (
+        {tracksToDisplay.length ? tracksToDisplay.slice(0, 11).map((itm, idx) => (
           <MediaListItem
             key={idx}
             item={itm}
@@ -104,7 +107,11 @@ function Explore() {
             isLoading={isLoading}
             currentTrack={currentTrack}
           />
-        ))}
+        )) :
+          <View style={{
+            flex: 1, justifyContent: 'center',
+            alignItems: 'center'
+          }}><Text style={{ fontWeight: '700' }}>nothing found. should we add this?</Text></View>}
       </ScrollView>
     </View >
   )

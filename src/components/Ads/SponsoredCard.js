@@ -1,11 +1,12 @@
 import React from 'react'
 import { View, Text, ScrollView, Image as Img, StyleSheet, TouchableOpacity } from 'react-native'
 import {
-  Block, Button, Card, Icon, Input, NavBar, Text as GalText,
+  Block, Button as Btn, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
 } from 'galio-framework';
 import { Divider } from 'react-native-paper'
 import { FastImage as Image } from 'react-native-fast-image'
+import Button from 'react-native-button'
 
 import { useAuth } from '../../contexts/AuthContext'
 import { trimWWWString } from '../../utils'
@@ -45,8 +46,8 @@ function ExploreCard({ item, onOpen }) {
 
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={() => onOpen()}>
-        <View>
+      <TouchableOpacity>
+        <View style={{ marginBottom: 10 }}>
           <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: '700' }}>
             Sponsored
             </Text>
@@ -55,12 +56,14 @@ function ExploreCard({ item, onOpen }) {
             borderless
             shadow={true}
             title={'Stock up on your travel essentials!'}
-            caption={'Zorei Brand'}
+            caption={'Shop Zorei'}
             location={'Zorei.co'}
             avatar={'https://iplayulisten.com/zorei-logo.png'}
             imageStyle={{ borderRadius: 10, height: 300 }}
             image={'https://iplayulisten.com/zorei-logo.png'}
           />
+          <Button style={{ marginBottom: 20 }}
+            onPress={() => onOpen()}>Shop Now</Button>
           <Divider />
         </View>
       </TouchableOpacity>
