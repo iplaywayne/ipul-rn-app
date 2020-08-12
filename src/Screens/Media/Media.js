@@ -21,6 +21,9 @@ import Button from 'react-native-button'
 import Spinner from 'react-native-spinkit'
 
 import { SendPlayerDetails } from '../../utils/media/functions'
+import { MediaListItem } from './MediaListItem'
+import { styles } from './styles'
+
 
 const DATA = [];
 const getItem = (data, index) => {
@@ -50,13 +53,13 @@ function Explore() {
   const modalizeRef = React.useRef(null);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [trackQuery, setTrackQuery] = React.useState([])
-  const tracksToDisplay = trackQuery.length ? trackQuery : []
+  const tracksToDisplay = trackQuery.length ? trackQuery : tracks
 
   const onChangeSearch = query => {
     setSearchQuery(query)
     setTrackQuery(
       tracks.filter(t => t.artist.toString().toLowerCase().includes(query.toLowerCase())) ||
-      // tracks.filter(t => t.title.toString().toLowerCase().includes(query.toLowerCase())) ||
+      tracks.filter(t => t.title.toString().toLowerCase().includes(query.toLowerCase())) ||
       tracks.filter(t => t.genre.toString().toLowerCase().includes(query.toLowerCase())) ||
       tracks.filter(t => t.bio.toString().toLowerCase().includes(query.toLowerCase()))
     )
@@ -93,32 +96,15 @@ function Explore() {
 
       <ScrollView style={{ height: 'auto', marginTop: 40, marginBottom: 25 }}
         showsVerticalScrollIndicator={false}>
-
         {tracksToDisplay && tracksToDisplay.slice(0, 11).map((itm, idx) => (
-          <TouchableOpacity key={idx} onPress={() => handleListTapped(itm)}>
-            <View
-              style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
-              <FastImage
-                style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
-                source={{
-                  uri: itm.art_link || siteLogo,
-                  priority: FastImage.priority.normal,
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-              />
-              <Text style={{ marginVertical: 10, marginRight: 5, fontWeight: '700' }}>{itm.artist}</Text>
-              <Text style={{ marginVertical: 10 }}>{itm.title}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                <Button style={{ padding: 10, color: Colors.red500 }}
-                  onPress={() => addQueue(itm)}>
-                  {isLoading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
-                </Button>
-                {/* <Text>{currentTrack === itm ? 'true' : 'false'}</Text> */}
-              </View>
-            </View>
-            <Divider />
-          </TouchableOpacity>
+          <MediaListItem
+            key={idx}
+            item={itm}
+            addQueue={item => addQueue(item)}
+            isLoading={isLoading}
+          />
         ))}
+
       </ScrollView>
     </View >
   )
@@ -139,71 +125,6 @@ function Explore() {
   )
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  logo: {
-    borderRadius: 30,
-    height: height * .4,
-    width: width,
-  },
-  title:
-  {
-    zIndex: 1, top: 100, fontWeight: '700', color: 'white',
-    position: 'absolute', left: 30
-  },
-  header: {
-    flex: 1,
-  },
-  footer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingTop: 20,
-    paddingBottom: 120,
-    paddingHorizontal: 30,
-    height: height - 200,
-    marginTop: -40
-  },
-  miniCard: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    height: 200,
-    width: 200,
-    marginTop: 10,
-    marginLeft: 20,
-    borderRadius: 5
-  },
-  miniCardImage: {
-    flex: 3,
-    overflow: 'hidden',
-  },
-  miniCardText: {
-    flex: 1
-  },
-  sheetHeader: {
-    backgroundColor: '#fff',
-    height: 100,
-  },
-  sheetContent: {
-    backgroundColor: '#121212',
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: -100,
-    height: 700,
-  },
-  handlerBar: {
-    position: 'absolute',
-    backgroundColor: '#D1D1D6',
-    top: 10,
-    borderRadius: 3,
-    height: 5,
-    width: 30,
-    flex: 1,
-  },
-})
 
 
 export default Explore
