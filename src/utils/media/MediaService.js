@@ -17,6 +17,7 @@ const events = [
 ];
 
 function MediaService() {
+  if (!auth) return
   const [storeState, storeDispatch] = useStore()
   const { queued, currentTrack } = storeState
 
@@ -31,17 +32,19 @@ function MediaService() {
         const isIdle = event.state === 'idle'
         return
       case TrackPlayerEvents.PLAYBACK_QUEUE_ENDED:
-        console.log(currentTrack, 'has ended')
+        console.log(currentTrack.acid, 'has ended')
+        TrackPlayer.reset()
         storeDispatch.setQueued([])
         storeDispatch.setPlaying(false)
         return
       default:
-        console.log('Unknown State', event.type)
+        console.log('?? useTrackPlayerEvents State', event.type)
         return
     }
   });
 
   React.useEffect(() => {
+    if (!auth) return
     getTracks(result => storeDispatch.setTracks(result))
     console.log('[MEDIASERVICE] [', auth.currentUser.displayName, ']')
   }, [])
@@ -53,7 +56,7 @@ function MediaService() {
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[MEDIASERVICE] Your playlist has ended`);
-        // TrackPlayer.reset()
+        TrackPlayer.removeUpcomingTracks()
         storeDispatch.setQueued([])
         storeDispatch.setPlaying(false)
       })

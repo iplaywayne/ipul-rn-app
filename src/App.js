@@ -11,24 +11,23 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import { SignIn as SignInScreen } from './screens/SignIn'
 import { SignUp as SignUpScreen } from './screens/SignUp'
 import TabNavigator from './components/Navigation/TabNavigator'
-
 import { Store, useStore } from './utils/store'
 import { Center } from './components/Center'
 import AuthProvider, { useAuth } from './contexts/AuthContext'
-
 
 const AuthStack = createStackNavigator();
 
 
 export default function () {
   const [authState, authDispatch] = useAuth()
-  const { isLoading, userToken } = authState
+  const [storeState, storeDispatch] = useStore()
+  const { user, isLoading, userToken } = authState
   if (isLoading) return <Center><ActivityIndicator color='darkgray' /></Center>
 
   return (
     <NavigationContainer>
 
-      {userToken == null ?
+      {userToken === null ?
         <AuthStack.Navigator>
           <AuthStack.Screen name="SplashScreen" component={SplashScreen} options={{
             headerShown: false,
@@ -42,7 +41,9 @@ export default function () {
             // headerShown: false,
             animationTypeForReplace: userToken ? 'pop' : 'push'
           }} />
-        </AuthStack.Navigator> :
+        </AuthStack.Navigator>
+        
+        :
 
         <TabNavigator />
 

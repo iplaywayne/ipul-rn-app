@@ -18,7 +18,7 @@ export default function AuthProvider({ children }) {
             ...prevState,
             userToken: action.token,
             isLoading: false,
-            user: action.user
+            user: 'user' in action ? action.user : null
           };
         case 'SET_USER':
           return {
@@ -68,8 +68,10 @@ export default function AuthProvider({ children }) {
         })
       } else {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-
       }
+      // setTimeout(() => {
+      //   if (auth.currentUser) authDispatch.signOut()
+      // }, 3000)
     };
 
     bootstrapAsync();
@@ -81,18 +83,19 @@ export default function AuthProvider({ children }) {
       signIn: async data => {
         auth.signInWithEmailAndPassword(data.username, data.password)
           .then(async result => {
-            try {
-              console.log('ACCOUNT ONLINE [', result.user.uid, ']')
-              await AsyncStorage.setItem('_iPUser_UserToken', result.user.uid);
-              dispatch({ type: 'SIGN_IN', token: result.user.uid });
+            if (result.user.uid) {
+              const uid = result.user.uid
 
-              const usrRef = database.ref(`/users/${result.user.uid}`)
-              usrRef.on('value', snap => {
-                dispatch({ type: 'SET_USER', val: snap.val() })
-              })
-            } catch (e) {
-              // Restoring token failed
-              console.warn(e)
+              try {
+                console.log('ACCOUNT ONLINE [', uid, ']')
+                await AsyncStorage.setItem('_iPUser_UserToken', uid);
+                const usrRef = database.ref(`/users/${uid}`)
+                usrRef.on('value', snap => {
+                  dispatch({ type: 'SET_USER', val: snap.val() })
+                })
+              } catch (e) {
+                console.warn(e)
+              }
             }
           })
       },
@@ -111,11 +114,13 @@ export default function AuthProvider({ children }) {
               await AsyncStorage.setItem('_iPUser_userToken', result.user.uid);
               dispatch({ type: 'SIGN_IN', token: result.user.uid });
             } catch (e) {
-              // Restoring token failed
               console.warn(e)
             }
           })
       },
+      setToken: token => {
+        dispatch({ type: 'RESTORE_TOKEN', token })
+      }
     }),
     []
   );

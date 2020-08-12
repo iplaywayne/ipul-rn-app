@@ -1,4 +1,6 @@
 import { firebase, database, auth, trimWWWString } from '../../../utils'
+export { SendPlayerDetails } from './SendPlayerDetails'
+
 
 const tracksPath = `/mediaTracks`
 
@@ -7,7 +9,7 @@ export const ReadTracks = cb => {
   trkRef.on('value', snap => {
     let list = []
     snap.forEach(child => {
-      list.push({
+      list.unshift({
         ...child.val(),
         art_link: trimWWWString(child.val().art_link),
         song: trimWWWString(child.val().song),

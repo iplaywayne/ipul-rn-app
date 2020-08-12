@@ -73,7 +73,9 @@ function StoreProvider({ children }) {
 
   return (
     <StoreContext.Provider value={[state, storeDispatch]}>
+      
       {children}
+
     </StoreContext.Provider>
   )
 }

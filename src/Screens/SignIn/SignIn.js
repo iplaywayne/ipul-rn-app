@@ -1,13 +1,16 @@
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Image, Dimensions,
-  Text, StatusBar, NativeModules, Button, TextInput, TouchableOpacity
+  Text, StatusBar, NativeModules, Button as Btn, TextInput, TouchableOpacity
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
 import firebase from '@react-native-firebase/app'
 import '@react-native-firebase/auth'
 import { Card } from 'galio-framework';
+import Button from 'react-native-button'
+import Spinner from 'react-native-spinkit'
+
 
 import { domain } from '../../constants'
 import { Center } from '../../components/Center'
@@ -22,7 +25,9 @@ const SignIn = (props) => {
   const [username, setUsername] = React.useState('dev@iplayulisten.com')
   const [password, setPassword] = React.useState('admin20')
   const [authState, authDispatch] = useAuth()
+  const { isLoading } = authState
 
+  if (isLoading) return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spinner /></View>
 
   return (
     <Center>
@@ -32,7 +37,7 @@ const SignIn = (props) => {
           <Image source={require('../../assets/images/ipul_logo_trans.png')}
             style={{ width: 200, height: 200, marginTop: 60 }} />
         </View>
-        <View style={{ flex: 2, alignItems: 'flex-start' }}>
+        <View style={{ flex: 2 }}>
           <Text style={styles.label}>Your email address</Text>
           <TextInput
             placeholder="Username"
@@ -50,22 +55,33 @@ const SignIn = (props) => {
             style={styles.passInput}
             secureTextEntry
           />
+          <Text style={[styles.label, { color: '#121212' }]}>Forgot your password?</Text>
           <View style={styles.buttons}>
-            <TouchableOpacity style={styles.signIn} onPress={() => {
-              authDispatch.signIn({ username, password })
-            }}>
-              <Text>Sign in</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.signIn} onPress={() => {
-              navigation.push('Sign Up')
-            }}>
-              <Text>Sign Up</Text>
-            </TouchableOpacity>
+            <Button
+              style={{ fontSize: 15, color: 'white', width: '100%' }}
+              styleDisabled={{ color: 'white' }}
+              // disabled={isLoading}
+              containerStyle={{ padding: 10, margin: 5, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
+              disabledContainerStyle={{ backgroundColor: '#ddd' }}
+              onPress={() => authDispatch.signIn({ username, password })}
+            >
+              Sign In
+            </Button>
+            <Button
+              style={{ fontSize: 15, color: 'white', width: '100%' }}
+              styleDisabled={{ color: 'white' }}
+              // disabled={isLoading}
+              containerStyle={{ padding: 10, margin: 5, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
+              disabledContainerStyle={{ backgroundColor: '#ddd' }}
+              onPress={() => navigation.push('Sign Up')}
+            >
+              Sign Up
+            </Button>
           </View>
         </View>
-        <Text>
+        {/* <Text>
           {JSON.stringify(authState, null, 2)}
-        </Text>
+        </Text> */}
       </ScrollView>
     </Center>
   )
@@ -132,9 +148,11 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flex: 1,
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    marginTop: 30,
+    // margin: 'auto',
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignContent: 'center',
   },
   signIn: {
     backgroundColor: '#ddd',

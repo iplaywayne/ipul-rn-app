@@ -30,6 +30,8 @@ function Explore({ navigation }) {
   const mediaService = MediaService()
   const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
+  const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
+
 
   React.useEffect(() => {
     mediaService.setup()
@@ -57,6 +59,7 @@ function Explore({ navigation }) {
 
   if (!tracks.length) return null
 
+  
   const ProfileHeader = () => (
     <View style={{ flex: 2 }}>
       <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
@@ -158,7 +161,7 @@ function Explore({ navigation }) {
 
       <ProfileFavorites />
 
-    </ScrollView>
+    </ScrollView >
   )
 }
 

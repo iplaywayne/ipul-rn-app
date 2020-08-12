@@ -9,10 +9,12 @@ import TrackPlayer from 'react-native-track-player'
 import { IconButton, Colors } from 'react-native-paper';
 import FastImage from 'react-native-fast-image'
 import { v4 as uuidv4 } from 'uuid';
+import { Divider, Snackbar } from 'react-native-paper'
 
 import { useAuth, useStore } from '../../contexts'
 import { logo, siteLogo } from '../../constants'
 import { firebase, database, auth, trimWWWString } from '../../utils'
+import { SendPlayerDetails } from '../../utils/media/functions'
 
 
 const elements = [
@@ -47,43 +49,45 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const [{ user }] = auth
   const { avatar, details } = user ?? { avatar: '', details: {} }
   const { queued, tracks, isPlaying, currentTrack } = storeState
+  const [isAlert, setIsAlert] = React.useState()
+  const [alertMessage, setAlertMessage] = React.useState({
+    visible: false, message: 'Test'
+  })
 
   if (!item) item = {}
   let newItem = { ...item, id: item.acid }
 
   const addQueue = async () => {
+    if (removeControl) return
     setTimeout(() => storeDispatch.setLoading(true), 250)
     setTimeout(async () => {
       if (idx < 0) {
         console.log('Missing media index', item.title, idx)
         return
       }
-      sendPlayer(item)
+      SendPlayerDetails(item)
     }, 250)
   }
 
-  const sendPlayer = async item => {
-    await TrackPlayer.add({
-      idx: Math.random(item.acid * 1100),
-      id: item.acid,
-      title: item.title,
-      artist: item.artist,
-      artwork: trimWWWString(item.art_link),
-      url: trimWWWString(item.song),
-    })
-    await updateStoreQueued(item)
-    await TrackPlayer.play()
-    storeDispatch.setCurrentTrack(item)
-    storeDispatch.setPlaying(true)
-    setTimeout(() => storeDispatch.setLoading(false), 250)
-  }
+  // const sendPlayerDetails = async item => {
+  //   await TrackPlayer.add({
+  //     idx: Math.random(item.acid * 1100),
+  //     id: item.acid,
+  //     title: item.title,
+  //     artist: item.artist,
+  //     artwork: trimWWWString(item.art_link),
+  //     url: trimWWWString(item.song),
+  //   })
+  //   setTimeout(async () => {
+  //     const queued = await TrackPlayer.getQueue()
+  //     storeDispatch.setQueued(queued)
+  //   }, 500)
 
-  const updateStoreQueued = async () => {
-    setTimeout(async () => {
-      const queued = await TrackPlayer.getQueue()
-      storeDispatch.setQueued(queued)
-    }, 500)
-  }
+  //   await TrackPlayer.play()
+  //   storeDispatch.setCurrentTrack(item)
+  //   storeDispatch.setPlaying(true)
+  //   await setTimeout(() => storeDispatch.setLoading(false), 250)
+  // }
 
   const removeQueue = async () => {
     setTimeout(() => storeDispatch.setLoading(true), 250)
@@ -113,7 +117,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
             <FastImage
               style={{ width: '100%', height: '100%' }}
               source={{
-                uri: item.art_link || siteLogo,
+                uri: item.art_link ? item.art_link : item.artwork || siteLogo,
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -126,6 +130,21 @@ function MiniCard({ idx, item, addControl, removeControl }) {
         </View>
 
       </ScrollView>
+
+      <Snackbar
+        visible={alertMessage.visible}
+        duration={3000}
+        onDismiss={() => alertMessage({ visible: false })}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            () => alertMessage({ visible: false })
+          },
+        }}>
+        {alertMessage.message}
+      </Snackbar>
+
+      {/* <Text>{JSON.stringify(alertMessage, null, 2)}</Text> */}
     </TouchableScale>
   )
 }

@@ -15,7 +15,6 @@ import DrawerNavigator from './DrawerNavigator'
 
 const Tab = createMaterialBottomTabNavigator();
 
-
 const TabNavigator = () => (
   <Tab.Navigator
     initialRouteName="Home"

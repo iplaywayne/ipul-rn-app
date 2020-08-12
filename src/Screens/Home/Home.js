@@ -18,7 +18,7 @@ function Home({ navigation }) {
   const mediaService = MediaService()
   const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase().includes('r&'))
 
-  if (!name) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+  if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
   </View>
 
