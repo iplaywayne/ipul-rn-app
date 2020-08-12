@@ -118,7 +118,7 @@ function Explore() {
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <View style={{ marginTop: 70, marginHorizontal: 30 }}>
+      <View style={{ marginTop: 75, marginHorizontal: 20 }}>
         <Searchbar
           placeholder="Search iPlayuListen"
           onChangeText={onChangeSearch}

@@ -131,10 +131,9 @@ function Home({ navigation }) {
         ))}
       </ScrollView>
 
-      <Divider style={{ marginTop: 15 }} />
+      <Divider style={{ marginTop: 15,marginBottom:10 }} />
 
-      <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
-
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <SponsoredCard onOpen={openLink} />
       </View>
 

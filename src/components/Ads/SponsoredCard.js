@@ -47,7 +47,7 @@ function ExploreCard({ item, onOpen }) {
   return (
     <ScrollView style={styles.root}>
       <TouchableOpacity>
-        <View style={{ marginBottom: 10 }}>
+        <View>
           <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: '700' }}>
             Sponsored
             </Text>
@@ -62,7 +62,7 @@ function ExploreCard({ item, onOpen }) {
             imageStyle={{ borderRadius: 10, height: 300 }}
             image={'https://iplayulisten.com/zorei-logo.png'}
           />
-          <Button style={{ marginBottom: 20 }}
+          <Button style={{ fontSize: 15,marginBottom: 20 }}
             onPress={() => onOpen()}>Shop Now</Button>
           <Divider />
         </View>
