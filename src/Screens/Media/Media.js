@@ -102,9 +102,9 @@ function Explore() {
             item={itm}
             addQueue={item => addQueue(item)}
             isLoading={isLoading}
+            currentTrack={currentTrack}
           />
         ))}
-
       </ScrollView>
     </View >
   )
@@ -120,7 +120,6 @@ function Explore() {
       </View>
 
       <MediaContent />
-
     </ScrollView>
   )
 }

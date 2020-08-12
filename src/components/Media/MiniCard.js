@@ -65,7 +65,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
         console.log('Missing media index', item.title, idx)
         return
       }
-      SendPlayerDetails(item)
+      SendPlayerDetails(item, storeDispatch)
     }, 250)
   }
 

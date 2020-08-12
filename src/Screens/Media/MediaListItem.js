@@ -10,7 +10,7 @@ import { List, Divider, Searchbar, Colors } from 'react-native-paper';
 import { siteLogo, logo, width, height } from '../../constants'
 
 
-export const MediaListItem = ({ item, idx, addQueue, isLoading }) => (
+export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) => (
   <TouchableOpacity key={idx} onPress={() => addQueue(item)}>
     <View
       style={{ flexDirection: 'row', marginVertical: 0, alignItems: 'center' }}>
@@ -29,9 +29,14 @@ export const MediaListItem = ({ item, idx, addQueue, isLoading }) => (
           onPress={() => addQueue(item)}>
           {isLoading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
         </Button>
-        {/* <Text>{currentTrack === itm ? 'true' : 'false'}</Text> */}
       </View>
     </View>
+    {currentTrack === item ?
+      <View style={{
+        flex: 1, justifyContent: 'center', alignItems: 'center',
+        paddingBottom: 10
+      }}>
+        <Text style={{ fontWeight: '700' }}>Now Playing</Text></View> : null}
     <Divider />
   </TouchableOpacity>
 )
