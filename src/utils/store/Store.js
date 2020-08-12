@@ -14,7 +14,7 @@ const SET_PLAYING = 'SET_PLAYING'
 const SET_LOADING = 'SET_LOADING'
 
 const initialState = {
-  name: 'Stylz',
+  name: '',
   tracks: [],
   queued: [],
   currentTrack: {},
@@ -57,7 +57,7 @@ function StoreProvider({ children }) {
     },
     removeFromQueue: async track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
-      await TrackPlayer.reset()
+      await TrackPlayer.removeUpcomingTracks()
         if (state.queued.length > 0) {
           const updatedQueue = state.queued.filter(t => t.idx !== track.idx)
           await TrackPlayer.add(updatedQueue)

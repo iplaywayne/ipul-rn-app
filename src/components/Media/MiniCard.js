@@ -12,13 +12,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { Divider, Snackbar } from 'react-native-paper'
 
 import { useAuth, useStore } from '../../contexts'
-import { logo, siteLogo } from '../../constants'
+import { logo, siteLogo, truncate } from '../../constants'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { SendPlayerDetails } from '../../utils/media/functions'
 
-const truncate = (val, size) => {
-  return val.length > size ? val.slice(0, size) + '...' : val
-}
 
 const elements = [
   <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
@@ -56,7 +53,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const [alertMessage, setAlertMessage] = React.useState({
     visible: false, message: 'Test'
   })
-
+  
   if (!item) item = {}
   let newItem = { ...item, id: item.acid }
 
@@ -107,8 +104,8 @@ function MiniCard({ idx, item, addControl, removeControl }) {
             />
           </View>
           <View style={styles.miniCardText}>
-            <GalText style={{ fontWeight: '700' }}>{item.artist}</GalText>
-            <GalText>{truncate(item.title,20)}</GalText>
+            <GalText style={{ fontWeight: '700' }}>{truncate(item.artist, 20)}</GalText>
+            <GalText>{truncate(item.title, 20)}</GalText>
           </View>
         </View>
 

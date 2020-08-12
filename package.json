@@ -16,6 +16,7 @@
     "bigpush": "yarn commit && yarn pushgit"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/audio-toolkit": "^2.0.3",
     "@react-native-community/blur": "^3.6.0",
@@ -42,6 +43,7 @@
     "react-native-inappbrowser-reborn": "^3.4.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-loading-spinner-overlay": "^1.1.0",
+    "react-native-neomorph-shadows": "^1.1.2",
     "react-native-paper": "^4.0.1",
     "react-native-popover-view": "^3.0.3",
     "react-native-raw-bottom-sheet": "^2.2.0",

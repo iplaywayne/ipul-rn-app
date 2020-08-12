@@ -3,6 +3,7 @@ import { View, Text, Button, SafeAreaView, ScrollView, StyleSheet, Image, Status
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Divider } from 'react-native-paper'
+import Spinner from 'react-native-spinkit'
 
 import { ExploreCard, Center } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -15,6 +16,19 @@ function Explore() {
   const { tracks } = storeState
   const mediaService = MediaService()
   const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase() === 'remix')
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (tracks.length) {
+        setLoading(false)
+      }
+    }, 1500)
+
+  }, [tracks])
+
+  if (loading) return <Center><Spinner type='Wave' /></Center>
+
 
   return (
     <ScrollView style={styles.root}>

@@ -12,6 +12,7 @@ import { Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
+import Spinner from 'react-native-spinkit'
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -31,7 +32,16 @@ function Explore({ navigation }) {
   const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
+  const [loading, setLoading] = React.useState(true)
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (tracks.length) {
+        setLoading(false)
+      }
+    }, 1500)
+
+  }, [tracks])
 
   React.useEffect(() => {
     mediaService.setup()
@@ -57,7 +67,7 @@ function Explore({ navigation }) {
     }, 500)
   }
 
-  if (!tracks.length) return null
+  if (loading) return <Center><Spinner type='Wave' /></Center>
 
   
   const ProfileHeader = () => (

@@ -8,12 +8,15 @@ import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { Divider } from 'react-native-paper'
 import InAppBrowser from 'react-native-inappbrowser-reborn'
+import { Shadow } from 'react-native-neomorph-shadows';
+import Popover from 'react-native-popover-view';
+import Spinner from 'react-native-spinkit'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
-import Popover from 'react-native-popover-view';
+
 
 async function openLink() {
   try {
@@ -63,23 +66,31 @@ function Home({ navigation }) {
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
   const { user } = authState
-  const name = (user && user.name) ?? { name: '' }
+  const name = user && user.name
   const mediaService = MediaService()
   const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase().includes('r&'))
   const modalizeRef = React.useRef(null);
+  const [loading, setLoading] = React.useState(true)
 
   const onOpen = () => {
     modalizeRef.current?.open();
   };
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      if (tracks.length) {
+        mediaService.setup()
+        setLoading(false)
+      }
+    }, 1500)
+
+  }, [tracks])
+
   if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
   </View>
 
-  if (!tracks) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-    <Text style={{ fontSize: 15 }}>We are waiting for tracks</Text>
-  </View>
-
+  if (loading) return <Center><Spinner type='Wave' /></Center>
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
@@ -131,10 +142,27 @@ function Home({ navigation }) {
         ))}
       </ScrollView>
 
-      <Divider style={{ marginTop: 15,marginBottom:10 }} />
+      <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <SponsoredCard onOpen={openLink} />
+      <View style={{
+        flex: 1, marginBottom: 20,
+        justifyContent: 'center', alignItems: 'center'
+      }}>
+        <Shadow
+          useArt // <- set this prop to use non-native shadow on ios
+          style={{
+            shadowOffset: { width: 10, height: 10 },
+            shadowOpacity: 1,
+            shadowColor: "grey",
+            shadowRadius: 10,
+            borderRadius: 10,
+            backgroundColor: 'white',
+            width: 400,
+            height: 470,
+          }}
+        >
+          <SponsoredCard onOpen={openLink} />
+        </Shadow>
       </View>
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>

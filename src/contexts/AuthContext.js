@@ -18,7 +18,6 @@ export default function AuthProvider({ children }) {
             ...prevState,
             userToken: action.token,
             isLoading: false,
-            user: 'user' in action ? action.user : null
           };
         case 'SET_USER':
           return {
@@ -49,22 +48,22 @@ export default function AuthProvider({ children }) {
 
 
   React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('_iPUser_UserToken');
+        userToken = await AsyncStorage.getItem('_iPUser');
       } catch (e) {
         // Restoring token failed
         console.warn(e)
       }
 
       if (userToken) {
-        console.log(`Registered [`, userToken, ']')
+        dispatch({ type: 'RESTORE_TOKEN', token: 'asdf' });
         const usrRef = database.ref(`/users/${userToken}`)
         usrRef.on('value', snap => {
-          dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: snap.val() });
+          dispatch({ type: 'SET_USER', val: snap.val() })
+          authDispatch.setToken(userToken)
         })
       } else {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
@@ -88,10 +87,11 @@ export default function AuthProvider({ children }) {
 
               try {
                 console.log('ACCOUNT ONLINE [', uid, ']')
-                await AsyncStorage.setItem('_iPUser_UserToken', uid);
+                await AsyncStorage.setItem('_iPUser', uid);
                 const usrRef = database.ref(`/users/${uid}`)
                 usrRef.on('value', snap => {
                   dispatch({ type: 'SET_USER', val: snap.val() })
+                  authDispatch.setToken(uid)
                 })
               } catch (e) {
                 console.warn(e)
@@ -102,7 +102,7 @@ export default function AuthProvider({ children }) {
       signOut: async () => {
         auth.signOut().then(async _ => {
           console.log('ACCOUNT OFFLINE')
-          await AsyncStorage.removeItem('_iPUser_UserToken');
+          await AsyncStorage.removeItem('_iPUser');
           dispatch({ type: 'SIGN_OUT' })
         })
       },
@@ -111,15 +111,15 @@ export default function AuthProvider({ children }) {
           .then(async result => {
             try {
               console.log('ACCOUNT CREATED [', result.user.uid, ']')
-              await AsyncStorage.setItem('_iPUser_userToken', result.user.uid);
+              await AsyncStorage.setItem('_iPUser', result.user.uid);
               dispatch({ type: 'SIGN_IN', token: result.user.uid });
             } catch (e) {
               console.warn(e)
             }
           })
       },
-      setToken: token => {
-        dispatch({ type: 'RESTORE_TOKEN', token })
+      setToken: val => {
+        console.log({ type: 'RESTORE_TOKEN', token: val })
       }
     }),
     []

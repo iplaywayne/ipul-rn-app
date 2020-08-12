@@ -24,7 +24,6 @@ import { MediaListItem } from './MediaListItem'
 import { styles } from './styles'
 
 
-
 const DATA = [];
 const getItem = (data, index) => {
   return {
@@ -54,6 +53,7 @@ function Explore() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [trackQuery, setTrackQuery] = React.useState([])
   const tracksToDisplay = trackQuery.length ? trackQuery : []
+  const [loading, setLoading] = React.useState(true)
 
   const onChangeSearch = query => {
     setSearchQuery(query)
@@ -66,7 +66,7 @@ function Explore() {
   };
 
   const addQueue = async (item) => {
-    setTimeout(() => storeDispatch.setLoading(true), 250)
+    // setTimeout(() => storeDispatch.setLoading(true), 250)
     SendPlayerDetails(item, storeDispatch)
   }
 
@@ -75,15 +75,24 @@ function Explore() {
   }
 
   React.useEffect(() => {
+    setTimeout(() => {
+      if (tracks.length) {
+        setLoading(false)
+      }
+    }, 1500)
+
+  }, [tracks])
+
+  React.useEffect(() => {
+
     storeDispatch.setLoading(false)
     if (!searchQuery) {
       setTrackQuery(tracks)
     }
   }, [])
 
-  if (!tracks.length) return <ActivityIndicator
-    style={{ flex: 1, backgroundColor: '#121212' }} color='pink'
-  />
+  if (loading) return <Center><Spinner type='Wave' /></Center>
+
 
   const MediaContent = () => (
     <View>

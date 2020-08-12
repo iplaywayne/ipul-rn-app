@@ -62,9 +62,9 @@ function ExploreCard({ item, onOpen }) {
             imageStyle={{ borderRadius: 10, height: 300 }}
             image={'https://iplayulisten.com/zorei-logo.png'}
           />
-          <Button style={{ fontSize: 15,marginBottom: 20 }}
-            onPress={() => onOpen()}>Shop Now</Button>
           <Divider />
+          <Button style={{ fontSize: 15, marginTop: 15, marginBottom: 15 }}
+            onPress={() => onOpen()}>Shop Now</Button>
         </View>
       </TouchableOpacity>
     </ScrollView>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     padding: 5,
-    marginVertical: 20,
+    marginTop: 20,
     width: '100%',
     maxWidth: 500,
   },
