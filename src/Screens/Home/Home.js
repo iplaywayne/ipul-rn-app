@@ -125,7 +125,10 @@ function Home({ navigation }) {
 
       <Divider style={{ marginTop: 15 }} />
 
+      <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
+
       <SponsoredCard onOpen={openLink} />
+      </View>
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
