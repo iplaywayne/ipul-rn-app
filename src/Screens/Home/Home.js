@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
-  Alert
+  Alert, TouchableOpacity
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -13,7 +13,7 @@ import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
-
+import Popover from 'react-native-popover-view';
 
 async function openLink() {
   try {
@@ -84,6 +84,14 @@ function Home({ navigation }) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle='dark-content' />
+      {/* <Popover
+        from={(
+          <TouchableOpacity>
+            <Text>Press here to open popover!</Text>
+          </TouchableOpacity>
+        )}>
+        <Text style={{ height: 600 }}>This is the contents of the popover</Text>
+      </Popover> */}
 
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
@@ -127,7 +135,7 @@ function Home({ navigation }) {
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
 
-      <SponsoredCard onOpen={openLink} />
+        <SponsoredCard onOpen={openLink} />
       </View>
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>

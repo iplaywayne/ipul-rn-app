@@ -25,7 +25,7 @@ const AppStackNavigator = ({ navigation }) => {
   const { user } = authState
 
   return (
-    <AppStack.Navigator>
+    <AppStack.Navigator mode='modal'>
       <AppStack.Screen name="Profile" component={ProfileScreen} options={{
         title: user.name || 'iPlayuListen',
         headerShown: true,

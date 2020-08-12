@@ -57,12 +57,12 @@ function Explore() {
 
   const onChangeSearch = query => {
     setSearchQuery(query)
-    setTrackQuery(
-      tracks.filter(t => t.artist.toString().toLowerCase().includes(query.toLowerCase())) ||
-      tracks.filter(t => t.title.toString().toLowerCase().includes(query.toLowerCase())) ||
-      tracks.filter(t => t.genre.toString().toLowerCase().includes(query.toLowerCase())) ||
-      tracks.filter(t => t.bio.toString().toLowerCase().includes(query.toLowerCase()))
-    )
+    setTrackQuery(tracks.filter(t =>
+      t.artist.toString().toLowerCase().includes(query.toLowerCase()) ||
+      t.title.toString().toLowerCase().includes(query.toLowerCase()) ||
+      t.genre.toString().toLowerCase().includes(query.toLowerCase()) ||
+      t.bio.toString().toLowerCase().includes(query.toLowerCase())
+    ))
   };
 
   const addQueue = async (item) => {
