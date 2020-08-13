@@ -41,7 +41,6 @@ export const MediaNavigator = ({ navigation }) => {
       {/* Profile Screen */}
       <MediaStack.Screen name="Media" component={MediaScreen} options={{
         title: 'Media',
-        headerShown: true,
       }} />
       <MediaStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',

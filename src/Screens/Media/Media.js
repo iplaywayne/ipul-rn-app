@@ -77,9 +77,7 @@ function Media({ navigation }) {
         firstTitle={'Find something new'}
         secondTitle={'on iPlayuListen'}
         onChangeText={onChangeSearch}
-        onPressHamburgerIcon={() => navigation.toggleDrawer()}
-        // iconComponent={<Text>H</Text>}
-        
+        onPressHamburgerIcon={() => navigation.toggleDrawer()}        
       />)
     })
   }, [loading])

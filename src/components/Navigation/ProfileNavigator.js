@@ -16,7 +16,7 @@ import { Settings as SettingsScreen } from '../../screens/Settings'
 import DrawerContent from './DrawerContent'
 
 
-const AppStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
@@ -32,13 +32,11 @@ export const ProfileNavigator = ({ navigation }) => {
   const { user } = authState
 
   return (
-    <AppStack.Navigator mode='modal'>
+    <ProfileStack.Navigator mode='modal'>
 
       {/* Profile Screen */}
-      <AppStack.Screen name="Profile" component={ProfileScreen} options={{
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{
         title: user && user.name || 'iPlayuListen',
-        headerShown: true,
-        headerTransparent: false, 
         headerLeft: props => (
           <NavigationDrawerStructure
             navigationProps={navigation}
@@ -52,24 +50,24 @@ export const ProfileNavigator = ({ navigation }) => {
           />
         )
       }} />
-      <AppStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
+      <ProfileStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',
       }} />
-      <AppStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
+      <ProfileStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
         title: 'Update Mood',
       }} />
 
       
-      <AppStack.Screen name="Settings" component={SettingsScreen} options={{
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />
-      <AppStack.Screen name="Notifications" component={NotifsScreen} options={{
+      <ProfileStack.Screen name="Notifications" component={NotifsScreen} options={{
         title: 'Notifications',
       }} />
-      <AppStack.Screen name="Ads" component={AdsScreen} options={{
+      <ProfileStack.Screen name="Ads" component={AdsScreen} options={{
         title: 'Advertisements',
       }} />
-    </AppStack.Navigator>
+    </ProfileStack.Navigator>
   )
 }
 
@@ -79,7 +77,7 @@ export const ProfileDrawerNavigator = () => {
   const { user } = authState
 
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} user={user} />}>
+    <Drawer.Navigator drawerType='back' drawerContent={(props) => <DrawerContent {...props} user={user} />}>
       <Drawer.Screen name="Profile" component={ProfileNavigator} />
     </Drawer.Navigator >
   )

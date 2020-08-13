@@ -40,15 +40,15 @@ function Profile({ navigation }) {
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
 
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     if (tracks.length) {
-  //       setLoading(false)
-  //     }
-  //   }, 1000)
-  // }, [tracks])
-
   React.useEffect(() => {
+    setTimeout(() => {
+      if (tracks.length) {
+        setLoading(false)
+      }
+    }, 250)
+  }, [tracks])
+
+  React.useLayoutEffect(() => {
     mediaService.setup()
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
