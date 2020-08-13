@@ -10,7 +10,7 @@ import Button from 'react-native-button'
 import { Shadow } from 'react-native-neomorph-shadows';
 
 import { useAuth } from '../../contexts/AuthContext'
-import { trimWWWString } from '../../utils'
+import { trimWWWString, truncate } from '../../utils'
 import { siteLogo } from '../../constants'
 
 const elements = [
@@ -70,13 +70,11 @@ function SponsoredCard(props) {
               flex
               borderless
               shadow={true}
-              title={title || 'Stock up on your travel essentials!'}
-              caption={caption || 'Shop Zorei'}
-              location={location || 'Zorei.co'}
-              // avatar={avatar || 'https://iplayulisten.com/zorei-logo.png'}
+              title={title}
+              caption={caption}
+              location={truncate(location,18)}
               avatar={avatar}
               imageStyle={{ borderRadius: 10, height: 300 }}
-              // image={image || 'https://iplayulisten.com/zorei-logo.png'}
               image={image}
             />
             <Divider />

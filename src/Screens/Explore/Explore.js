@@ -43,8 +43,8 @@ function Explore() {
           title='Essential Fitness Apparrel'
           caption='Shop Dynamic'
           location='DynamicFitnessLife.com'
-          image={'https://iplayulisten.com/public_html/assets/images/sponsored/dynamicfit.png'}
-          avatar={'https://iplayulisten.com/assets/images/dynamicfit.png'}
+          image={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
+          avatar={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
           onOpen={() => openLink('https://www.dynamicfitnesslife.com')}
         />
       </Center>
