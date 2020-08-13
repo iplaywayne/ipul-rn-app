@@ -1,9 +1,10 @@
 import React from 'react'
-import { ScrollView, View, ActivityIndicator, Image } from 'react-native'
+import { ScrollView, View, ActivityIndicator, Image, TouchableOpacity } from 'react-native'
 import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
 import { Divider, Text, TextInput } from 'react-native-paper';
 import Animated from 'react-native-reanimated'
+import { List, RadioButton } from 'react-native-paper';
 
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
@@ -21,13 +22,6 @@ function UpdateProfile({ navigation }) {
     bio: bio
   })
 
-  const scrollY = React.useRef(new Animated.Value(0)).current
-
-  const changingHeight = scrollY.interpolate({
-    inputRange: [0, 50],
-    outputRange: [120, 60],
-    extrapolate: 'clamp'
-  })
 
   const handleGoBack = async () => {
     await wait(() => setLoading(true))
@@ -59,43 +53,30 @@ function UpdateProfile({ navigation }) {
   }, [loading])
 
 
+  const moodArray = [
+    { id: 1, emoji: '😌', title: 'Jus Chillin', description: 'R & B, Reggae, Soul' },
+    { id: 2, emoji: '🥳', title: 'Club Ready', description: 'Hip Hop, Trap, Dancehall' },
+  ]
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}
-    // onScroll={Animated.event(
-    //   [{ nativeEvent: { contentOffset: { x: scrollY } } }], { listener }
-    // )}
-    >
-      <Animated.View style={{ alignItems: 'center', marginVertical: 20 }}>
-        <Image source={require('../../assets/images/iPlay2020Logo.png')}
-          style={{ height: 100, width: 100, borderRadius: 100 / 2 }} />
-      </Animated.View>
+    <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
 
-      {/* <Text style={styles.title}>Settings</Text> */}
-      {/* <Text style={styles.subTitle}>Your Username</Text> */}
-      <TextInput
-        // disabled
-        label="Username"
-        value={formState.name}
-        onChangeText={val => setFormState(state => ({
-          ...formState,
-          name: val
-        }))}
-        type='outlined'
-      />
-      <Divider />
 
-      <TextInput
-        label="Bio"
-        value={formState.bio}
-        onChangeText={val => setFormState(state => ({
-          ...formState,
-          bio: val
-        }))}
-        type='outlined'
-        multiline={true}
-        height={120}
-      />
+
+      {moodArray.map((itm, idx) => (
+        <TouchableOpacity onPress={() => console.log(itm)}>
+          <List.Item
+            title={itm.title}
+            description={itm.description}
+            left={() => <Text style={{ padding: 10 }}>{itm.emoji}</Text>}
+          // right={() => <RadioButton
+          //   value="second"
+          //   status={'checked'}
+          //   onPress={() => console.log('second')}
+          // />}
+          />
+        </TouchableOpacity>
+      ))}
 
       {/* <Text>{JSON.stringify(user, null, 2)}</Text> */}
     </ScrollView>
