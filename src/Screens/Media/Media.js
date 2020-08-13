@@ -18,6 +18,7 @@ import FastImage from 'react-native-fast-image'
 import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
 import Spinner from 'react-native-spinkit'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { SendPlayerDetails } from '../../utils/media/functions'
 import { MediaListItem } from './MediaListItem'
@@ -57,16 +58,10 @@ function Explore() {
 
   const onChangeSearch = query => {
     setSearchQuery(query)
-    setTrackQuery(tracks.filter(t =>
-      t.artist.toString().toLowerCase().includes(query.toLowerCase()) ||
-      t.title.toString().toLowerCase().includes(query.toLowerCase()) ||
-      t.genre.toString().toLowerCase().includes(query.toLowerCase()) ||
-      t.bio.toString().toLowerCase().includes(query.toLowerCase())
-    ))
+    setTrackQuery(tracks.filter(t => JSON.stringify(t).toLowerCase().includes(query.toLowerCase())))
   };
 
   const addQueue = async (item) => {
-    // setTimeout(() => storeDispatch.setLoading(true), 250)
     SendPlayerDetails(item, storeDispatch)
   }
 
@@ -106,7 +101,7 @@ function Explore() {
           </Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 30, marginBottom: 25 }}
+      <ScrollView style={{ height: 'auto', marginTop: 30 }}
         showsVerticalScrollIndicator={false}>
         {tracksToDisplay.length ? tracksToDisplay.slice(0, 11).map((itm, idx) => (
           <MediaListItem
@@ -126,21 +121,23 @@ function Explore() {
   )
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : null}
-      style={{ flex: 1 }}
+    <KeyboardAwareScrollView
+      style={{}}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      // contentContainerStyle={{height:1000}}
+      scrollEnabled={true}
     >
-      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-        <View style={{ marginTop: 75, marginHorizontal: 20,justifyContent: 'flex-end' }}>
-          <Searchbar
-            placeholder="Search iPlayuListen"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-          />
-        </View>
+      <View style={{ marginTop: 75, marginHorizontal: 10 }}>
+        <Searchbar
+          placeholder="Search iPlayuListen"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
+      </View>
+
         <MediaContent />
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+    </KeyboardAwareScrollView>
   )
 }
 
