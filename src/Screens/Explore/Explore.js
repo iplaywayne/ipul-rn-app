@@ -8,7 +8,8 @@ import Spinner from 'react-native-spinkit'
 import { ExploreCard, Center } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
-
+import SponsoredCard from '../../components/Ads/SponsoredCard'
+import { openLink } from '../../utils/functions'
 
 function Explore() {
   const [authState, authDispatch] = useAuth()
@@ -35,9 +36,23 @@ function Explore() {
         <Text style={styles.title}>Explore iPlayuListen</Text>
       </View>
 
-      <Divider />
+      <Divider style={{ marginBottom: 30 }} />
 
-      <View style={{ paddingBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
+      <Center>
+        <SponsoredCard
+          title='Essential Fitness Apparrel'
+          caption='Shop Dynamic'
+          location='DynamicFitnessLife.com'
+          image={'https://iplayulisten.com/public_html/assets/images/sponsored/dynamicfit.png'}
+          avatar={'https://iplayulisten.com/assets/images/dynamicfit.png'}
+          onOpen={() => openLink('https://www.dynamicfitnesslife.com')}
+        />
+      </Center>
+
+      <View style={{
+        paddingTop: 20,
+        paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
+      }}>
         {topRemixes.map((itm, idx) => (
           <ExploreCard key={idx} item={itm} />
         ))}

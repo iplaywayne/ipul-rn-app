@@ -39,10 +39,11 @@ const Swiper = () => (
   </View>
 )
 
-function ExploreCard({ item, onOpen }) {
+function SponsoredCard(props) {
+  const { title, caption, location, avatar, image, item, onOpen } = props
   const [authState, authDispatch] = useAuth()
   const { user } = authState
-  const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+  // const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
 
 
   return (
@@ -69,12 +70,14 @@ function ExploreCard({ item, onOpen }) {
               flex
               borderless
               shadow={true}
-              title={'Stock up on your travel essentials!'}
-              caption={'Shop Zorei'}
-              location={'Zorei.co'}
-              avatar={'https://iplayulisten.com/zorei-logo.png'}
+              title={title || 'Stock up on your travel essentials!'}
+              caption={caption || 'Shop Zorei'}
+              location={location || 'Zorei.co'}
+              // avatar={avatar || 'https://iplayulisten.com/zorei-logo.png'}
+              avatar={avatar}
               imageStyle={{ borderRadius: 10, height: 300 }}
-              image={'https://iplayulisten.com/zorei-logo.png'}
+              // image={image || 'https://iplayulisten.com/zorei-logo.png'}
+              image={image}
             />
             <Divider />
             <Button style={{ fontSize: 15, marginTop: 15, marginBottom: 15 }}
@@ -119,4 +122,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ExploreCard
+export default SponsoredCard

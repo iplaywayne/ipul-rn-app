@@ -87,7 +87,13 @@ function Home({ navigation }) {
         justifyContent: 'center', alignItems: 'center'
       }}>
 
-        <SponsoredCard onOpen={() => openLink('https://www.zorei.co')} />
+        <SponsoredCard
+          title={'Stock up on your travel essentials!'}
+          caption={'Shop Zorei'}
+          location={'Zorei.co'}
+          image={'https://iplayulisten.com/zorei-logo.png'}
+          avatar={'https://iplayulisten.com/zorei-logo.png'}
+          onOpen={() => openLink('https://www.zorei.co')} />
       </View>
       <Button onPress={() => {
         setTimeout(() => {

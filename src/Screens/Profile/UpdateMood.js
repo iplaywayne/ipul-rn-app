@@ -2,9 +2,8 @@ import React from 'react'
 import { ScrollView, View, ActivityIndicator, Image, TouchableOpacity } from 'react-native'
 import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
-import { Divider, Text, TextInput } from 'react-native-paper';
+import { Divider, Text, TextInput, List, RadioButton  } from 'react-native-paper';
 import Animated from 'react-native-reanimated'
-import { List, RadioButton } from 'react-native-paper';
 
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
@@ -55,7 +54,10 @@ function UpdateProfile({ navigation }) {
 
   const moodArray = [
     { id: 1, emoji: '😌', title: 'Jus Chillin', description: 'R & B, Reggae, Soul' },
-    { id: 2, emoji: '🥳', title: 'Club Ready', description: 'Hip Hop, Trap, Dancehall' },
+    { id: 2, emoji: '🥳', title: 'Ready for the Club', description: 'Hip Hop, Trap, Dancehall' },
+    { id: 3, emoji: '😇', title: 'Meditating', description: 'Various Soothing Sounds' },
+    { id: 4, emoji: '🤘', title: 'Call of Duty', description: 'Hip Hop, Trap' },
+    { id: 5, emoji: '🤘', title: 'Feeling curious, surprise me', description: 'Mixed Genres' },
   ]
 
   return (
@@ -64,7 +66,7 @@ function UpdateProfile({ navigation }) {
 
 
       {moodArray.map((itm, idx) => (
-        <TouchableOpacity onPress={() => console.log(itm)}>
+        <TouchableOpacity onPress={() => console.log(itm.emoji)}>
           <List.Item
             title={itm.title}
             description={itm.description}
@@ -75,6 +77,7 @@ function UpdateProfile({ navigation }) {
           //   onPress={() => console.log('second')}
           // />}
           />
+          <Divider />
         </TouchableOpacity>
       ))}
 
