@@ -44,5 +44,14 @@ export const styles = StyleSheet.create({
   },
   miniCardText: {
     flex: 1
-  }
+  },
+  handlerBar: {
+    position: 'absolute',
+    backgroundColor: '#D1D1D6',
+    top: 20,
+    borderRadius: 3,
+    height: 5,
+    width: 30,
+    flex: 1,
+  },
 })

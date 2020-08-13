@@ -6,7 +6,8 @@ import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
 
 import { Profile as ProfileScreen } from '../../screens/Profile'
-import { default as EditProfileScreen } from '../../screens/Profile/EditProfile'
+import { default as UpdateProfileScreen } from '../../screens/Profile/UpdateProfile'
+import { default as UpdateMoodScreen } from '../../screens/Profile/UpdateMood'
 import { useAuth } from '../../contexts'
 import { NavigationDrawerStructure } from './NavigationDrawerStructure'
 import { Settings as SettingsScreen } from '../../screens/Settings'
@@ -28,6 +29,8 @@ const AppStackNavigator = ({ navigation }) => {
 
   return (
     <AppStack.Navigator mode='modal'>
+
+      {/* Profile Screen */}
       <AppStack.Screen name="Profile" component={ProfileScreen} options={{
         title: user.name || 'iPlayuListen',
         headerShown: true,
@@ -45,9 +48,14 @@ const AppStackNavigator = ({ navigation }) => {
           />
         )
       }} />
-      <AppStack.Screen name="EditProfile" component={EditProfileScreen} options={{
-        title: 'Edit Profile',
+      <AppStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
+        title: 'Update Profile',
       }} />
+      <AppStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
+        title: 'Update Mood',
+      }} />
+
+      
       <AppStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />

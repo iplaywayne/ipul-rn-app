@@ -9,7 +9,7 @@ import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
 
 
-function EditProfile({ navigation }) {
+function UpdateProfile({ navigation }) {
   const [authState] = useAuth()
   const [storeState] = useStore()
   const [loading, setLoading] = React.useState(false)
@@ -113,4 +113,4 @@ const styles = {
     padding: 10
   }
 }
-export default EditProfile
+export default UpdateProfile

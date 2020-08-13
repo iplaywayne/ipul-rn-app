@@ -14,6 +14,7 @@ import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
 import Btn from '../../components/Prebuilt/Button'
+import BottomSheet from 'reanimated-bottom-sheet'
 
 
 import { Center, MiniCard } from '../../components'
@@ -21,6 +22,9 @@ import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
 import { styles } from './styles'
+
+
+const BUTTON_WIDTH = 100
 
 function Profile({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -72,10 +76,10 @@ function Profile({ navigation }) {
 
 
   const ProfileHeader = () => (
-    <View style={{ flex: 2 }}>
+    <View style={{ flex: 2, paddingBottom: 0 }}>
       <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
         {avatar ?
-          <TouchableOpacity onPress={() => navigation.push('EditProfile')}>
+          <TouchableOpacity onPress={() => navigation.push('UpdateProfile')}>
             <FastImage
               style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
               source={{
@@ -97,17 +101,20 @@ function Profile({ navigation }) {
 
       <View style={{
         justifyContent: 'center',
-        paddingHorizontal: 5, paddingBottom: 10, flexDirection: 'row'
+        paddingHorizontal: 5, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
       }}>
         <Btn
-          style={{ width: 100 }}
           title='Update Profile'
-          onPress={() => navigation.push('EditProfile')}
+          onPress={() => navigation.push('UpdateProfile')}
         />
         <Btn
-          style={{ width: 100 }}
           title='Set Your Mood'
-          onPress={() => navigation.push('EditMood')}
+          onPress={() => navigation.push('UpdateMood')}
+        />
+        <Btn
+          color='#350DB6'
+          title={isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
+          onPress={() => playNowTapped()}
         />
       </View>
     </View>
@@ -124,16 +131,6 @@ function Profile({ navigation }) {
               <MiniCard key={idx} item={itm} removeControl />
             ))}
           </ScrollView>
-          <Button
-            style={{ fontSize: 15, color: 'white' }}
-            styleDisabled={{ color: 'white' }}
-            disabled={isLoading}
-            containerStyle={{ padding: 10, margin: 10, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
-            disabledContainerStyle={{ backgroundColor: '#ddd' }}
-            onPress={() => playNowTapped()}
-          >
-            {isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
-          </Button>
         </View>
         :
         <View>
@@ -144,7 +141,7 @@ function Profile({ navigation }) {
   )
 
   const ProfileFavorites = () => (
-    <View style={{ marginBottom: 50 }}>
+    <View style={{ marginBottom: 0 }}>
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
@@ -185,10 +182,12 @@ function Profile({ navigation }) {
       <Divider />
 
       <ProfileQueued />
-
+      {/* 
       <Divider />
 
-      <ProfileFavorites />
+      <ProfileFavorites /> */}
+
+
 
     </ScrollView >
   )
