@@ -19,6 +19,10 @@ import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
 import Spinner from 'react-native-spinkit'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {
+  HeaderSearchBar,
+  HeaderClassicSearchBar
+} from "react-native-header-search-bar";
 
 import { SendPlayerDetails } from '../../utils/media/functions'
 import { MediaListItem } from './MediaListItem'
@@ -43,9 +47,7 @@ const Item = ({ title }) => {
   );
 }
 
-
-
-function Explore() {
+function Media({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { isLoading, tracks, currentTrack, queued } = storeState
@@ -68,6 +70,20 @@ function Explore() {
   const handleListTapped = async (item) => {
     addQueue(item)
   }
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      header: props => (<HeaderSearchBar
+        firstTitle={'Find something new'}
+        secondTitle={'on iPlayuListen'}
+        onChangeText={onChangeSearch}
+        onPressHamburgerIcon={() => navigation.toggleDrawer()}
+        // iconComponent={<Text>H</Text>}
+        
+      />)
+    })
+  }, [loading])
+
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -101,7 +117,7 @@ function Explore() {
           </Text>}
         </View>}
 
-      <ScrollView style={{ height: 'auto', marginTop: 30 }}
+      <ScrollView style={{ height: 'auto', marginTop: 15 }}
         showsVerticalScrollIndicator={false}>
         {tracksToDisplay.length ? tracksToDisplay.slice(0, 11).map((itm, idx) => (
           <MediaListItem
@@ -122,20 +138,29 @@ function Explore() {
 
   return (
     <KeyboardAwareScrollView
-      style={{}}
+      style={{ height: 1000 }}
+      showsVerticalScrollIndicator={false}
       resetScrollToCoords={{ x: 0, y: 0 }}
       // contentContainerStyle={{height:1000}}
       scrollEnabled={true}
     >
-      <View style={{ marginTop: 75, marginHorizontal: 10 }}>
+      {/* <HeaderSearchBar
+        firstTitle={'Find something new'}
+        secondTitle={'on iPlayuListen'}
+        onChangeText={onChangeSearch}
+        onPressHamburgerIcon={() => console.log('Show Media Action Sheet')}
+      /> */}
+
+      {/* <View style={{ marginTop: 75, marginHorizontal: 10 }}> */}
+      {/* <View style={{ position:'relative',top:50,left:0,right:0,paddingHorizontal:10 }}>
         <Searchbar
           placeholder="Search iPlayuListen"
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
-      </View>
+      </View> */}
 
-        <MediaContent />
+      <MediaContent />
 
     </KeyboardAwareScrollView>
   )
@@ -143,4 +168,4 @@ function Explore() {
 
 
 
-export default Explore
+export default Media

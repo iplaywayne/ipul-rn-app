@@ -182,12 +182,11 @@ function Profile({ navigation }) {
       <Divider />
 
       <ProfileQueued />
+      
       {/* 
       <Divider />
 
       <ProfileFavorites /> */}
-
-
 
     </ScrollView >
   )
