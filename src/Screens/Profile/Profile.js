@@ -20,7 +20,7 @@ import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
 import { styles } from './styles'
 
-function Explore({ navigation }) {
+function Profile({ navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
@@ -32,16 +32,15 @@ function Explore({ navigation }) {
   const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = React.useState(false)
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      if (tracks.length) {
-        setLoading(false)
-      }
-    }, 1500)
-
-  }, [tracks])
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     if (tracks.length) {
+  //       setLoading(false)
+  //     }
+  //   }, 1000)
+  // }, [tracks])
 
   React.useEffect(() => {
     mediaService.setup()
@@ -67,30 +66,32 @@ function Explore({ navigation }) {
     }, 500)
   }
 
-  if (loading) return <Center><Spinner type='Wave' /></Center>
+  if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
-  
+
   const ProfileHeader = () => (
     <View style={{ flex: 2 }}>
-      <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
-        {avatar ?
-          <FastImage
-            style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
-            source={{
-              uri: avatar,
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          :
-          <Avatar.Text size={100} label={name.substring(0, 2)}
-            style={{ backgroundColor: '#444' }} />}
+      <TouchableOpacity onPress={() => navigation.push('EditProfile')}>
+        <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
+          {avatar ?
+            <FastImage
+              style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
+              source={{
+                uri: avatar,
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            :
+            <Avatar.Text size={100} label={name.substring(0, 2)}
+              style={{ backgroundColor: '#444' }} />}
 
-        <View style={{ marginLeft: 15, marginTop: 25 }}>
-          <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-          <Text>{bio || 'Brand'}</Text>
+          <View style={{ marginLeft: 15, marginTop: 25 }}>
+            <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
+            <Text>{bio || 'Brand'}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 
@@ -176,4 +177,4 @@ function Explore({ navigation }) {
 }
 
 
-export default Explore
+export default Profile

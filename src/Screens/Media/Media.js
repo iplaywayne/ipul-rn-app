@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image as Img, ActivityIndicator,
-  Dimensions, VirtualizedList, FlatList, TouchableOpacity, StatusBar
+  Dimensions, VirtualizedList, FlatList, TouchableOpacity, StatusBar, KeyboardAvoidingView, Platform
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -126,16 +126,21 @@ function Explore() {
   )
 
   return (
-    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <View style={{ marginTop: 75, marginHorizontal: 20 }}>
-        <Searchbar
-          placeholder="Search iPlayuListen"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </View>
-      <MediaContent />
-    </ScrollView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      style={{ flex: 1 }}
+    >
+      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+        <View style={{ marginTop: 75, marginHorizontal: 20,justifyContent: 'flex-end' }}>
+          <Searchbar
+            placeholder="Search iPlayuListen"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+          />
+        </View>
+        <MediaContent />
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

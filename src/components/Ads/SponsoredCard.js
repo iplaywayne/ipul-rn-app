@@ -7,6 +7,7 @@ import {
 import { Divider } from 'react-native-paper'
 import { FastImage as Image } from 'react-native-fast-image'
 import Button from 'react-native-button'
+import { Shadow } from 'react-native-neomorph-shadows';
 
 import { useAuth } from '../../contexts/AuthContext'
 import { trimWWWString } from '../../utils'
@@ -45,29 +46,43 @@ function ExploreCard({ item, onOpen }) {
 
 
   return (
-    <ScrollView style={styles.root}>
-      <TouchableOpacity>
-        <View>
-          <Text style={{ paddingLeft: 10, paddingBottom: 10, fontWeight: '700' }}>
-            Sponsored
+    <Shadow
+      useArt // <- set this prop to use non-native shadow on ios
+      style={{
+        shadowOffset: { width: 10, height: 10 },
+        shadowOpacity: 1,
+        shadowColor: "grey",
+        shadowRadius: 10,
+        borderRadius: 10,
+        backgroundColor: 'white',
+        width: 400,
+        height: 475,
+      }}
+    >
+      <ScrollView style={styles.root}>
+        <TouchableOpacity>
+          <View>
+            <Text style={{ paddingLeft: 10, paddingBottom: 20, fontWeight: '700' }}>
+              Sponsored
             </Text>
-          <Card
-            flex
-            borderless
-            shadow={true}
-            title={'Stock up on your travel essentials!'}
-            caption={'Shop Zorei'}
-            location={'Zorei.co'}
-            avatar={'https://iplayulisten.com/zorei-logo.png'}
-            imageStyle={{ borderRadius: 10, height: 300 }}
-            image={'https://iplayulisten.com/zorei-logo.png'}
-          />
-          <Divider />
-          <Button style={{ fontSize: 15, marginTop: 15, marginBottom: 15 }}
-            onPress={() => onOpen()}>Shop Now</Button>
-        </View>
-      </TouchableOpacity>
-    </ScrollView>
+            <Card
+              flex
+              borderless
+              shadow={true}
+              title={'Stock up on your travel essentials!'}
+              caption={'Shop Zorei'}
+              location={'Zorei.co'}
+              avatar={'https://iplayulisten.com/zorei-logo.png'}
+              imageStyle={{ borderRadius: 10, height: 300 }}
+              image={'https://iplayulisten.com/zorei-logo.png'}
+            />
+            <Divider />
+            <Button style={{ fontSize: 15, marginTop: 15, marginBottom: 15 }}
+              onPress={() => onOpen()}>Shop Now</Button>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
+    </Shadow >
   )
 }
 

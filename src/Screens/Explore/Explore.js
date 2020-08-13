@@ -20,9 +20,7 @@ function Explore() {
 
   React.useEffect(() => {
     setTimeout(() => {
-      if (tracks.length) {
-        setLoading(false)
-      }
+      if (tracks.length) setLoading(false)
     }, 1500)
 
   }, [tracks])

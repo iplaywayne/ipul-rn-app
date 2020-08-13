@@ -6,6 +6,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Spinner from 'react-native-spinkit'
 
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import { SignIn as SignInScreen } from './screens/SignIn'
@@ -22,7 +23,8 @@ export default function () {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user, isLoading, userToken } = authState
-  if (isLoading) return <Center><ActivityIndicator color='darkgray' /></Center>
+  
+  if (isLoading) return <Center><Spinner type='Wave' /></Center>
 
   return (
     <NavigationContainer>

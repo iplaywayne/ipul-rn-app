@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  SafeAreaView, StyleSheet, ScrollView, View, Image, Dimensions,
+  SafeAreaView, StyleSheet, ScrollView, View, Image, Dimensions, ActivityIndicator,
   Text, StatusBar, NativeModules, Button as Btn, TextInput, TouchableOpacity
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
@@ -26,8 +26,26 @@ const SignIn = (props) => {
   const [password, setPassword] = React.useState('admin20')
   const [authState, authDispatch] = useAuth()
   const { isLoading } = authState
+  const [signInLoading, setSignInLoading] = React.useState(false)
+  const [signUpLoading, setSignUpLoading] = React.useState(false)
 
-  if (isLoading) return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Spinner /></View>
+
+  const handleSignIn = () => {
+    setSignInLoading(true)
+    setTimeout(() => {
+      authDispatch.signIn({ username, password })
+    }, 2000)
+  }
+  const handleSignUp = () => {
+    setSignUpLoading(true)
+    setTimeout(() => {
+      setSignUpLoading(false)
+    }, 2000)
+  }
+
+
+  if (isLoading) return <Center><Spinner /></Center>
+
 
   return (
     <Center>
@@ -63,9 +81,9 @@ const SignIn = (props) => {
               // disabled={isLoading}
               containerStyle={{ padding: 10, margin: 5, height: 40, overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212' }}
               disabledContainerStyle={{ backgroundColor: '#ddd' }}
-              onPress={() => authDispatch.signIn({ username, password })}
+              onPress={() => handleSignIn()}
             >
-              Sign In
+              {signInLoading ? <ActivityIndicator /> : 'Sign In'}
             </Button>
             <Button
               style={{ fontSize: 15, color: 'white', width: '100%' }}
@@ -75,7 +93,7 @@ const SignIn = (props) => {
               disabledContainerStyle={{ backgroundColor: '#ddd' }}
               onPress={() => navigation.push('Sign Up')}
             >
-              Sign Up
+              {signUpLoading ? <ActivityIndicator /> : 'Sign Up'}
             </Button>
           </View>
         </View>

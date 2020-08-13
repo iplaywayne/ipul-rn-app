@@ -9,7 +9,7 @@ export const useAuth = () => React.useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
   const [authorizedUser, setAuthorizedUser] = React.useState(null)
-
+  
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -119,7 +119,10 @@ export default function AuthProvider({ children }) {
           })
       },
       setToken: val => {
-        console.log({ type: 'RESTORE_TOKEN', token: val })
+        dispatch({ type: 'RESTORE_TOKEN', token: val })
+      },
+      setLoading: val => {
+        dispatch({ type: 'SET_LOADING', val })
       }
     }),
     []

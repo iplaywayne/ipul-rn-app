@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Button, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
+  View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
   Alert, TouchableOpacity
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -11,54 +11,14 @@ import InAppBrowser from 'react-native-inappbrowser-reborn'
 import { Shadow } from 'react-native-neomorph-shadows';
 import Popover from 'react-native-popover-view';
 import Spinner from 'react-native-spinkit'
+import Button from 'react-native-button'
+
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
-
-
-async function openLink() {
-  try {
-    const url = 'https://www.zorei.co'
-    if (await InAppBrowser.isAvailable()) {
-      const result = await InAppBrowser.open(url, {
-        // iOS Properties
-        dismissButtonStyle: 'cancel',
-        preferredBarTintColor: '#121212',
-        preferredControlTintColor: 'white',
-        readerMode: false,
-        animated: true,
-        modalPresentationStyle: 'popover',
-        modalTransitionStyle: 'coverVertical',
-        modalEnabled: true,
-        enableBarCollapsing: false,
-        // Android Properties
-        showTitle: true,
-        toolbarColor: '#6200EE',
-        secondaryToolbarColor: 'black',
-        enableUrlBarHiding: true,
-        enableDefaultShare: true,
-        forceCloseOnRedirection: false,
-        // Specify full animation resource identifier(package:anim/name)
-        // or only resource name(in case of animation bundled with app).
-        animations: {
-          startEnter: 'slide_in_right',
-          startExit: 'slide_out_left',
-          endEnter: 'slide_in_left',
-          endExit: 'slide_out_right'
-        },
-        headers: {
-          'my-custom-header': 'my custom header value'
-        }
-      })
-      // Alert.alert(JSON.stringify(result))
-    }
-    else Linking.openURL(url)
-  } catch (error) {
-    Alert.alert(error.message)
-  }
-}
+import { openLink } from '../../utils/functions'
 
 
 function Home({ navigation }) {
@@ -75,6 +35,19 @@ function Home({ navigation }) {
   const onOpen = () => {
     modalizeRef.current?.open();
   };
+
+  const MediaRow = ({ title, query, tracks }) => (
+    <View>
+      <Text style={{ paddingTop: 5, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>{title}</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+        style={{ marginBottom: 15, flexDirection: 'row' }}>
+
+        {tracks && tracks.filter(t => JSON.stringify(t).toLowerCase().includes(query)).map((itm, idx) => (
+          <MiniCard key={idx} item={itm} />
+        ))}
+      </ScrollView>
+    </View>
+  )
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -95,14 +68,6 @@ function Home({ navigation }) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle='dark-content' />
-      {/* <Popover
-        from={(
-          <TouchableOpacity>
-            <Text>Press here to open popover!</Text>
-          </TouchableOpacity>
-        )}>
-        <Text style={{ height: 600 }}>This is the contents of the popover</Text>
-      </Popover> */}
 
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
@@ -110,37 +75,10 @@ function Home({ navigation }) {
 
       <Divider style={{ marginBottom: 20 }} />
 
-      <Text style={{ paddingTop: 5, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Remixes</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.filter(t => t.bio.toLowerCase().includes('remix')).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
-
-      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Hip Hop</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('hip')).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
-
-      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top R & B</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('r&')).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
-
-      <Text style={{ paddingTop: 10, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>Top Reggae</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
-        {tracks && tracks.filter(t => t.genre.toLowerCase().includes('regg')).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
+      <MediaRow title='Top Remixes' query='rem' tracks={tracks} />
+      <MediaRow title='Top Hip Hop' query='hip' tracks={tracks} />
+      <MediaRow title='Top R & B' query='r&' tracks={tracks} />
+      <MediaRow title='Top Reggae' query='regg' tracks={tracks} />
 
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
@@ -148,22 +86,17 @@ function Home({ navigation }) {
         flex: 1, marginBottom: 20,
         justifyContent: 'center', alignItems: 'center'
       }}>
-        <Shadow
-          useArt // <- set this prop to use non-native shadow on ios
-          style={{
-            shadowOffset: { width: 10, height: 10 },
-            shadowOpacity: 1,
-            shadowColor: "grey",
-            shadowRadius: 10,
-            borderRadius: 10,
-            backgroundColor: 'white',
-            width: 400,
-            height: 470,
-          }}
-        >
-          <SponsoredCard onOpen={openLink} />
-        </Shadow>
+
+        <SponsoredCard onOpen={() => openLink('https://www.zorei.co')} />
       </View>
+      <Button onPress={() => {
+        setTimeout(() => {
+          authDispatch.signOut()
+        }, 1000)
+      }}
+        style={{ fontSize: 15 }}>
+        Sign Out
+      </Button>
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
@@ -171,9 +104,7 @@ function Home({ navigation }) {
         ))}
       </View>
 
-
       {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
-      {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
     </ScrollView>
   )
 }
@@ -182,7 +113,7 @@ const styles = StyleSheet.create({
   root: {
     paddingTop: 30,
     flex: 1,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   title: {
     fontSize: 28,
