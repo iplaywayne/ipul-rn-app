@@ -1,41 +1,55 @@
 import React from 'react'
-import { ScrollView, View, Animated, ActivityIndicator, Image } from 'react-native'
+import { ScrollView, View, ActivityIndicator, Image } from 'react-native'
 import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
 import { Divider, Text, TextInput } from 'react-native-paper';
+import Animated from 'react-native-reanimated'
 
 import { Center } from '../../components'
-import { useAuth } from '../../contexts/AuthContext'
-import { useStore } from '../../utils'
+import { useAuth, useStore, wait } from '../../utils'
 
-const wait = (cb = null, tm = 100) => {
-  if (cb === null) return
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      cb()
-      resolve()
-    }, tm)
-  })
-}
 
 function EditProfile({ navigation }) {
   const [authState] = useAuth()
   const [storeState] = useStore()
   const [loading, setLoading] = React.useState(false)
   const { user } = authState
-  const name = user && user.name
-  const [text, setText] = React.useState(name)
+  const { name, bio } = user && user
+
+  const [formState, setFormState] = React.useState({
+    name: name,
+    bio: bio
+  })
+
   const scrollY = React.useRef(new Animated.Value(0)).current
+  
   const changingHeight = scrollY.interpolate({
     inputRange: [0, 50],
     outputRange: [120, 60],
     extrapolate: 'clamp'
   })
 
+  const handleGoBack = async () => {
+    await wait(() => setLoading(true))
+    await wait(() => setLoading(false), 750)
+    navigation.goBack()
+  }
+
+  const handleCancel = async () => {
+    navigation.goBack()
+  }
+
+  const listener = () => {
+
+  }
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: false,
+      headerLeft: () => (
+        <Button style={{ marginLeft: 20 }} onPress={handleCancel}>
+          {'Cancel'}
+        </Button>
+      ),
       headerRight: () => (
         <Button style={{ marginRight: 20 }} onPress={handleGoBack}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
@@ -44,20 +58,13 @@ function EditProfile({ navigation }) {
     })
   }, [loading])
 
-  const handleGoBack = async () => {
-    await wait(() => setLoading(true))
-    await wait(() => setLoading(false), 750)
-    navigation.goBack()
-  }
-  const listener = () => {
-  }
 
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}
-      // onScroll={Animated.event(
-      //   [{ nativeEvent: { contentOffset: { x: scrollY } } }], { listener }
-      // )}
+    // onScroll={Animated.event(
+    //   [{ nativeEvent: { contentOffset: { x: scrollY } } }], { listener }
+    // )}
     >
       <Animated.View style={{ alignItems: 'center', marginVertical: 20 }}>
         <Image source={require('../../assets/images/iPlay2020Logo.png')}
@@ -67,16 +74,29 @@ function EditProfile({ navigation }) {
       {/* <Text style={styles.title}>Settings</Text> */}
       {/* <Text style={styles.subTitle}>Your Username</Text> */}
       <TextInput
-        disabled
+        // disabled
         label="Username"
-        value={text}
-        onChangeText={text => setText(text)}
+        value={formState.name}
+        onChangeText={val => setFormState(state => ({
+          ...formState,
+          name: val
+        }))}
         type='outlined'
       />
-      <Text>{JSON.stringify(user, null, 2)}</Text>
-      <Text>{JSON.stringify(user, null, 2)}</Text>
-      <Text>{JSON.stringify(user, null, 2)}</Text>
       <Divider />
+
+      <TextInput
+        label="Bio"
+        value={formState.bio}
+        onChangeText={val => setFormState(state => ({
+          ...formState,
+          bio: val
+        }))}
+        type='outlined'
+        multiline={true}
+        height={120}
+      />
+      {/* <Text>{JSON.stringify(user, null, 2)}</Text> */}
     </ScrollView>
   )
 }

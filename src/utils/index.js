@@ -3,4 +3,4 @@ export { useStore } from './store'
 
 export { firebase, database, auth } from './firebase'
 export { default as MediaService } from './media/MediaService'
-export { trimWWWString } from './functions'
+export { trimWWWString,wait } from './functions'

@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image,
+  View, SafeAreaView, ScrollView, StyleSheet, Image,
   Dimensions, TouchableOpacity, StatusBar, Animated, ActivityIndicator
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -13,6 +13,8 @@ import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
+import Btn from '../../components/Prebuilt/Button'
+
 
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -71,9 +73,9 @@ function Profile({ navigation }) {
 
   const ProfileHeader = () => (
     <View style={{ flex: 2 }}>
-      <TouchableOpacity onPress={() => navigation.push('EditProfile')}>
-        <View style={{ marginBottom: 20, marginLeft: 20, flexDirection: 'row' }}>
-          {avatar ?
+      <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
+        {avatar ?
+          <TouchableOpacity onPress={() => navigation.push('EditProfile')}>
             <FastImage
               style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
               source={{
@@ -82,16 +84,32 @@ function Profile({ navigation }) {
               }}
               resizeMode={FastImage.resizeMode.cover}
             />
-            :
-            <Avatar.Text size={100} label={name.substring(0, 2)}
-              style={{ backgroundColor: '#444' }} />}
+          </TouchableOpacity>
+          :
+          <Avatar.Text size={100} label={name.substring(0, 2)}
+            style={{ backgroundColor: '#444' }} />}
 
-          <View style={{ marginLeft: 15, marginTop: 25 }}>
-            <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-            <Text>{bio || 'Brand'}</Text>
-          </View>
+        <View style={{ marginLeft: 15, marginTop: 25 }}>
+          <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
+          <Text>{bio || 'Brand'}</Text>
         </View>
-      </TouchableOpacity>
+      </View>
+
+      <View style={{
+        justifyContent: 'center',
+        paddingHorizontal: 5, paddingBottom: 10, flexDirection: 'row'
+      }}>
+        <Btn
+          style={{ width: 100 }}
+          title='Update Profile'
+          onPress={() => navigation.push('EditProfile')}
+        />
+        <Btn
+          style={{ width: 100 }}
+          title='Set Your Mood'
+          onPress={() => navigation.push('EditMood')}
+        />
+      </View>
     </View>
   )
 

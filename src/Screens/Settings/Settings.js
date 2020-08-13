@@ -5,18 +5,8 @@ import { CommonActions } from '@react-navigation/native';
 import { Divider, Text, TextInput } from 'react-native-paper';
 
 import { Center } from '../../components'
-import { useAuth } from '../../contexts/AuthContext'
-import { useStore } from '../../utils'
+import { useAuth, useStore, wait } from '../../utils'
 
-const wait = (cb = null, tm = 100) => {
-  if (cb === null) return
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      cb()
-      resolve()
-    }, tm)
-  })
-}
 
 function Settings({ navigation }) {
   const [authState] = useAuth()
@@ -55,9 +45,9 @@ function Settings({ navigation }) {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}
-      // onScroll={Animated.event(
-      //   [{ nativeEvent: { contentOffset: { x: scrollY } }, useNativeDriver:true }], { listener }
-      // )}
+    // onScroll={Animated.event(
+    //   [{ nativeEvent: { contentOffset: { x: scrollY } }, useNativeDriver:true }], { listener }
+    // )}
     >
       {/* <Animated.View style={{ alignItems: 'center', marginVertical: 20 }}>
         <Image source={require('../../assets/images/iPlay2020Logo.png')}
