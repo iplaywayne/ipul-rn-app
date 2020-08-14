@@ -66,8 +66,9 @@ function UpdateProfile({ navigation }) {
 
 
       {moodArray.map((itm, idx) => (
-        <TouchableOpacity onPress={() => console.log(itm.emoji)}>
+        <TouchableOpacity key={idx} onPress={() => console.log(itm.emoji)}>
           <List.Item
+            
             title={itm.title}
             description={itm.description}
             left={() => <Text style={{ padding: 10 }}>{itm.emoji}</Text>}

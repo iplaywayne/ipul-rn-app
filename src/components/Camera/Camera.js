@@ -152,6 +152,7 @@ export default class CameraScreen extends React.Component {
     }
   };
 
+  
   toggle = value => () => this.setState(prevState => ({ [value]: !prevState[value] }));
 
 
@@ -221,16 +222,8 @@ export default class CameraScreen extends React.Component {
         }}
       >
 
-        <View
-          style={{
-            flex: 0.5,
-            height: 72,
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-          }}
-        >
-          <View
+        <View >
+          {/* <View
             style={{
               backgroundColor: 'transparent',
               flexDirection: 'row',
@@ -249,46 +242,37 @@ export default class CameraScreen extends React.Component {
             <TouchableOpacity style={styles.flipButton} onPress={this.toggleWB.bind(this)}>
               <Text style={styles.flipText}> WB: {this.state.whiteBalance} </Text>
             </TouchableOpacity>
-          </View>
-
+          </View> */}
         </View>
 
 
+
         <View
-          style={{ bottom: 0 }}
+          style={{
+            height: 56,
+            width: '100%',
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 30
+          }}>
 
-        >
-
-          <View
-            style={{
-              height: 56,
-              width: '100%',
-              backgroundColor: 'transparent',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: 30
-
-            }}
+          <TouchableOpacity
+            style={[
+              styles.flipButton,
+              {
+                alignSelf: 'flex-end',
+                width: 100,
+                backgroundColor: this.state.isRecording ? 'white' : 'gray',
+              },
+            ]}
+            onPress={() => this.takePicture()}
           >
+            <Text style={styles.flipText}> SNAP </Text>
+          </TouchableOpacity>
 
-
-            <TouchableOpacity
-              style={[
-                styles.flipButton,
-                {
-                  alignSelf: 'flex-end',
-                  width: 100,
-                  backgroundColor: this.state.isRecording ? 'white' : 'gray',
-                },
-              ]}
-              onPress={() => this.takePicture()}
-            >
-              <Text style={styles.flipText}> SNAP </Text>
-            </TouchableOpacity>
-
-            {this.renderRecording()}
-          </View>
+          {this.renderRecording()}
         </View>
 
       </RNCamera>
@@ -311,7 +295,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     marginBottom: 10,
     marginTop: 10,
-    borderRadius: 8,
+    borderRadius: 5,
     borderColor: 'white',
     borderWidth: 1,
     padding: 5,

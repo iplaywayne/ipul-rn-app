@@ -4,6 +4,7 @@ import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import { Input as TextInput } from 'galio-framework'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Camera from '../../../components/Camera/Camera'
 import VideoPlayer from '../../../components/Video/VideoPlayer'
@@ -12,6 +13,7 @@ import { height, width } from '../../../constants'
 import CropImage from './CropImage'
 
 const Tab = createMaterialTopTabNavigator();
+const TypeTab = createMaterialBottomTabNavigator();
 
 
 export function CreatePost({ navigation }) {
@@ -20,7 +22,7 @@ export function CreatePost({ navigation }) {
   const [loading, setLoading] = React.useState(false)
   const playerRef = React.useRef(null)
 
-
+  
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -43,13 +45,11 @@ export function CreatePost({ navigation }) {
   if (!captured) {
     return (
       <Tab.Navigator>
-        <Tab.Screen name="Camera" component={() => (
-          <Camera
-            dataUri={uri => setCaptured(uri)}
-            dataType={type => setCaptureType(type)}
-          />
-        )} />
-        <Tab.Screen name="Gallery" component={() => <View><Text>Gallery</Text></View>} />
+        <Tab.Screen name="Camera" children={() => (<Camera
+          dataUri={uri => setCaptured(uri)}
+          dataType={type => setCaptureType(type)}
+        />)} />
+        <Tab.Screen name="Gallery" children={() => <View><Text>Gallery</Text></View>} />
       </Tab.Navigator>
     )
   }
@@ -105,6 +105,7 @@ export function CreatePost({ navigation }) {
           <CapturedVideo playerRef={ref => playerRef.current = ref}/>}
         
       </KeyboardAvoidingView>
+
     </View>
   )
 }
