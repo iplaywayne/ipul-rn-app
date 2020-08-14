@@ -22,6 +22,7 @@ import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
 import { styles } from './styles'
+import Camera from '../../components/Camera/Camera'
 
 
 const BUTTON_WIDTH = 100

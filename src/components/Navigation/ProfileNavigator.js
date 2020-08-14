@@ -14,6 +14,7 @@ import { useAuth ,useStore} from '../../contexts'
 import { NavigationDrawerStructure } from './NavigationDrawerStructure'
 import { Settings as SettingsScreen } from '../../screens/Settings'
 import DrawerContent from './DrawerContent'
+import { CreatePost as CreatePostScreen } from '../../screens/Profile/Posts/CreatePost'
 
 
 const ProfileStack = createStackNavigator();
@@ -40,12 +41,14 @@ export const ProfileNavigator = ({ navigation }) => {
         headerLeft: props => (
           <NavigationDrawerStructure
             navigationProps={navigation}
+            onPress={() => navigation.navigate('CreatePost')}
             icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
           />
         ),
         headerRight: props => (
           <NavigationDrawerStructure
             navigationProps={navigation}
+            onPress={() => navigation.toggleDrawer()}
             icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
           />
         )
@@ -58,6 +61,9 @@ export const ProfileNavigator = ({ navigation }) => {
       }} />
 
       
+      <ProfileStack.Screen name="CreatePost" component={CreatePostScreen} options={{
+        title: 'Create Post',
+      }} />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />

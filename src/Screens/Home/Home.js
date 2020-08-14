@@ -19,6 +19,7 @@ import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
+import Camera from '../../components/Camera/Camera'
 
 
 function Home(props) {
@@ -64,6 +65,7 @@ function Home(props) {
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
     <Text>{JSON.stringify(user, null, 2)}</Text>
   </View>
+
 
   if (loading) return <Center><Spinner type='Wave' /></Center>
 

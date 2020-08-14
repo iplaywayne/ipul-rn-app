@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Image, Dimensions, ActivityIndicator,
-  Text, StatusBar, NativeModules, Button as Btn, TextInput, TouchableOpacity, Alert
+  Text, StatusBar, NativeModules, Button as Btn, TextInput as TI, TouchableOpacity, Alert
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
@@ -10,7 +10,7 @@ import '@react-native-firebase/auth'
 import { Card } from 'galio-framework';
 import Button from 'react-native-button'
 import Spinner from 'react-native-spinkit'
-import { Toast, Block } from 'galio-framework';
+import { Input as TextInput, Toast, Block } from 'galio-framework';
 
 
 import { domain } from '../../constants'
@@ -65,7 +65,8 @@ const SignIn = (props) => {
 
   return (
     <Center>
-      <ScrollView style={{ width: '100%', backgroundColor: '#235566' }}
+      <ScrollView showsVerticalScrollIndicator={false}
+        style={{ width: '100%', backgroundColor: '#235566' }}
         contentContainerStyle={{ alignItems: 'center' }}>
 
         <Toast isShow={success} positionIndicator="bottom" color="success" useNativeDriver={true}>
@@ -80,7 +81,7 @@ const SignIn = (props) => {
           <Image source={require('../../assets/images/ipul_logo_trans.png')}
             style={{ width: 200, height: 200, marginTop: 60 }} />
         </View>
-        <View style={{ flex: 2 }}>
+        <View style={{ flex: 2,marginBottom:100 }}>
           <Text style={styles.label}>Your email address</Text>
           <TextInput
             placeholder="Username"
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 1,
     borderRadius: 25,
-    width: width * .8,
+    width: 350,
     borderColor: '#ddd'
   },
   passInput: {
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 1,
     borderRadius: 25,
-    width: width * .8,
+    width: 350,
     borderColor: '#ddd'
   },
   label: {
