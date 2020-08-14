@@ -136,6 +136,9 @@ export default function AuthProvider({ children }) {
       },
       setLoading: val => {
         dispatch({ type: 'SET_LOADING', val })
+      },
+      setUser: user => {
+        dispatch({ type: 'SET_USER', val: user })
       }
     }),
     []

@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
 import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
 import { Divider } from 'react-native-paper'
 
-import { useAuth } from '../../utils'
+import { useAuth, useStore } from '../../utils'
 
 
 const DrawerContent = (props) => {
   const { navigation, user } = props
-  const { name, avatar } = user
   const [authState, authDispatch] = useAuth()
+  const { name, avatar } = authState
 
 
   return (

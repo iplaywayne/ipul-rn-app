@@ -40,8 +40,18 @@ function App() {
   if (isLoading) return <Center><Spinner type='Wave' /></Center>
 
   const handleCreateName = () => {
+    const isValid = /^(?:[A-Za-z]+|\d+)$/.test(newUserName);
+
+    if (!isValid) {
+      Alert.alert('Incorrect Username characters, try again')
+      return
+    }
+    if (!newUserName) {
+      Alert.alert('Please complete the form to continue')
+      return
+    }
     const usrRef = firebase.database().ref(`users/`)
-    usrRef.on('value', snap => {
+    usrRef.once('value', snap => {
       let list = []
       snap.forEach(child => {
         if (child.val().name === newUserName) {
@@ -54,6 +64,11 @@ function App() {
       if (!list.length) {
         setTimeout(() => {
           Alert.alert('This username is available')
+          const usrRef = firebase.database().ref(`users/${user.uid}`)
+          usrRef.update({
+            name: newUserName
+          })
+          storeDispatch.setUser({ ...user, name: newUserName })
         }, 1000)
       }
     })
@@ -67,10 +82,11 @@ function App() {
         right
         icon="check"
         family="antdesign"
+        type='twitter'
         iconSize={14}
         iconColor="green"
         placeholderTextColor={'#121212'}
-        onChange={e => setNewUserName(e.nativeEvent.text)}
+        onChange={e => setNewUserName(e.nativeEvent.text.replace(/[^\x00-\x7F]+/ig, ''))}
       />
       <Button
         style={{ fontSize: 15, color: 'white', width: '100%' }}
