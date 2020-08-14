@@ -9,7 +9,7 @@ export const useAuth = () => React.useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
   const [authorizedUser, setAuthorizedUser] = React.useState(null)
-  
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -59,7 +59,7 @@ export default function AuthProvider({ children }) {
       }
 
       if (userToken) {
-        dispatch({ type: 'RESTORE_TOKEN', token: 'asdf' });
+        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
         const usrRef = database.ref(`/users/${userToken}`)
         usrRef.on('value', snap => {
           dispatch({ type: 'SET_USER', val: snap.val() })
@@ -68,9 +68,6 @@ export default function AuthProvider({ children }) {
       } else {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
       }
-      // setTimeout(() => {
-      //   if (auth.currentUser) authDispatch.signOut()
-      // }, 3000)
     };
 
     bootstrapAsync();
@@ -84,7 +81,6 @@ export default function AuthProvider({ children }) {
           .then(async result => {
             if (result.user.uid) {
               const uid = result.user.uid
-
               try {
                 console.log('ACCOUNT ONLINE [', uid, ']')
                 await AsyncStorage.setItem('_iPUser', uid);

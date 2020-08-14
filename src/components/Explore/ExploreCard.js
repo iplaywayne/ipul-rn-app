@@ -7,8 +7,7 @@ import {
 import { Divider } from 'react-native-paper'
 import { FastImage as Image } from 'react-native-fast-image'
 
-import { useAuth } from '../../contexts/AuthContext'
-import { trimWWWString } from '../../utils'
+import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
 
 const elements = [
@@ -37,15 +36,24 @@ const Swiper = () => (
   </View>
 )
 
-function ExploreCard({ item }) {
+function ExploreCard(props) {
+  const { item, navigation } = props
   const [authState, authDispatch] = useAuth()
   const { user } = authState
-  const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+  const [storeState] = useStore()
+  const { tracks } = storeState
 
+  const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+  console.log(props)
 
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={() => console.log(item.acid)}>
+      <TouchableOpacity onPress={() => navigation.navigate('MediaDetails', {
+        item: item,
+        user: user,
+        tracks: tracks
+      })}>
+
         <View>
           <Card
             flex
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     marginTop: 10,
-    width:'100%',
+    width: '100%',
     maxWidth: 500,
   },
   title: {

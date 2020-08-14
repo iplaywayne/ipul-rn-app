@@ -10,6 +10,7 @@ import '@react-native-firebase/auth'
 import { Card } from 'galio-framework';
 import Button from 'react-native-button'
 import Spinner from 'react-native-spinkit'
+import { Toast, Block } from 'galio-framework';
 
 
 import { domain } from '../../constants'
@@ -28,14 +29,19 @@ const SignIn = (props) => {
   const { isLoading } = authState
   const [signInLoading, setSignInLoading] = React.useState(false)
   const [signUpLoading, setSignUpLoading] = React.useState(false)
-
+  const [isShow, setShow] = React.useState(false);
+  const [success, setSuccess] = React.useState(false)
+  const [failed, setFailed] = React.useState(false)
 
   const handleSignIn = () => {
+    setFailed(false)
+    setSuccess(false)
     setSignInLoading(true)
     setTimeout(() => {
       authDispatch.signIn({ username, password })
-    }, 2000)
+    }, 1000)
   }
+
   const handleSignUp = () => {
     setSignUpLoading(true)
     setTimeout(() => {
@@ -51,6 +57,15 @@ const SignIn = (props) => {
     <Center>
       <ScrollView style={{ width: '100%', backgroundColor: '#235566' }}
         contentContainerStyle={{ alignItems: 'center' }}>
+
+        <Toast isShow={success} positionIndicator="bottom" color="success" useNativeDriver={true}>
+          Authorization was successful!
+        </Toast>
+
+        <Toast isShow={failed} positionIndicator="bottom" color="warning" useNativeDriver={true}>
+          We could not authenticate your account
+        </Toast>
+
         <View style={{ flex: 1 }}>
           <Image source={require('../../assets/images/ipul_logo_trans.png')}
             style={{ width: 200, height: 200, marginTop: 60 }} />

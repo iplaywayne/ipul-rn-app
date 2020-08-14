@@ -21,7 +21,8 @@ import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 
 
-function Home({ navigation }) {
+function Home(props) {
+  const { navigation } = props
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
@@ -95,18 +96,10 @@ function Home({ navigation }) {
           avatar={'https://iplayulisten.com/zorei-logo.png'}
           onOpen={() => openLink('https://www.zorei.co')} />
       </View>
-      <Button onPress={() => {
-        setTimeout(() => {
-          authDispatch.signOut()
-        }, 1000)
-      }}
-        style={{ fontSize: 15 }}>
-        Sign Out
-      </Button>
 
       <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
         {topRemixes.map((itm, idx) => (
-          <ExploreCard key={idx} item={itm} />
+          <ExploreCard {...props} key={idx} item={itm} />
         ))}
       </View>
 

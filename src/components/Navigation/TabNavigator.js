@@ -10,6 +10,7 @@ import { SignUp as SignUpScreen } from '../../screens/SignUp'
 import { Home as HomeScreen } from '../../screens/Home'
 import { Explore as ExploreScreen } from '../../screens/Explore'
 import { Media as MediaScreen } from '../../screens/Media'
+import { HomeNavigator, HomeDrawerNavigator } from '../../components/Navigation/HomeNavigator'
 import { MediaNavigator, MediaDrawerNavigator } from '../../components/Navigation/MediaNavigator'
 import { Profile as ProfileScreen } from '../../screens/Profile'
 import { ProfileNavigator, ProfileDrawerNavigator } from '../../components/Navigation/ProfileNavigator'
@@ -33,7 +34,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeNavigator}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (

@@ -11,7 +11,7 @@ import MediaService from '../../utils/media/MediaService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 
-function Explore() {
+function Explore(props) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
@@ -54,7 +54,7 @@ function Explore() {
         paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
       }}>
         {topRemixes.map((itm, idx) => (
-          <ExploreCard key={idx} item={itm} />
+          <ExploreCard {...props} key={idx} item={itm} />
         ))}
       </View>
 
