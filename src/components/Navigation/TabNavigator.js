@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { SignIn as SignInScreen } from '../../screens/SignIn'
 import { SignUp as SignUpScreen } from '../../screens/SignUp'
-import { Explore as ExploreScreen } from '../../screens/Explore'
+import { ExploreNavigator, ExploreDrawerNavigator } from '../../components/Navigation/ExploreNavigator'
 import { HomeNavigator, HomeDrawerNavigator } from '../../components/Navigation/HomeNavigator'
 import { MediaNavigator, MediaDrawerNavigator } from '../../components/Navigation/MediaNavigator'
 import { ProfileNavigator, ProfileDrawerNavigator } from '../../components/Navigation/ProfileNavigator'
@@ -41,7 +41,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Explore"
-        component={ExploreScreen}
+        component={ExploreDrawerNavigator}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
