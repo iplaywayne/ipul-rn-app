@@ -9,7 +9,7 @@ import { useAuth, useStore } from '../../contexts'
 import { NavigationDrawerStructure } from './NavigationDrawerStructure'
 import { Settings as SettingsScreen } from '../../screens/Settings'
 import DrawerContent from './DrawerContent'
-import { Home as HomeScreen } from '../../screens/Home'
+import { Explore as ExploreScreen } from '../../screens/Explore'
 import { MediaDetails } from '../../screens/Media/MediaDetails'
 
 
@@ -25,7 +25,7 @@ export const ExploreNavigator = ({ navigation }) => {
     <ExploreStack.Navigator mode='modal'>
 
       {/* Media Screen */}
-      <ExploreStack.Screen name="Home" component={HomeScreen} options={{
+      <ExploreStack.Screen name="Explore" component={ExploreScreen} options={{
         headerShown: false
       }} />
       <ExploreStack.Screen name="MediaDetails" component={MediaDetails} options={{
