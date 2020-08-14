@@ -40,7 +40,7 @@ export const ProfileNavigator = ({ navigation }) => {
         headerLeft: props => (
           <NavigationDrawerStructure
             navigationProps={navigation}
-            icon={<Icon name='view-dashboard' size={25} style={{ marginLeft: 20 }} />}
+            icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
           />
         ),
         headerRight: props => (

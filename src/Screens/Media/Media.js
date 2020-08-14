@@ -29,23 +29,6 @@ import { MediaListItem } from './MediaListItem'
 import { styles } from './styles'
 
 
-const DATA = [];
-const getItem = (data, index) => {
-  return {
-    id: Math.random().toString(12).substring(0),
-    title: `Item ${index + 1}`
-  }
-}
-const getItemCount = (data) => {
-  return 50;
-}
-const Item = ({ title }) => {
-  return (
-    <View style={styles.item}>
-      <Text style={{ color: 'white', marginVertical: 5 }}>{title}</Text>
-    </View>
-  );
-}
 
 function Media({ navigation }) {
   const [authState, authDispatch] = useAuth()
@@ -57,6 +40,7 @@ function Media({ navigation }) {
   const [trackQuery, setTrackQuery] = React.useState([])
   const tracksToDisplay = trackQuery.length ? trackQuery : []
   const [loading, setLoading] = React.useState(true)
+  const { user } = authState
 
   const onChangeSearch = query => {
     setSearchQuery(query)
@@ -77,8 +61,8 @@ function Media({ navigation }) {
         firstTitle={'Find something new'}
         secondTitle={'on iPlayuListen'}
         onChangeText={onChangeSearch}
-        onPressHamburgerIcon={() => navigation.toggleDrawer()}        
-      />)
+        onPressHamburgerIcon={() => navigation.toggleDrawer()}
+      />),
     })
   }, [loading])
 
@@ -121,14 +105,18 @@ function Media({ navigation }) {
           <MediaListItem
             key={idx}
             item={itm}
-            addQueue={item => addQueue(item)}
+            addQueue={item => navigation.navigate('MediaDetails', {
+              item: itm,
+              user: user,
+              tracks: tracks
+            })}
             isLoading={isLoading}
             currentTrack={currentTrack}
           />
         )) :
           <View style={{
             flex: 1, justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center', marginTop: 10
           }}><Text style={{ fontWeight: '700' }}>nothing found. should we add this?</Text></View>}
       </ScrollView>
     </View >
@@ -139,24 +127,8 @@ function Media({ navigation }) {
       style={{ height: 1000 }}
       showsVerticalScrollIndicator={false}
       resetScrollToCoords={{ x: 0, y: 0 }}
-      // contentContainerStyle={{height:1000}}
       scrollEnabled={true}
     >
-      {/* <HeaderSearchBar
-        firstTitle={'Find something new'}
-        secondTitle={'on iPlayuListen'}
-        onChangeText={onChangeSearch}
-        onPressHamburgerIcon={() => console.log('Show Media Action Sheet')}
-      /> */}
-
-      {/* <View style={{ marginTop: 75, marginHorizontal: 10 }}> */}
-      {/* <View style={{ position:'relative',top:50,left:0,right:0,paddingHorizontal:10 }}>
-        <Searchbar
-          placeholder="Search iPlayuListen"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </View> */}
 
       <MediaContent />
 
