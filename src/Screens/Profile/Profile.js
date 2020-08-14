@@ -72,6 +72,7 @@ function Profile({ navigation }) {
     }, 500)
   }
 
+  if (!user.name) return <Center><Text>Let's finish the setup</Text></Center>
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
 

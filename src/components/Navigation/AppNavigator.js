@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity ,StatusBar} from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from 'react-native-button'
@@ -29,6 +29,7 @@ const AppStackNavigator = ({ navigation }) => {
 
   return (
     <AppStack.Navigator mode='modal'>
+      <StatusBar barStyle='dark-content' />
 
       {/* Profile Screen */}
       <AppStack.Screen name="Profile" component={ProfileScreen} options={{

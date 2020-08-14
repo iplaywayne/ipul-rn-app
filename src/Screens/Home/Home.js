@@ -62,13 +62,13 @@ function Home(props) {
 
   if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
     <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
+    <Text>{JSON.stringify(user, null, 2)}</Text>
   </View>
 
   if (loading) return <Center><Spinner type='Wave' /></Center>
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-      <StatusBar barStyle='dark-content' />
 
       <View>
         <Text style={styles.title}>Welcome, {name}</Text>
@@ -103,7 +103,7 @@ function Home(props) {
         ))}
       </View>
 
-      {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
+      <Text>{JSON.stringify(topRemixes, null, 2)}</Text>
     </ScrollView>
   )
 }

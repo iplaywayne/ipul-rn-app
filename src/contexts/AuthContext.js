@@ -103,8 +103,11 @@ export default function AuthProvider({ children }) {
               case 'auth/too-many-requests':
                 error('Too many unsuccessful attempts, try later')
                 return
+              case 'auth/network-request-failed':
+                error('Please check your internet connection to continue')
               default:
-                error('Login failed', failed.code, failed.message)
+                // error('We could not complete your request', failed.code, failed.message)
+                console.log(failed)
                 return
             }
           })

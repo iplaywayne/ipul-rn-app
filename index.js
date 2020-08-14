@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry,LogBox } from 'react-native';
+import { AppRegistry, LogBox, StatusBar } from 'react-native';
 import TrackPlayer from 'react-native-track-player'
 
 import App from './src/App';
@@ -13,6 +13,7 @@ export default function Main() {
 
   return (
     <AuthProvider>
+      <StatusBar barStyle='dark-content' />
       <StoreProvider>
         <App />
       </StoreProvider>
