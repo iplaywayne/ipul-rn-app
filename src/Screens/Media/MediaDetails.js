@@ -82,9 +82,11 @@ export function MediaDetails({ route, navigation }) {
         </Text>
       </TouchableOpacity>
 
-      <FastImage source={item.art_link ? { uri: item.art_link } : logo}
-        style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
-        resizeMode='cover' />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <FastImage source={item.art_link ? { uri: item.art_link } : logo}
+          style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+          resizeMode='cover' />
+      </TouchableOpacity>
 
       <View style={{ flex: 1, alignItems: 'center', marginTop: 10 }}>
         <Text style={{ fontWeight: '700', fontSize: 20 }}>{item.artist}</Text>
@@ -143,14 +145,16 @@ export function MediaDetails({ route, navigation }) {
       </View>
 
 
-      {queued.length > 0 &&
+      {
+        queued.length > 0 &&
         <View>
           <Divider />
 
           <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
             Upcoming tracks
         </Text>
-        </View>}
+        </View>
+      }
 
       <View>
         {queued && queued.map((itm, idx) => (
@@ -179,6 +183,6 @@ export function MediaDetails({ route, navigation }) {
       {/* <Text style={{ height: 500 }}>
         {JSON.stringify(route.params, null, 2)}
       </Text> */}
-    </ScrollView>
+    </ScrollView >
   )
 }

@@ -28,6 +28,9 @@ export const HomeNavigator = ({ navigation }) => {
       <MediaStack.Screen name="Home" component={HomeScreen} options={{
         headerShown: false
       }} />
+      <MediaStack.Screen name="MediaDetails" component={MediaDetails} options={{
+        title: 'Media Details',
+      }} />
 
     </MediaStack.Navigator>
   )

@@ -103,7 +103,7 @@ function Home(props) {
         ))}
       </View>
 
-      <Text>{JSON.stringify(topRemixes, null, 2)}</Text>
+      {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
     </ScrollView>
   )
 }
