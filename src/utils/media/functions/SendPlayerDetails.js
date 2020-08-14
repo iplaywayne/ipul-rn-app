@@ -20,7 +20,7 @@ export const SendPlayerDetails = async (item, storeDispatch) => {
   setTimeout(async () => {
     const queued = await TrackPlayer.getQueue()
     storeDispatch.setQueued(queued)
-  }, 500)
+  }, 250)
 
   await TrackPlayer.play()
   storeDispatch.setCurrentTrack(item)

@@ -16,13 +16,45 @@ export function MediaDetails({ route, navigation }) {
   const [tracksLikeThis, setTracksLikeThis] = React.useState(null)
   const { isPlaying, currentTrack, queued } = storeState
 
+
+
   const addQueue = async (item) => {
-    SendPlayerDetails(item, storeDispatch)
+    console.log(TrackPlayerStructure(item))
+    await TrackPlayer.setupPlayer()
+    await TrackPlayer.add(TrackPlayerStructure(item))
+    console.log('Done')
+    setTimeout(async () => {
+      const queued = await TrackPlayer.getQueue()
+      storeDispatch.setQueued(queued)
+    }, 250)
   }
 
   const playNow = async (item) => {
-    TrackPlayer.reset()
-    TrackPlayer.add(TrackPlayerStructure(item))
+    if (!isPlaying && currentTrack !== item) {
+      await TrackPlayer.setupPlayer()
+      await TrackPlayer.reset()
+      await TrackPlayer.add(TrackPlayerStructure(item))
+      await TrackPlayer.play()
+      storeDispatch.setPlaying(true)
+      storeDispatch.setCurrentTrack(item)
+    } else if (!isPlaying && currentTrack === item) {
+      TrackPlayer.play()
+      storeDispatch.setPlaying(true)
+    } else if (isPlaying && currentTrack === item) {
+      TrackPlayer.pause()
+      storeDispatch.setPlaying(false)
+    } else {
+      await TrackPlayer.setupPlayer()
+      await TrackPlayer.reset()
+      await TrackPlayer.add(TrackPlayerStructure(item))
+      await TrackPlayer.play()
+      storeDispatch.setPlaying(true)
+      storeDispatch.setCurrentTrack(item)
+    }
+    setTimeout(async () => {
+      const queued = await TrackPlayer.getQueue()
+      storeDispatch.setQueued(queued)
+    }, 250)
   }
 
   React.useEffect(() => {
@@ -33,6 +65,7 @@ export function MediaDetails({ route, navigation }) {
       setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
     }
   }, [tracks])
+
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,9 +92,13 @@ export function MediaDetails({ route, navigation }) {
       </View>
       <View style={{
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-        marginHorizontal: 40
+        marginHorizontal: 20
       }}>
-        <Icons name='skip-previous' size={75} />
+        <Icons name='repeat' size={65} />
+
+        <TouchableOpacity onPress={() => addQueue(item)}>
+          <Icons name='plus' size={30} />
+        </TouchableOpacity>
 
         <TouchableOpacity onPress={() => playNow(item)}>
           {isPlaying && currentTrack !== item && <Icons name='play-circle' size={100} />}
@@ -69,7 +106,8 @@ export function MediaDetails({ route, navigation }) {
           {!isPlaying && <Icons name='play-circle' size={100} />}
         </TouchableOpacity>
 
-        <Icons name='skip-next' size={75} />
+        <Icons name='heart-outline' size={30} />
+        <Icons name='skip-next' size={65} />
       </View>
 
       <Divider style={{ marginTop: 10 }} />
@@ -82,9 +120,10 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {tracksLikeThis && tracksLikeThis.map((itm, idx) => (
-          <TouchableOpacity onPress={() => navigation.push('MediaDetails', {
-            item: itm, user: user, tracks: tracks
-          })}
+          <TouchableOpacity key={idx}
+            onPress={() => navigation.push('MediaDetails', {
+              item: itm, user: user, tracks: tracks
+            })}
             style={{
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
               alignItems: 'center'
@@ -103,17 +142,19 @@ export function MediaDetails({ route, navigation }) {
         ))}
       </View>
 
-      <Divider />
 
-      <View>
-        <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
-          Upcoming tracks
+      {queued.length > 0 &&
+        <View>
+          <Divider />
+
+          <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
+            Upcoming tracks
         </Text>
-      </View>
+        </View>}
 
       <View>
         {queued && queued.map((itm, idx) => (
-          <TouchableOpacity onPress={() => navigation.replace('MediaDetails', {
+          <TouchableOpacity onPress={() => navigation.push('MediaDetails', {
             item: itm, user: user, tracks: tracks
           })}
             style={{
