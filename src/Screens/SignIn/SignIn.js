@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SafeAreaView, StyleSheet, ScrollView, View, Image, Dimensions, ActivityIndicator,
-  Text, StatusBar, NativeModules, Button as Btn, TextInput, TouchableOpacity
+  Text, StatusBar, NativeModules, Button as Btn, TextInput, TouchableOpacity, Alert
 } from 'react-native';
 import { Header, Colors, } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios'
@@ -23,7 +23,7 @@ const { width, height } = Dimensions.get('window')
 const SignIn = (props) => {
   const { signIn, navigation } = props
   const [state, dispatch] = useStore()
-  const [username, setUsername] = React.useState('dev@iplayulisten.com')
+  const [username, setUsername] = React.useState('stylz@iplayulisten.com')
   const [password, setPassword] = React.useState('admin20')
   const [authState, authDispatch] = useAuth()
   const { isLoading } = authState
@@ -38,7 +38,17 @@ const SignIn = (props) => {
     setSuccess(false)
     setSignInLoading(true)
     setTimeout(() => {
-      authDispatch.signIn({ username, password })
+      authDispatch.signIn({ username, password },
+        success => {
+          Alert.alert(success)
+          setSuccess(true)
+          setSignInLoading(false)
+        },
+        error => {
+          Alert.alert(error)
+          setFailed(true)
+          setSignInLoading(false)
+        })
     }, 1000)
   }
 

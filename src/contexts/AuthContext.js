@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 
 import firebase, { auth, database } from '../utils/firebase/FirebaseStore'
@@ -76,7 +77,7 @@ export default function AuthProvider({ children }) {
 
   const authDispatch = React.useMemo(
     () => ({
-      signIn: async data => {
+      signIn: async (data, success, error) => {
         auth.signInWithEmailAndPassword(data.username, data.password)
           .then(async result => {
             if (result.user.uid) {
@@ -92,6 +93,19 @@ export default function AuthProvider({ children }) {
               } catch (e) {
                 console.warn(e)
               }
+            }
+          })
+          .catch(failed => {
+            switch (failed.code) {
+              case 'auth/wrong-password':
+                error('We could not authenticate with your credentials')
+                return
+              case 'auth/too-many-requests':
+                error('Too many unsuccessful attempts, try later')
+                return
+              default:
+                error('Login failed', failed.code, failed.message)
+                return
             }
           })
       },

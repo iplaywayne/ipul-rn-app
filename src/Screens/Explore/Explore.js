@@ -19,12 +19,13 @@ function Explore(props) {
   const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase() === 'remix')
   const [loading, setLoading] = React.useState(true)
 
+
   React.useEffect(() => {
     setTimeout(() => {
       if (tracks.length) setLoading(false)
     }, 1500)
-
   }, [tracks])
+
 
   if (loading) return <Center><Spinner type='Wave' /></Center>
 
@@ -58,10 +59,6 @@ function Explore(props) {
         ))}
       </View>
 
-      <View>
-        {/* <Text>{JSON.stringify(user, null, 2)}{name}</Text> */}
-        {/* <Button title='Sign Out' onPress={() => authDispatch.signOut()} /> */}
-      </View>
     </ScrollView>
   )
 }

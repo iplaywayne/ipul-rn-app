@@ -44,7 +44,6 @@ function ExploreCard(props) {
   const { tracks } = storeState
 
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
-  console.log(props)
 
   return (
     <ScrollView style={styles.root}>

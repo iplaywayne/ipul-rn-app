@@ -30,6 +30,11 @@ function MediaService() {
         const isPlaying = event.state === 'playing'
         const isLoading = event.state === 'loading'
         const isIdle = event.state === 'idle'
+        if (isPlaying) {
+          storeDispatch.setPlaying(true)
+        } else {
+          storeDispatch.setPlaying(false)
+        }
         return
       case TrackPlayerEvents.PLAYBACK_QUEUE_ENDED:
         console.log(currentTrack.acid, 'has ended')
