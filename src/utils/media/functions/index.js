@@ -1,5 +1,5 @@
 import { firebase, database, auth, trimWWWString } from '../../../utils'
-export { SendPlayerDetails } from './SendPlayerDetails'
+export { SendPlayerDetails, TrackPlayerStructure } from './SendPlayerDetails'
 
 
 const tracksPath = `/mediaTracks`

@@ -3,10 +3,11 @@ import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card, Divider } from 'react-native-paper'
+import TrackPlayer from 'react-native-track-player'
 
 import { siteLogo, logo } from '../../constants'
 import { useStore } from '../../utils'
-import { SendPlayerDetails } from '../../utils/media/functions'
+import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 
 
 export function MediaDetails({ route, navigation }) {
@@ -17,6 +18,11 @@ export function MediaDetails({ route, navigation }) {
 
   const addQueue = async (item) => {
     SendPlayerDetails(item, storeDispatch)
+  }
+
+  const playNow = async (item) => {
+    TrackPlayer.reset()
+    TrackPlayer.add(TrackPlayerStructure(item))
   }
 
   React.useEffect(() => {
@@ -57,12 +63,10 @@ export function MediaDetails({ route, navigation }) {
       }}>
         <Icons name='skip-previous' size={75} />
 
-        <TouchableOpacity onPress={() => addQueue(item)}>
-          {isPlaying && currentTrack === item
-            ?
-            <Icons name='play-circle' size={100} />
-            :
-            <Icons name='pause-circle' size={100} />}
+        <TouchableOpacity onPress={() => playNow(item)}>
+          {isPlaying && currentTrack !== item && <Icons name='play-circle' size={100} />}
+          {isPlaying && currentTrack === item && <Icons name='pause-circle' size={100} />}
+          {!isPlaying && <Icons name='play-circle' size={100} />}
         </TouchableOpacity>
 
         <Icons name='skip-next' size={75} />
@@ -78,7 +82,7 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {tracksLikeThis && tracksLikeThis.map((itm, idx) => (
-          <TouchableOpacity onPress={() => navigation.replace('MediaDetails', {
+          <TouchableOpacity onPress={() => navigation.push('MediaDetails', {
             item: itm, user: user, tracks: tracks
           })}
             style={{
