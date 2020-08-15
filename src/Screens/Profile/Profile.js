@@ -15,7 +15,6 @@ import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
 import BottomSheet from 'reanimated-bottom-sheet'
 
-
 import { Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
@@ -44,6 +43,7 @@ function Profile({ route, navigation }) {
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
   const [postDetailsPending, setPostDetailsPending] = React.useState(null)
+  const [capturedMood, setCapturedMood] = React.useState(false)
 
   const handlePostTask = details => {
     postService.test(details,
@@ -92,7 +92,7 @@ function Profile({ route, navigation }) {
     mediaService.setup()
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
-      console.log('[FAVORITES] Loaded', result.length)
+      // console.log('[FAVORITES] Loaded', result.length)
     })
     if (tracks.length > 0) setReady(true)
     storeDispatch.setLoading(false)
@@ -211,61 +211,62 @@ function Profile({ route, navigation }) {
   )
 
   return (
-    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-
+    <>
       <View style={{
         paddingTop: 45, height: 80, flexDirection: 'row', paddingHorizontal: 5,
-        justifyContent: 'space-between', backgroundColor: '#fff', marginTop: -20,
-        marginBottom: 20
+        justifyContent: 'space-between', backgroundColor: '#fff', marginTop: 0,
       }}>
         <NavigationDrawerStructure
           navigationProps={navigation}
           onPress={() => navigation.navigate('CreatePost')}
           icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
         />
-        <Text style={{ fontWeight: '800',fontSize:20 }}>{user.name}</Text>
+        <Text style={{ fontWeight: '800', fontSize: 20 }}>{user.name}</Text>
         <NavigationDrawerStructure
           navigationProps={navigation}
           onPress={() => navigation.toggleDrawer()}
           icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
         />
       </View>
+      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
-      {postDetailsPending &&
-        <View>
-          <View style={{ paddingHorizontal: 20 }}>
-            {postDetailsPending && <Text style={{ fontSize: 15 }}>You have post details pending post</Text>}
-            {/* <Text>{JSON.stringify(postDetailsPending, null, 2)}</Text> */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-              <Image
-                style={{ height: 50, width: 50, borderRadius: 5 }}
-                source={{ uri: postDetailsPending.type === 'image' ? postDetailsPending.image : postDetailsPending.video }} />
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ marginHorizontal: 20 }}>{postDetailsPending.caption}</Text>
-                <Btn title='Post Now' onPress={() => handlePostTask(postDetailsPending)} />
+
+        {postDetailsPending &&
+          <View>
+            <View style={{ paddingHorizontal: 20 }}>
+              {postDetailsPending && <Text style={{ fontSize: 15 }}>You have post details pending post</Text>}
+              {/* <Text>{JSON.stringify(postDetailsPending, null, 2)}</Text> */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                <Image
+                  style={{ height: 50, width: 50, borderRadius: 5 }}
+                  source={{ uri: postDetailsPending.type === 'image' ? postDetailsPending.image : postDetailsPending.video }} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{ marginHorizontal: 20 }}>{postDetailsPending.caption}</Text>
+                  <Btn title='Post Now' onPress={() => handlePostTask(postDetailsPending)} />
+                </View>
               </View>
             </View>
-          </View>
-          <Divider style={{ marginVertical: 20 }} />
-        </View>}
+            <Divider style={{ marginVertical: 20 }} />
+          </View>}
 
 
-      <ProfileHeader />
+        <ProfileHeader />
 
-      <Divider />
+        <Divider />
 
-      <ProfileRecent />
+        <ProfileRecent />
 
-      <Divider />
+        <Divider />
 
-      <ProfileQueued />
+        <ProfileQueued />
 
-      <Divider />
+        <Divider />
 
-      {/* <ProfileFavorites /> */}
+        {/* <ProfileFavorites /> */}
 
-      <View style={{ marginBottom: 40 }}></View>
-    </ScrollView >
+        <View style={{ marginBottom: 40 }}></View>
+      </ScrollView >
+    </>
   )
 }
 

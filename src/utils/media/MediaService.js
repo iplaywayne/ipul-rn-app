@@ -51,7 +51,7 @@ function MediaService() {
   React.useEffect(() => {
     if (!auth) return
     getTracks(result => storeDispatch.setTracks(result))
-    console.log('[MEDIASERVICE] [', auth.currentUser.displayName, ']')
+    console.log('[MEDIASERVICE] [', auth.currentUser.displayName ? 'Ready' : 'Accounts needs setup', ']')
   }, [])
 
   React.useEffect(() => {

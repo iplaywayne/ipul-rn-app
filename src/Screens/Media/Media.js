@@ -84,6 +84,7 @@ function Media({ navigation }) {
     }
   }, [])
 
+
   if (loading) return <Center><Spinner type='Wave' /></Center>
 
 

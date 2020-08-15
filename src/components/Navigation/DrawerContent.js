@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
 import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
 import { Divider } from 'react-native-paper'
 
-import { useAuth, useStore } from '../../utils'
+import { useAuth, useStore, trimWWWString } from '../../utils'
 
 
 const DrawerContent = (props) => {
@@ -15,7 +15,7 @@ const DrawerContent = (props) => {
   return (
     <View>
       <View style={styles.root} >
-        <Image source={{ uri: avatar }} style={{ height: 70, width: 70, borderRadius: 70 / 2, marginTop: 35 }} />
+        <Image source={{ uri: trimWWWString(avatar) }} style={{ height: 70, width: 70, borderRadius: 70 / 2, marginTop: 35 }} />
         <Text style={{ color: '#121212', fontWeight: '700', fontSize: 22, marginTop: 10 }}>
           {name}
         </Text>
