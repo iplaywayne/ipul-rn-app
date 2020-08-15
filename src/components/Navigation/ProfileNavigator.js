@@ -37,21 +37,21 @@ export const ProfileNavigator = ({ navigation }) => {
 
       {/* Profile Screen */}
       <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{
-        title: user && user.name || 'iPlayuListen',
-        headerLeft: props => (
-          <NavigationDrawerStructure
-            navigationProps={navigation}
-            onPress={() => navigation.navigate('CreatePost')}
-            icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
-          />
-        ),
-        headerRight: props => (
-          <NavigationDrawerStructure
-            navigationProps={navigation}
-            onPress={() => navigation.toggleDrawer()}
-            icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
-          />
-        )
+        // title: user && user.name || 'iPlayuListen',
+        // headerLeft: props => (
+        //   <NavigationDrawerStructure
+        //     navigationProps={navigation}
+        //     onPress={() => navigation.navigate('CreatePost')}
+        //     icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
+        //   />
+        // ),
+        // headerRight: props => (
+        //   <NavigationDrawerStructure
+        //     navigationProps={navigation}
+        //     onPress={() => navigation.toggleDrawer()}
+        //     icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
+        //   />
+        // )
       }} />
       <ProfileStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',

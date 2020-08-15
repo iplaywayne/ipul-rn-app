@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {
+import { LogBox,
   View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator, Alert
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';

@@ -13,7 +13,6 @@ import TrackPlayer from 'react-native-track-player'
 import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
-import Btn from '../../components/Prebuilt/Button'
 import BottomSheet from 'reanimated-bottom-sheet'
 
 
@@ -24,6 +23,9 @@ import { logo, width, height } from '../../constants'
 import { styles } from './styles'
 import Camera from '../../components/Camera/Camera'
 import PostService from '../../utils/post/PostService'
+import { NavigationDrawerStructure } from '../../components/Navigation/NavigationDrawerStructure'
+import Btn from '../../components/Prebuilt/Button'
+
 
 const BUTTON_WIDTH = 100
 
@@ -47,7 +49,7 @@ function Profile({ route, navigation }) {
     postService.test(details,
       progress => {
         console.log(`${progress}% complete`)
-    })
+      })
   }
 
   React.useEffect(() => {
@@ -68,6 +70,25 @@ function Profile({ route, navigation }) {
   }, [tracks])
 
   React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: user && user.name || 'iPlayuListen',
+      headerShown: false,
+      // headerLeft: props => (
+      //   <NavigationDrawerStructure
+      //     navigationProps={navigation}
+      //     onPress={() => navigation.navigate('CreatePost')}
+      //     icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
+      //   />
+      // ),
+      headerRight: props => (
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          onPress={() => navigation.toggleDrawer()}
+          icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
+        />
+      )
+    })
+
     mediaService.setup()
     mediaService.getTracks(result => setTracks(result))
     mediaService.getFavorites(user.uid, result => {
@@ -95,7 +116,7 @@ function Profile({ route, navigation }) {
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
   const ProfileHeader = () => (
-    <View style={{ flex: 2, paddingBottom: 0 }}>
+    <View style={{ flex: 1, paddingBottom: 0 }}>
       <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
         {avatar ?
           <TouchableOpacity onPress={() => navigation.push('UpdateProfile')}>
@@ -192,6 +213,24 @@ function Profile({ route, navigation }) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
+      <View style={{
+        paddingTop: 45, height: 80, flexDirection: 'row', paddingHorizontal: 5,
+        justifyContent: 'space-between', backgroundColor: '#fff', marginTop: -20,
+        marginBottom: 20
+      }}>
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          onPress={() => navigation.navigate('CreatePost')}
+          icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
+        />
+        <Text style={{ fontWeight: '800',fontSize:20 }}>{user.name}</Text>
+        <NavigationDrawerStructure
+          navigationProps={navigation}
+          onPress={() => navigation.toggleDrawer()}
+          icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
+        />
+      </View>
+
       {postDetailsPending &&
         <View>
           <View style={{ paddingHorizontal: 20 }}>
@@ -203,13 +242,13 @@ function Profile({ route, navigation }) {
                 source={{ uri: postDetailsPending.type === 'image' ? postDetailsPending.image : postDetailsPending.video }} />
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text style={{ marginHorizontal: 20 }}>{postDetailsPending.caption}</Text>
-              <Btn title='Post Now' onPress={() => handlePostTask(postDetailsPending)} />
+                <Btn title='Post Now' onPress={() => handlePostTask(postDetailsPending)} />
               </View>
             </View>
           </View>
           <Divider style={{ marginVertical: 20 }} />
         </View>}
-      
+
 
       <ProfileHeader />
 
@@ -220,7 +259,6 @@ function Profile({ route, navigation }) {
       <Divider />
 
       <ProfileQueued />
-
 
       <Divider />
 
