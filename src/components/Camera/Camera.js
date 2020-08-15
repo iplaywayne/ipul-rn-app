@@ -127,7 +127,7 @@ export default class CameraScreen extends React.Component {
   takePicture = async function () {
     if (this.camera) {
       const data = await this.camera.takePictureAsync();
-      console.warn('takePicture ', data);
+      console.log(data)
       this.props.dataUri(data.uri)
       this.props.dataType('image')
     }
@@ -142,7 +142,6 @@ export default class CameraScreen extends React.Component {
         if (promise) {
           this.setState({ isRecording: true });
           const data = await promise;
-          console.warn('takeVideo', data);
           this.props.dataUri(data.uri)
           this.props.dataType('video')
         }

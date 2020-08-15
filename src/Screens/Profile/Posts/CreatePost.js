@@ -11,6 +11,8 @@ import VideoPlayer from '../../../components/Video/VideoPlayer'
 import Btn from '../../../components/Prebuilt/Button'
 import { height, width } from '../../../constants'
 import CropImage from './CropImage'
+import { useAuth } from '../../../utils'
+
 
 const Tab = createMaterialTopTabNavigator();
 const TypeTab = createMaterialBottomTabNavigator();
@@ -20,9 +22,23 @@ export function CreatePost({ navigation }) {
   const [captured, setCaptured] = React.useState(null)
   const [captureType, setCaptureType] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
+  const [postCaption, setPostCaption] = React.useState('')
   const playerRef = React.useRef(null)
+  const [authState] = useAuth()
+  const { user } = authState
 
-  
+  const handlePostTask = () => {
+    const details = {
+      uid: user.uid,
+      caption: postCaption,
+      type: captureType,
+      [captureType]: captured,
+    }
+    navigation.navigate('Profile', {
+      details
+    })
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -33,7 +49,7 @@ export function CreatePost({ navigation }) {
       ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
-          <Button onPress={() => navigation.goBack()}>
+          <Button onPress={handlePostTask}>
             {loading ? <ActivityIndicator /> : 'Done'}
           </Button>
         </View>
@@ -79,7 +95,9 @@ export function CreatePost({ navigation }) {
             What would you like to share?</Text>
         </View>
         <View style={{ paddingHorizontal: 10, paddingBottom: 0 }}>
-          <TextInput />
+          <TextInput
+            onChange={e => setPostCaption(e.nativeEvent.text)}
+          />
         </View>
 
         <View style={{
@@ -98,12 +116,12 @@ export function CreatePost({ navigation }) {
         {captureType == 'image' &&
           <CropImage
             captured={captured}
-            onComplete={uri => console.log(uri)}
+            onComplete={uri => console.log('[CROPIMAGE]',uri)}
           />}
 
         {captureType == 'video' &&
-          <CapturedVideo playerRef={ref => playerRef.current = ref}/>}
-        
+          <CapturedVideo playerRef={ref => playerRef.current = ref} />}
+
       </KeyboardAvoidingView>
 
     </View>

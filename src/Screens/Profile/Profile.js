@@ -23,11 +23,11 @@ import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
 import { styles } from './styles'
 import Camera from '../../components/Camera/Camera'
-
+import PostService from '../../utils/post/PostService'
 
 const BUTTON_WIDTH = 100
 
-function Profile({ navigation }) {
+function Profile({ route, navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
@@ -36,10 +36,28 @@ function Profile({ navigation }) {
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
+  const postService = PostService()
   const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
+  const [postDetailsPending, setPostDetailsPending] = React.useState(null)
+
+  const handlePostTask = details => {
+    postService.test(details,
+      progress => {
+        console.log(`${progress}% complete`)
+    })
+  }
+
+  React.useEffect(() => {
+    if ('params' in route) {
+      let params = route.params
+      if (params && 'details' in params)
+        setPostDetailsPending(params.details)
+    }
+
+  }, [route])
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -75,7 +93,6 @@ function Profile({ navigation }) {
 
   if (!user.name) return <Center><Text>Let's finish the setup</Text></Center>
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
-
 
   const ProfileHeader = () => (
     <View style={{ flex: 2, paddingBottom: 0 }}>
@@ -175,6 +192,25 @@ function Profile({ navigation }) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
+      {postDetailsPending &&
+        <View>
+          <View style={{ paddingHorizontal: 20 }}>
+            {postDetailsPending && <Text style={{ fontSize: 15 }}>You have post details pending post</Text>}
+            {/* <Text>{JSON.stringify(postDetailsPending, null, 2)}</Text> */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+              <Image
+                style={{ height: 50, width: 50, borderRadius: 5 }}
+                source={{ uri: postDetailsPending.type === 'image' ? postDetailsPending.image : postDetailsPending.video }} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ marginHorizontal: 20 }}>{postDetailsPending.caption}</Text>
+              <Btn title='Post Now' onPress={() => handlePostTask(postDetailsPending)} />
+              </View>
+            </View>
+          </View>
+          <Divider style={{ marginVertical: 20 }} />
+        </View>}
+      
+
       <ProfileHeader />
 
       <Divider />
@@ -184,12 +220,13 @@ function Profile({ navigation }) {
       <Divider />
 
       <ProfileQueued />
-      
-      {/* 
+
+
       <Divider />
 
-      <ProfileFavorites /> */}
+      {/* <ProfileFavorites /> */}
 
+      <View style={{ marginBottom: 40 }}></View>
     </ScrollView >
   )
 }

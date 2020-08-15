@@ -14,10 +14,9 @@ function CropImage(props) {
     if (!croppedUri) {
       ImagePicker.openCropper({
         path: props.captured,
-        width: 1080,
+        width: 720,
         height: 1080
       }).then(image => {
-        console.log('newUri', image);
         setCroppedUri(image.path)
       });
     }

@@ -1,1 +1,1 @@
-export { default as firebase, auth, database } from './FirebaseStore'
+export { default as firebase, auth, database, storage } from './FirebaseStore'
