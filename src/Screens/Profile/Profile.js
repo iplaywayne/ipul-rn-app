@@ -15,7 +15,7 @@ import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
 import BottomSheet from 'reanimated-bottom-sheet'
 
-import { Center, MiniCard } from '../../components'
+import { ExploreCard, Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
 import { logo, width, height } from '../../constants'
@@ -26,6 +26,8 @@ import { NavigationDrawerStructure } from '../../components/Navigation/Navigatio
 import Btn from '../../components/Prebuilt/Button'
 import PendingPost from './Posts/PendingPost'
 import AppHeader from '../../components/Header/AppHeader'
+import PostCard from '../../components/Post/PostCard'
+
 
 const BUTTON_WIDTH = 100
 
@@ -38,19 +40,12 @@ function Profile({ route, navigation }) {
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
-  const postService = PostService()
-  const spinner = React.useRef(new Animated.Value(0)).current
   const [ready, setReady] = React.useState(false)
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
   const [postDetailsPending, setPostDetailsPending] = React.useState(null)
+  const [userPosts, setUserPosts] = React.useState([])
 
-  const handlePostTask = details => {
-    postService.putPost(details,
-      progress => {
-        console.log(`${progress}% complete`)
-      })
-  }
 
   React.useEffect(() => {
     if ('params' in route) {
@@ -73,6 +68,9 @@ function Profile({ route, navigation }) {
       title: user && user.name || 'iPlayuListen',
       headerShown: false,
     })
+
+    PostService.getUserPosts(user.uid,
+      posts => setUserPosts(posts))
 
     mediaService.setup()
     mediaService.getTracks(result => setTracks(result))
@@ -220,7 +218,11 @@ function Profile({ route, navigation }) {
 
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
-        <PendingPost />
+        <PendingPost
+          user={user}
+          postDetails={postDetailsPending}
+          onChange={val => setPostDetailsPending(val)}
+        />
 
         <ProfileHeader />
 
@@ -234,7 +236,18 @@ function Profile({ route, navigation }) {
 
         <Divider />
 
-        {/* <ProfileFavorites /> */}
+        <ProfileFavorites />
+
+        <Divider />
+
+        <View style={{
+          paddingTop: 20,
+          paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
+        }}>
+          {userPosts.map((itm, idx) => (
+            <PostCard navigation={navigation} key={idx} item={itm} />
+          ))}
+        </View>
 
         <View style={{ marginBottom: 40 }}></View>
       </ScrollView >
