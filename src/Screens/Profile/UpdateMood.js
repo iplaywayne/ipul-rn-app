@@ -17,8 +17,18 @@ function UpdateProfile({ navigation }) {
   const { user } = authState
   const { name, bio, mood } = user && user
   const [capturedMood, setCapturedMood] = React.useState(null)
+  const previousMood = mood
 
   const handleGoBack = async () => {
+    authDispatch.setUser({ ...user, mood: previousMood })
+    navigation.goBack()
+  }
+
+  const handleCapturedMood = () => {
+    const usrRef = database.ref(`users/${user.uid}`)
+    usrRef.update({
+      mood: capturedMood
+    })
     navigation.goBack()
   }
 
@@ -26,15 +36,11 @@ function UpdateProfile({ navigation }) {
     if (capturedMood && 'id' in capturedMood) {
       console.log('Mood Changed', capturedMood.id)
       authDispatch.setUser({ ...user, mood: capturedMood })
-      const usrRef = database.ref(`users/${user.uid}`)
-      usrRef.update({
-        mood: capturedMood
-      })
     }
     return () => { }
   }, [capturedMood])
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <Button style={{ marginLeft: 20 }} onPress={handleGoBack}>
@@ -42,14 +48,14 @@ function UpdateProfile({ navigation }) {
         </Button>
       ),
       headerRight: () => (
-        <Button disabled={!mood}
-          style={{ marginRight: 20 }} onPress={handleGoBack}>
+        <Button disabled={capturedMood === null}
+          style={{ marginRight: 20 }} onPress={handleCapturedMood}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
     })
     return () => { }
-  }, [loading])
+  }, [loading, capturedMood])
 
 
   const moodArray = [

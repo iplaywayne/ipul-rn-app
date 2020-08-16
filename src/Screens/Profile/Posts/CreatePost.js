@@ -11,7 +11,7 @@ import VideoPlayer from '../../../components/Video/VideoPlayer'
 import Btn from '../../../components/Prebuilt/Button'
 import { height, width } from '../../../constants'
 import CropImage from '../../../components/Profile/CropImage'
-import { useAuth } from '../../../utils'
+import { firebase, useAuth } from '../../../utils'
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -37,10 +37,12 @@ export function CreatePost({ navigation }) {
       caption: postCaption,
       type: captureType,
       [captureType]: captured,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
     }
     navigation.navigate('Profile', {
       details
     })
+    console.log(details)
   }
 
   React.useLayoutEffect(() => {
