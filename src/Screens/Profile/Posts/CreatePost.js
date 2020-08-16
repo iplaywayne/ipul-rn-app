@@ -47,9 +47,19 @@ export function CreatePost({ navigation }) {
     console.log(details)
   }
 
+  const handlePostReset = () => {
+    if (captured) {
+      setCaptured(null)
+      setCaptureType(null)
+      setCaptureMode(null)
+    } else {
+      navigation.goBack()
+    }
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: true,
+      headerShown: false,
       headerLeft: () => (
         <Button style={{ marginLeft: 20 }} onPress={() => {
           if (!captured) navigation.goBack()
@@ -73,9 +83,20 @@ export function CreatePost({ navigation }) {
 
   return (
     <View style={{
-      backgroundColor: '#121212',
-      flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
+      backgroundColor: '#121212', flex: 1, flexDirection: 'row',
     }}>
+
+      <View style={{
+        position: 'absolute', zIndex: 100, top: 87, flexDirection: 'row',
+        alignItems: 'center', justifyContent: 'center', marginHorizontal: 20,
+      }}>
+        <TouchableOpacity onPress={handlePostReset}>
+          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18, marginLeft: 12 }}>
+            {captured ? 'Reset' : 'Cancel'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
 
       {captureType == 'image' &&
         <CropImage

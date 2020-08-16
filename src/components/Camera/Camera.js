@@ -61,10 +61,6 @@ export default class CameraScreen extends React.Component {
     barcodes: [],
   };
 
-  componentDidMount() {
-    console.log(this.props)
-  }
-
   componentWillUnmount() {
     this.stopVideo()
   }
@@ -84,52 +80,6 @@ export default class CameraScreen extends React.Component {
   toggleWB() {
     this.setState({
       whiteBalance: wbOrder[this.state.whiteBalance],
-    });
-  }
-
-  toggleFocus() {
-    this.setState({
-      autoFocus: this.state.autoFocus === 'on' ? 'off' : 'on',
-    });
-  }
-
-  touchToFocus(event) {
-    const { pageX, pageY } = event.nativeEvent;
-    const screenWidth = Dimensions.get('window').width;
-    const screenHeight = Dimensions.get('window').height;
-    const isPortrait = screenHeight > screenWidth;
-
-    let x = pageX / screenWidth;
-    let y = pageY / screenHeight;
-    // Coordinate transform for portrait. See autoFocusPointOfInterest in docs for more info
-    if (isPortrait) {
-      x = pageY / screenHeight;
-      y = -(pageX / screenWidth) + 1;
-    }
-
-    this.setState({
-      autoFocusPoint: {
-        normalized: { x, y },
-        drawRectPosition: { x: pageX, y: pageY },
-      },
-    });
-  }
-
-  zoomOut() {
-    this.setState({
-      zoom: this.state.zoom - 0.1 < 0 ? 0 : this.state.zoom - 0.1,
-    });
-  }
-
-  zoomIn() {
-    this.setState({
-      zoom: this.state.zoom + 0.1 > 1 ? 1 : this.state.zoom + 0.1,
-    });
-  }
-
-  setFocusDepth(depth) {
-    this.setState({
-      depth,
     });
   }
 
@@ -162,45 +112,11 @@ export default class CameraScreen extends React.Component {
     }
   };
 
-
-  toggle = value => () => this.setState(prevState => ({ [value]: !prevState[value] }));
-
-
-  renderRecording = () => {
-    const { isRecording } = this.state;
-    const backgroundColor = isRecording ? 'white' : 'darkred';
-    const action = isRecording ? this.stopVideo : this.takeVideo;
-    const button = isRecording ? this.renderStopRecBtn() : this.renderRecBtn();
-
-    return (
-      <TouchableOpacity
-        style={[
-          styles.flipButton,
-          {
-            alignSelf: 'flex-end',
-            width: 100,
-            backgroundColor,
-          },
-        ]}
-        onPress={() => action()}
-      >
-        {button}
-      </TouchableOpacity>
-    );
-  };
-
   stopVideo = async () => {
     await this.camera.stopRecording();
     this.setState({ isRecording: false });
   };
 
-  renderRecBtn() {
-    return <Text style={styles.flipText}> REC </Text>;
-  }
-
-  renderStopRecBtn() {
-    return <Text style={styles.flipText}> ☕ </Text>;
-  }
 
   renderCamera() {
 
@@ -231,8 +147,9 @@ export default class CameraScreen extends React.Component {
         }}
       >
 
-        <View >
-          <TouchableOpacity style={{ margin: 35 }} onPress={this.toggleFacing.bind(this)}>
+        <View>
+          <TouchableOpacity style={{ position: 'absolute', bottom: 50, zIndex: 100 }}
+            onPress={this.toggleFacing.bind(this)}>
             <MaterialCommunityIcons name="camera" color={'white'} size={26} />
           </TouchableOpacity>
         </View>

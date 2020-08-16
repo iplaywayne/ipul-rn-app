@@ -17,7 +17,7 @@ function VideoPlayer({ source, resetSource }) {
   const [onVideoError, setOnVideoError] = React.useState(null)
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'center' }}>
       <Video
         source={{ uri: source }}   // Can be a URL or a local file.
         ref={ref => playerRef.current = ref}                                     // Store reference
@@ -28,7 +28,7 @@ function VideoPlayer({ source, resetSource }) {
         volume={1}
       />
       <TouchableOpacity onPress={() => playerRef.current.seek(0)}
-        style={{ position: 'absolute', top: -50, left: 30, zIndex: 10 }}>
+        style={{ top: 0, left: 30, zIndex: 10 }}>
         <Icons name='repeat' size={35} style={{ color: 'white' }} />
       </TouchableOpacity>
     </View>

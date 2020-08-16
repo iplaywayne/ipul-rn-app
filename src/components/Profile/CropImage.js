@@ -32,7 +32,7 @@ function CropImage(props) {
 
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'center' }}>
       <Image source={{ uri: croppedUri }}
         style={{ height: 550, borderRadius: 0 }} />
     </View>
