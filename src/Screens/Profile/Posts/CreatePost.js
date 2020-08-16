@@ -83,16 +83,21 @@ export function CreatePost({ navigation }) {
 
   return (
     <View style={{
-      backgroundColor: '#121212', flex: 1, flexDirection: 'row',
+      backgroundColor: '#121212', flex: 1, flexDirection: 'column', marginTop: -25
     }}>
 
       <View style={{
-        position: 'absolute', zIndex: 100, top: 87, flexDirection: 'row',
-        alignItems: 'center', justifyContent: 'center', marginHorizontal: 20,
+        position: 'relative', zIndex: 100, top: 87, flexDirection: 'row',
+        alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 30,
       }}>
-        <TouchableOpacity onPress={handlePostReset}>
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18, marginLeft: 12 }}>
+        <TouchableOpacity onPress={handlePostReset} style={{ alignSelf: 'flex-start' }}>
+          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18 }}>
             {captured ? 'Reset' : 'Cancel'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handlePostReset} style={{ alignSelf: 'flex-end' }}>
+          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18 }}>
+            {captured && 'Done'}
           </Text>
         </TouchableOpacity>
       </View>
