@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
 import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
-import { Divider } from 'react-native-paper'
+import { Avatar, Divider } from 'react-native-paper'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 
@@ -15,9 +15,15 @@ const DrawerContent = (props) => {
   return (
     <View>
       <View style={styles.root} >
-        <Image source={{ uri: trimWWWString(avatar) }} style={{ height: 70, width: 70, borderRadius: 70 / 2, marginTop: 35 }} />
-        <Text style={{ color: '#121212', fontWeight: '700', fontSize: 22, marginTop: 10 }}>
-          {name}
+        {avatar ?
+          <Image source={{ uri: avatar }}
+            style={{ height: 200, width: 200, borderRadius: 200 / 2 }} />
+          :
+          <Avatar.Text size={100} label={'iP'}
+            style={{ backgroundColor: '#444' }} />}
+
+        <Text style={{ color: '#121212', fontWeight: '700', fontSize: 17, marginTop: 10 }}>
+          {name || 'Setup incomplete'}
         </Text>
         <Divider />
         <Text style={{ color: 'blue', fontSize: 15, opacity: .8 }}>
@@ -52,6 +58,9 @@ const DrawerContent = (props) => {
             navigation.navigate('Settings');
           }}
         />
+        
+        <Divider style={{ marginVertical: 20 }} />
+
         <DrawerItem
           label="Sign Out"
           onPress={(): void => {
@@ -72,7 +81,8 @@ const styles = StyleSheet.create({
     height: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 30
+    paddingTop: 55,
+    paddingBottom: 30,
   }
 })
 export default DrawerContent
