@@ -43,7 +43,6 @@ function Profile({ route, navigation }) {
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
   const [postDetailsPending, setPostDetailsPending] = React.useState(null)
-  const [capturedMood, setCapturedMood] = React.useState(false)
 
   const handlePostTask = details => {
     postService.test(details,
@@ -215,6 +214,7 @@ function Profile({ route, navigation }) {
       <View style={{
         paddingTop: 45, height: 80, flexDirection: 'row', paddingHorizontal: 5,
         justifyContent: 'space-between', backgroundColor: '#fff', marginTop: 0,
+        borderBottomColor: '#ddf', borderBottomWidth: 1
       }}>
         <NavigationDrawerStructure
           navigationProps={navigation}
@@ -228,8 +228,9 @@ function Profile({ route, navigation }) {
           icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
         />
       </View>
-      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
+
+      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
         {postDetailsPending &&
           <View>

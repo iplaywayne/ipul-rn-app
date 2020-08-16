@@ -2,39 +2,55 @@ import React from 'react'
 import { ScrollView, View, ActivityIndicator, Image, TouchableOpacity } from 'react-native'
 import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
-import { Divider, Text, TextInput, List, RadioButton  } from 'react-native-paper';
+import { Divider, Text, TextInput, List, RadioButton } from 'react-native-paper';
 import Animated from 'react-native-reanimated'
 
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
+import { firebase, database } from '../../utils/firebase'
 
 
 function UpdateProfile({ navigation }) {
-  const [authState] = useAuth()
+  const [authState, authDispatch] = useAuth()
   const [storeState] = useStore()
   const [loading, setLoading] = React.useState(false)
   const { user } = authState
-  const { name, bio } = user && user
+  const { name, bio, mood } = user && user
+  const [capturedMood, setCapturedMood] = React.useState(null)
 
   const [formState, setFormState] = React.useState({
-    name: name,
-    bio: bio
+    name, bio, mood: mood ? { ...mood } : { id: 0 }
   })
 
 
-  const handleGoBack = async () => {
-    await wait(() => setLoading(true))
-    await wait(() => setLoading(false), 750)
-    navigation.goBack()
+  const handleCapturedMood = () => {
+    setLoading(true)
+    setTimeout(() => {
+      if (typeof capturedMood !== 'object' || !user.uid) {
+        console.log('Missing Mood Param')
+        return
+      }
+
+      const usrRef = database.ref(`users/${user.uid}`)
+      usrRef.update({
+        mood: capturedMood
+      })
+
+      setLoading(false)
+      navigation.goBack()
+    }, 250)
   }
 
   const handleCancel = async () => {
     navigation.goBack()
   }
 
-  const listener = () => {
-
-  }
+  React.useEffect(() => {
+    if (capturedMood && 'id' in capturedMood) {
+      console.log('Mood Changed', capturedMood.id)
+      authDispatch.setUser({ ...user, mood: capturedMood })
+    }
+  }, [capturedMood])
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,7 +60,7 @@ function UpdateProfile({ navigation }) {
         </Button>
       ),
       headerRight: () => (
-        <Button style={{ marginRight: 20 }} onPress={handleGoBack}>
+        <Button style={{ marginRight: 20 }} onPress={handleCapturedMood}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
@@ -58,31 +74,45 @@ function UpdateProfile({ navigation }) {
     { id: 3, emoji: '😇', title: 'Meditating', description: 'Various Soothing Sounds' },
     { id: 4, emoji: '🤘', title: 'Call of Duty', description: 'Hip Hop, Trap' },
     { id: 5, emoji: '🤘', title: 'Feeling curious, surprise me', description: 'Mixed Genres' },
+    { id: 6, emoji: '🤘', title: 'None of these', description: 'Not sure at the moment, play everything' },
   ]
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
 
-
+      {!mood &&
+        <View style={{ margin: 20, alignItems: 'center' }}>
+          <Text style={{ fontWeight: '700', fontSize: 17 }}>You do not have your mood set</Text>
+        </View>}
 
       {moodArray.map((itm, idx) => (
-        <TouchableOpacity key={idx} onPress={() => console.log(itm.emoji)}>
+        <TouchableOpacity key={idx} onPress={() => {
+          setCapturedMood(itm)
+          // handleCapturedMood(itm)
+        }}>
+          <Divider />
           <List.Item
-            
             title={itm.title}
             description={itm.description}
             left={() => <Text style={{ padding: 10 }}>{itm.emoji}</Text>}
-          // right={() => <RadioButton
-          //   value="second"
-          //   status={'checked'}
-          //   onPress={() => console.log('second')}
-          // />}
+            right={() => <RadioButton
+              value="second"
+              status={mood && 'id' in mood && mood.id === itm.id ? 'checked' : 'unchecked'}
+            />}
           />
-          <Divider />
         </TouchableOpacity>
       ))}
+      <Divider />
 
-      {/* <Text>{JSON.stringify(user, null, 2)}</Text> */}
+      <View style={{ marginTop: 100, alignItems: 'center' }}>
+        <Text style={{ fontWeight: '700', fontSize: 15, }}>
+          Your playlist may populate based on your mood
+        </Text>
+      </View>
+
+      {/* <Text>{JSON.stringify(capturedMood, null, 2)}</Text>
+      <Text>{JSON.stringify(user.mood, null, 2)}</Text> */}
+
     </ScrollView>
   )
 }
@@ -98,4 +128,5 @@ const styles = {
     padding: 10
   }
 }
+
 export default UpdateProfile
