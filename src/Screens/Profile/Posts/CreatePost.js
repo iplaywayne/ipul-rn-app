@@ -10,7 +10,7 @@ import Camera from '../../../components/Camera/Camera'
 import VideoPlayer from '../../../components/Video/VideoPlayer'
 import Btn from '../../../components/Prebuilt/Button'
 import { height, width } from '../../../constants'
-import CropImage from './CropImage'
+import CropImage from '../../../components/Profile/CropImage'
 import { useAuth } from '../../../utils'
 
 

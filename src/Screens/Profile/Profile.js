@@ -103,7 +103,7 @@ function Profile({ route, navigation }) {
     if (!queued.length) {
       console.log('Select a song to start playlist')
       return
-    } 
+    }
     setTimeout(() => {
       if (!isPlaying) {
         TrackPlayer.play()
@@ -228,7 +228,7 @@ function Profile({ route, navigation }) {
   return (
     <>
       <View style={{
-        paddingTop: 45, height: 80, flexDirection: 'row', paddingHorizontal: 5,
+        paddingTop: 55, height: 89, flexDirection: 'row', paddingHorizontal: 7,
         justifyContent: 'space-between', backgroundColor: '#fff', marginTop: 0,
         borderBottomColor: '#ddf', borderBottomWidth: 1
       }}>

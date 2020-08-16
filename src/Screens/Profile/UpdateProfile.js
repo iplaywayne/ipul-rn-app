@@ -4,12 +4,14 @@ import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
 import { Avatar, Divider, Text, TextInput } from 'react-native-paper';
 import Animated from 'react-native-reanimated'
-import ImagePicker from 'react-native-image-picker';
+// import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
 import Btn from '../../components/Prebuilt/Button'
+import CropImage from '../../components/Profile/CropImage'
 
 
 const options = {
@@ -35,34 +37,19 @@ function UpdateProfile({ navigation }) {
   })
 
   const handleSelectImage = () => {
-    setLoading(true)
-    ImagePicker.showImagePicker(options, (response) => {
-
-      if (response.didCancel) {
-        setLoading(false)
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        setLoading(false)
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        setLoading(false)
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        setCapturedImage(source)
-        setTimeout(() => {
-          setLoading(false)
-        }, 1000)
-      }
+    ImagePicker.openCamera({
+      width: 400,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setCapturedImage(image.path)
+      console.log(formState)
     });
   }
+
   const handleGoBack = async () => {
     await wait(() => setLoading(true))
     await wait(() => setLoading(false), 750)
-    navigation.goBack()
   }
 
   const handleCancel = async () => {
@@ -83,7 +70,7 @@ function UpdateProfile({ navigation }) {
         </Button>
       )
     })
-  }, [loading])
+  }, [loading, capturedImage])
 
 
 
@@ -94,7 +81,7 @@ function UpdateProfile({ navigation }) {
       <View style={{ alignItems: 'center', marginVertical: 20 }}>
         <TouchableOpacity onPress={handleSelectImage}>
           {avatar || capturedImage ?
-            <Image source={capturedImage ? capturedImage : { uri: avatar }}
+            <Image source={capturedImage ? { uri: capturedImage } : { uri: avatar }}
               style={{ height: 200, width: 200, borderRadius: 200 / 2 }} />
             :
             <Avatar.Text size={100} label={'iP'}

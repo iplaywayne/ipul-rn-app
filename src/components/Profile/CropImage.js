@@ -3,7 +3,7 @@ import { View, Text, Image } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker';
 import Button from 'react-native-button'
 
-import { height, width } from '../../../constants'
+import { height, width } from '../../constants'
 
 
 function CropImage(props) {
