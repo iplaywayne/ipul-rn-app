@@ -31,13 +31,12 @@ const PostService = (function () {
     const childRef = storageRef.child(`${userPush.key}/${userPush.key}${ext}`)
     const childRefKey = childRef.key
     const uploadTask = childRef.putFile(file, metadata)
-    var next = function (snapshot) {
+    var task = function (snapshot) {
       var percent = snapshot.bytesTransferred / snapshot.totalBytes
       progress(percent)
     };
     var error = function (error) { console.log(error) };
     var complete = function (data) {
-      console.log('Done!', data)
       childRef.getDownloadURL().then(url => {
         next(url)
         image && keyRef.update({ image: url })
@@ -47,7 +46,7 @@ const PostService = (function () {
 
     uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
-      next,
+      task,
       error,
       complete);
   }
