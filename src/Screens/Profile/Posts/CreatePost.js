@@ -57,6 +57,10 @@ export function CreatePost({ navigation }) {
     }
   }
 
+  const handlePostDone = () => {
+    
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -87,7 +91,7 @@ export function CreatePost({ navigation }) {
     }}>
 
       <View style={{
-        position: 'relative', zIndex: 100, top: 87, flexDirection: 'row',
+        position: 'relative', zIndex: 100, top: 110, flexDirection: 'row',
         alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 30,
       }}>
         <TouchableOpacity onPress={handlePostReset} style={{ alignSelf: 'flex-start' }}>
@@ -95,7 +99,7 @@ export function CreatePost({ navigation }) {
             {captured ? 'Reset' : 'Cancel'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePostReset} style={{ alignSelf: 'flex-end' }}>
+        <TouchableOpacity onPress={handlePostDone} style={{ alignSelf: 'flex-end' }}>
           <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18 }}>
             {captured && 'Done'}
           </Text>
