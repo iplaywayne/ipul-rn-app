@@ -60,7 +60,8 @@ function UpdateProfile({ navigation }) {
         </Button>
       ),
       headerRight: () => (
-        <Button style={{ marginRight: 20 }} onPress={handleCapturedMood}>
+        <Button disabled={!capturedMood}
+          style={{ marginRight: 20 }} onPress={handleCapturedMood}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
@@ -110,8 +111,8 @@ function UpdateProfile({ navigation }) {
         </Text>
       </View>
 
-      {/* <Text>{JSON.stringify(capturedMood, null, 2)}</Text>
-      <Text>{JSON.stringify(user.mood, null, 2)}</Text> */}
+      {/* <Text>{JSON.stringify(capturedMood, null, 2)}</Text> */}
+      {/* <Text>{JSON.stringify(user.mood, null, 2)}</Text> */}
 
     </ScrollView>
   )

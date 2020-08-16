@@ -4,17 +4,18 @@ import { ActivityIndicator } from 'react-native'
 
 
 export default function (props) {
-  const { title, style, loading, disabled, children, marginTop, onPress, backgroundColor, color } = props
+  const { title, style, loading, disabled, children, marginTop, onPress,
+    backgroundColor, color, containerStyle } = props
 
   return (
     <Button
       style={[{ fontSize: 13, color: 'white' }, style]}
       styleDisabled={{ color: 'white' }}
       disabled={disabled}
-      containerStyle={{
+      containerStyle={[{
         paddingTop: 8, margin: marginTop || 1, height: 32, width: 130, overflow: 'hidden', borderRadius: 5,
         backgroundColor: color ? color : backgroundColor || '#121212'
-      }}
+      }, containerStyle]}
       disabledContainerStyle={{ backgroundColor: '#ddd' }}
       onPress={onPress}
     >

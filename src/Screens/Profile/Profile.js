@@ -32,7 +32,7 @@ function Profile({ route, navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = authState
-  const { name, website, avatar, bio } = user ?? { name: '', website: '', avatar: '', bio: '' }
+  const { name, website, avatar, bio, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
   const { queued, isPlaying, isLoading } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
@@ -100,6 +100,10 @@ function Profile({ route, navigation }) {
 
 
   const playNowTapped = async () => {
+    if (!queued.length) {
+      console.log('Select a song to start playlist')
+      return
+    } 
     setTimeout(() => {
       if (!isPlaying) {
         TrackPlayer.play()
@@ -115,7 +119,7 @@ function Profile({ route, navigation }) {
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
   const ProfileHeader = () => (
-    <View style={{ flex: 1, paddingBottom: 0 }}>
+    <View style={{ flex: 1 }}>
       <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
         {avatar ?
           <TouchableOpacity onPress={() => navigation.push('UpdateProfile')}>
@@ -132,9 +136,21 @@ function Profile({ route, navigation }) {
           <Avatar.Text size={100} label={name.substring(0, 2)}
             style={{ backgroundColor: '#444' }} />}
 
-        <View style={{ marginLeft: 15, marginTop: 25 }}>
+        <View style={{ marginLeft: 15, justifyContent: 'center', marginTop: 5 }}>
           <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-          <Text>{bio || 'Brand'}</Text>
+          <View>
+            {mood && 'id' in mood ?
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '700', marginRight: 2 }}>Mood</Text>
+                <Text>{mood.title}</Text>
+              </View>
+              :
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '700', marginRight: 2 }}>Mood</Text><Text>not set</Text>
+              </View>}
+          </View>
+
+          <Text>{bio}</Text>
         </View>
       </View>
 
