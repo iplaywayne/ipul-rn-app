@@ -28,8 +28,8 @@ export function CreatePost({ navigation }) {
   const { user } = authState
 
   const handlePostTask = () => {
-    if (!postCaption || !captureType) {
-      console.log({ message: 'Missing handlePostTask param', postCaption, capturedType })
+    if (!postCaption) {
+      console.log({ message: 'Missing handlePostTask param', postCaption })
       return
     }
     const details = {
@@ -53,7 +53,8 @@ export function CreatePost({ navigation }) {
       ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
-          <Button onPress={handlePostTask}>
+          <Button disabled={!captured || !captureType}
+            onPress={handlePostTask}>
             {loading ? <ActivityIndicator /> : 'Done'}
           </Button>
         </View>
@@ -85,11 +86,11 @@ export function CreatePost({ navigation }) {
   const CapturedVideo = () => (
     <View style={{ flex: 1 }}>
 
-    <VideoPlayer
-      source={captured}
-      resetSource={() => setCaptured(null)}
+      <VideoPlayer
+        source={captured}
+        resetSource={() => setCaptured(null)}
       />
-      </View>
+    </View>
   )
 
   return (
