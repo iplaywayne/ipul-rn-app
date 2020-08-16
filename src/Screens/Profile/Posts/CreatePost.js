@@ -30,20 +30,20 @@ export function CreatePost({ navigation }) {
   const { user } = authState
 
   const handlePostTask = () => {
-    if (!postCaption) {
-      console.log({ message: 'Missing handlePostTask param', postCaption })
-      return
-    }
+    // if (!postCaption) {
+    //   console.log({ message: 'Missing handlePostTask param', postCaption })
+    //   return
+    // }
     const details = {
       uid: user.uid,
-      caption: postCaption,
+      // caption: postCaption,
       type: captureType,
       [captureType]: captured,
       createdAt: firebase.database.ServerValue.TIMESTAMP
     }
-    navigation.navigate('Profile', {
-      details
-    })
+    // navigation.navigate('Profile', {
+    //   details
+    // })
     console.log(details)
   }
 
@@ -58,8 +58,9 @@ export function CreatePost({ navigation }) {
   }
 
   const handlePostDone = () => {
-    
+    handlePostTask()
   }
+
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -124,6 +125,7 @@ export function CreatePost({ navigation }) {
           <View style={{ flex: 11 }}>
             <Camera
               mode={captureMode}
+              setCameraFlip={flip => setCameraFlip(flip)}
               dataUri={uri => setCaptured(uri)}
               dataType={type => setCaptureType(type)}
             />
@@ -133,6 +135,7 @@ export function CreatePost({ navigation }) {
             flex: 1, flexDirection: 'row', alignItems: 'center',
             justifyContent: 'space-around', marginHorizontal: 25
           }}>
+
             <TouchableOpacity onPress={() => setCaptureMode('camera')}
               style={{ alignItems: 'center' }}>
               <MaterialCommunityIcons name="camera"
@@ -140,6 +143,7 @@ export function CreatePost({ navigation }) {
                 size={26} />
               <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => setCaptureMode('video')}
               style={{ alignItems: 'center' }}>
               <MaterialCommunityIcons name="video"

@@ -12,6 +12,8 @@ import Slider from '@react-native-community/slider'
 import ImagePicker from 'react-native-image-crop-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { height } from '../../constants'
+
 
 const flashModeOrder = {
   off: 'on',
@@ -148,8 +150,10 @@ export default class CameraScreen extends React.Component {
       >
 
         <View>
-          <TouchableOpacity style={{ position: 'absolute', bottom: 50, zIndex: 100 }}
-            onPress={this.toggleFacing.bind(this)}>
+          <TouchableOpacity
+            style={{ position: 'absolute', top: 170, zIndex: 10, left: 47 }}
+            onPress={this.toggleFacing.bind(this)}
+          >
             <MaterialCommunityIcons name="camera" color={'white'} size={26} />
           </TouchableOpacity>
         </View>
