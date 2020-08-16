@@ -50,8 +50,12 @@ export function CreatePost({ navigation }) {
     navigation.setOptions({
       headerShown: true,
       headerLeft: () => (
-        <Button style={{ marginLeft: 20 }} onPress={() => navigation.goBack()}>
-          {'Cancel'}
+        <Button style={{ marginLeft: 20 }} onPress={() => {
+          if (!captured) navigation.goBack()
+          setCaptureType(null)
+          setCaptured(null)
+        }}>
+          {captured ? 'Reset' : 'Cancel'}
         </Button>
       ),
       headerRight: () => (
@@ -76,24 +80,28 @@ export function CreatePost({ navigation }) {
         <Tab.Screen
           name="Camera"
           children={() => (<Camera
-          dataUri={uri => setCaptured(uri)}
-          dataType={type => setCaptureType(type)}
+            takePicture
+            dataUri={uri => setCaptured(uri)}
+            dataType={type => setCaptureType(type)}
           />)}
           options={{
             tabBarLabel: 'Take Photo',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="camera" color={color} size={26} />
             ),
-          }}/>
+          }} />
         <Tab.Screen
           name="Gallery"
-          children={() => <View><Text>Gallery</Text></View>}
-          options={{
+          children={() => (<Camera
+            takeVideo
+            dataUri={uri => setCaptured(uri)}
+            dataType={type => setCaptureType(type)}
+          />)} options={{
             tabBarLabel: 'Take Video',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="video" color={color} size={26} />
             ),
-          }}/>
+          }} />
       </Tab.Navigator>
     )
   }

@@ -10,6 +10,7 @@ import {
 import { RNCamera } from 'react-native-camera';
 import Slider from '@react-native-community/slider'
 import ImagePicker from 'react-native-image-crop-picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const flashModeOrder = {
@@ -59,6 +60,10 @@ export default class CameraScreen extends React.Component {
     textBlocks: [],
     barcodes: [],
   };
+
+  componentWillUnmount() {
+    this.stopVideo()
+  }
 
   toggleFacing() {
     this.setState({
@@ -148,10 +153,12 @@ export default class CameraScreen extends React.Component {
       } catch (e) {
         console.error(e);
       }
+    } else {
+      this.stopVideo()
     }
   };
 
-  
+
   toggle = value => () => this.setState(prevState => ({ [value]: !prevState[value] }));
 
 
@@ -198,9 +205,7 @@ export default class CameraScreen extends React.Component {
     };
     return (
       <RNCamera
-        ref={ref => {
-          this.camera = ref;
-        }}
+        ref={ref => this.camera = ref}
         style={{
           flex: 1,
           justifyContent: 'space-between',
@@ -222,60 +227,38 @@ export default class CameraScreen extends React.Component {
       >
 
         <View >
-          <TouchableOpacity style={styles.flipButton} onPress={this.toggleFacing.bind(this)}>
-            <Text style={styles.flipText}> FLIP </Text>
+          <TouchableOpacity style={{ margin: 35 }} onPress={this.toggleFacing.bind(this)}>
+            <MaterialCommunityIcons name="camera" color={'white'} size={26} />
           </TouchableOpacity>
-          
-          {/* <View
-            style={{
-              backgroundColor: 'transparent',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}
-          >
-            <TouchableOpacity style={styles.flipButton} onPress={this.toggleFacing.bind(this)}>
-              <Text style={styles.flipText}> FLIP </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.flipButton} onPress={this.toggleFlash.bind(this)}>
-              <Text style={styles.flipText}> FLASH: {this.state.flash} </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.flipButton} onPress={this.toggleFlash.bind(this)}>
-              <Text style={styles.flipText}> AF: {this.state.autoFocus} </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.flipButton} onPress={this.toggleWB.bind(this)}>
-              <Text style={styles.flipText}> WB: {this.state.whiteBalance} </Text>
-            </TouchableOpacity>
-          </View> */}
         </View>
 
 
 
-        <View
-          style={{
-            height: 56,
-            width: '100%',
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: 30
-          }}>
+        <View style={{ width: '100%', alignItems: 'center', marginBottom: 30 }}>
 
-          <TouchableOpacity
-            style={[
-              styles.flipButton,
-              {
-                alignSelf: 'flex-end',
-                width: 100,
-                backgroundColor: this.state.isRecording ? 'white' : 'gray',
-              },
-            ]}
-            onPress={() => this.takePicture()}
-          >
-            <Text style={styles.flipText}> SNAP </Text>
-          </TouchableOpacity>
+          {this.props.takePicture &&
+            <TouchableOpacity
+              style={[
+                styles.flipButton,
+              ]}
+              onPress={() => this.takePicture()}
+            >
+              {/* <Text style={styles.flipText}> SNAP </Text> */}
+              <MaterialCommunityIcons name="circle" color={'#fff'} size={75} />
+            </TouchableOpacity>}
 
-          {this.renderRecording()}
+          {this.props.takeVideo &&
+            <TouchableOpacity
+              style={[
+                styles.flipButton,
+              ]}
+              onPress={() => this.takeVideo()}
+            >
+              {/* <Text style={styles.flipText}> SNAP </Text> */}
+            <MaterialCommunityIcons name="circle"
+              color={this.state.isRecording ? 'red' : 'white'} size={75} />
+            </TouchableOpacity>}
+
         </View>
 
       </RNCamera>
@@ -294,75 +277,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   flipButton: {
-    height: 40,
-    marginHorizontal: 2,
-    marginBottom: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    borderColor: 'white',
-    borderWidth: 1,
-    padding: 5,
+    height: 100,
+    width: 100,
+    borderRadius: 100 / 2,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  autoFocusBox: {
-    position: 'absolute',
-    height: 64,
-    width: 64,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'white',
-    opacity: 0.4,
+    justifyContent: 'space-around',
   },
   flipText: {
     color: 'white',
     fontSize: 15,
-  },
-  zoomText: {
-    position: 'absolute',
-    bottom: 70,
-    zIndex: 2,
-    left: 2,
-  },
-  picButton: {
-    backgroundColor: 'darkseagreen',
-  },
-  facesContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0,
-    top: 0,
-  },
-  face: {
-    padding: 10,
-    borderWidth: 2,
-    borderRadius: 2,
-    position: 'absolute',
-    borderColor: '#FFD700',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  landmark: {
-    width: landmarkSize,
-    height: landmarkSize,
-    position: 'absolute',
-    backgroundColor: 'red',
-  },
-  faceText: {
-    color: '#FFD700',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    margin: 10,
-    backgroundColor: 'transparent',
-  },
-  text: {
-    padding: 10,
-    borderWidth: 2,
-    borderRadius: 2,
-    position: 'absolute',
-    borderColor: '#F00',
-    justifyContent: 'center',
   },
   textBlock: {
     color: '#F00',
