@@ -26,6 +26,7 @@ function UpdateProfile({ navigation }) {
   const [loading, setLoading] = React.useState(false)
   const { user } = authState
   const { name, avatar, bio, occupation } = user && user
+  const [capturedImage, setCapturedImage] = React.useState(null)
 
   const [formState, setFormState] = React.useState({
     name: name,
@@ -34,24 +35,27 @@ function UpdateProfile({ navigation }) {
   })
 
   const handleSelectImage = () => {
+    setLoading(true)
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
 
       if (response.didCancel) {
+        setLoading(false)
         console.log('User cancelled image picker');
       } else if (response.error) {
+        setLoading(false)
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
+        setLoading(false)
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          avatarSource: source,
-        });
+        setCapturedImage(source)
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000)
       }
     });
   }
@@ -73,7 +77,8 @@ function UpdateProfile({ navigation }) {
         </Button>
       ),
       headerRight: () => (
-        <Button style={{ marginRight: 20 }} onPress={handleGoBack}>
+        <Button disabled={!capturedImage}
+          style={{ marginRight: 20 }} onPress={handleGoBack}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
@@ -88,11 +93,9 @@ function UpdateProfile({ navigation }) {
 
       <View style={{ alignItems: 'center', marginVertical: 20 }}>
         <TouchableOpacity onPress={handleSelectImage}>
-          {/* <Image source={avatar ? { uri: avatar } : require('../../assets/images/iPlay2020Logo.png')}
-          style={{ height: 100, width: 100, borderRadius: 100 / 2 }} /> */}
-          {avatar ?
-            <Image source={{ uri: avatar }}
-              style={{ height: 100, width: 100, borderRadius: 100 / 2 }} />
+          {avatar || capturedImage ?
+            <Image source={capturedImage ? capturedImage : { uri: avatar }}
+              style={{ height: 200, width: 200, borderRadius: 200 / 2 }} />
             :
             <Avatar.Text size={100} label={'iP'}
               style={{ backgroundColor: '#444' }} />}
