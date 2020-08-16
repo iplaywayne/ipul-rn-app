@@ -82,7 +82,7 @@ function Profile({ route, navigation }) {
     }
     setReady(true)
     return () => { }
-  }, [])
+  }, [navigation])
 
 
   const playNowTapped = async () => {
@@ -222,6 +222,7 @@ function Profile({ route, navigation }) {
           user={user}
           postDetails={postDetailsPending}
           onChange={val => setPostDetailsPending(val)}
+          onComplete={() => setPostDetailsPending(null)}
         />
 
         <ProfileHeader />

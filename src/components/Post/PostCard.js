@@ -7,6 +7,7 @@ import {
 import { Divider } from 'react-native-paper'
 import { FastImage as Image } from 'react-native-fast-image'
 import * as timeago from 'timeago.js';
+import Video from 'react-native-video'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
@@ -29,18 +30,48 @@ function PostCard(props) {
     <ScrollView style={styles.root}>
       <TouchableOpacity>
 
+
         <View>
-          <Card
-            flex
-            borderless
-            shadow={true}
-            title={item && item.caption}
-            caption={timeago.format(item.createdAt)}
-            location={(postAuthor || {}).mood.title}
-            avatar={(postAuthor || {}).avatar || siteLogo}
-            imageStyle={{ borderRadius: 10, height: 300 }}
-            image={item && item.image || siteLogo}
-          />
+
+
+          {item.image ?
+            <Card
+              flex
+              borderless
+              shadow
+              title={item && item.caption}
+              caption={timeago.format(item.createdAt)}
+              style={{ padding: 0 }}
+              location={(postAuthor || {}).name}
+              avatar={(postAuthor || {}).avatar || siteLogo}
+              children={<Img
+                source={{ uri: item.image }}
+                style={{ height: 500, width: '100%', maxWidth: 600 }}
+                paused={true}
+              />}
+
+            /> : null}
+
+          <Divider />
+
+          {item.video ?
+            <Card
+              flex
+              borderless
+              shadow
+              title={item && item.caption}
+              caption={timeago.format(item.createdAt)}
+              location={(postAuthor || {}).name}
+              avatar={(postAuthor || {}).avatar || siteLogo}
+              imageStyle={{ borderRadius: 10, height: 400 }}
+              children={<Video
+                source={{ uri: item.video }}
+                style={{ height: 500, width: '100%', maxWidth: 600 }}
+                paused={true}
+              />}
+            >
+            </Card> : null}
+
           <Divider />
         </View>
 

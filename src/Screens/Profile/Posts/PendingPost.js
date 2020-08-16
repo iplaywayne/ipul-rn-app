@@ -6,13 +6,16 @@ import PostService from '../../../utils/post/PostService'
 import Btn from '../../../components/Prebuilt/Button'
 
 
-const PendingPost = ({ user, postDetails, onChange }) => {
+const PendingPost = ({ user, postDetails, onChange, onComplete }) => {
 
 
   const handlePostTask = details => {
     PostService.putPost(user.uid, details,
       progress => {
         console.log(`${progress}% complete`)
+      },
+      next => {
+        onComplete(next)
       })
   }
 

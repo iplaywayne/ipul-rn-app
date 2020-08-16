@@ -6,7 +6,7 @@ import { firebase, storage, database } from '../firebase'
 
 const PostService = (function () {
 
-  const putPost = (uid, details, progress) => {
+  const putPost = (uid, details, progress,next) => {
 
     if (!details) throw new Error('Missing details to complete post task')
     const { type, image, video } = details
@@ -39,7 +39,7 @@ const PostService = (function () {
     var complete = function (data) {
       console.log('Done!', data)
       childRef.getDownloadURL().then(url => {
-        console.log(url)
+        next(url)
         image && keyRef.update({ image: url })
         video && keyRef.update({ video: url })
       })
@@ -54,13 +54,15 @@ const PostService = (function () {
 
   const getUserPosts = (uid, next) => {
     if (!uid) return
+    let list;
     const userRef = database.ref(`channels/posts/${uid}`)
     userRef.on('value', snap => {
+      let list = []
       snap.forEach(child => {
-        let list = []
         list.push(child.val())
-        next(list)
+        console.log(child.val().caption)
       })
+      next(list)
     })
   }
 
