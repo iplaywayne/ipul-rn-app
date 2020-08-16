@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
+import { View, Text, ActivityIndicator, KeyboardAvoidingView, TouchableOpacity } from 'react-native'
 import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import { Input as TextInput } from 'galio-framework'
@@ -22,6 +22,7 @@ const Tab = createMaterialBottomTabNavigator();
 export function CreatePost({ navigation }) {
   const [captured, setCaptured] = React.useState(null)
   const [captureType, setCaptureType] = React.useState(null)
+  const [captureMode, setCaptureMode] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
   const [postCaption, setPostCaption] = React.useState('')
   const playerRef = React.useRef(null)
@@ -60,69 +61,21 @@ export function CreatePost({ navigation }) {
       ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
-          <Button disabled={!captured || !captureType}
+          <Button disabled={!captured || !captureMode}
             onPress={handlePostTask}>
             {loading ? <ActivityIndicator /> : 'Done'}
           </Button>
         </View>
       ),
     })
-  })
+  }, [captured, captureMode])
 
-
-  if (!captured) {
-    return (
-      <Tab.Navigator
-        initialRouteName="Home"
-        activeColor="#f0edf6"
-        inactiveColor="#444"
-        barStyle={{ height: 60, backgroundColor: '#121212' }}>
-        <Tab.Screen
-          name="Camera"
-          children={() => (<Camera
-            takePicture
-            dataUri={uri => setCaptured(uri)}
-            dataType={type => setCaptureType(type)}
-          />)}
-          options={{
-            tabBarLabel: 'Take Photo',
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="camera" color={color} size={26} />
-            ),
-          }} />
-        <Tab.Screen
-          name="Gallery"
-          children={() => (<Camera
-            takeVideo
-            dataUri={uri => setCaptured(uri)}
-            dataType={type => setCaptureType(type)}
-          />)} options={{
-            tabBarLabel: 'Take Video',
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="video" color={color} size={26} />
-            ),
-          }} />
-      </Tab.Navigator>
-    )
-  }
-
-
-  const CapturedVideo = () => (
-    <View style={{ flex: 1 }}>
-
-      <VideoPlayer
-        source={captured}
-        resetSource={() => setCaptured(null)}
-      />
-    </View>
-  )
 
   return (
     <View style={{
       backgroundColor: '#121212',
       flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
     }}>
-
 
       {captureType == 'image' &&
         <CropImage
@@ -131,24 +84,69 @@ export function CreatePost({ navigation }) {
         />}
 
       {captureType == 'video' &&
-        <CapturedVideo playerRef={ref => playerRef.current = ref} />}
+        <VideoPlayer
+          source={captured}
+          resetSource={() => setCaptured(null)}
+        />}
 
-
-
-      {/* <Text style={{ fontWeight: '700', fontSize: 17, paddingLeft: 15 }}>
-            What would you like to share?</Text>
-          <View style={{ paddingHorizontal: 10, paddingBottom: 0 }}>
-            <TextInput
-              onChange={e => setPostCaption(e.nativeEvent.text)}
+      {!captured &&
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 11 }}>
+            <Camera
+              mode={captureMode}
+              dataUri={uri => setCaptured(uri)}
+              dataType={type => setCaptureType(type)}
             />
-          </View> */}
-      {/* {playerRef.current &&
-            <Btn title='Replay' onPress={() => playerRef.current.seek(0)}>
-              Replay
-          </Btn>}
+          </View>
 
-          <Btn title='Start over' onPress={() => setCaptured(null)} />
- */}
+          <View style={{
+            flex: 1, flexDirection: 'row', alignItems: 'center',
+            justifyContent: 'space-around', marginHorizontal: 25
+          }}>
+            <TouchableOpacity onPress={() => setCaptureMode('camera')}
+              style={{ alignItems: 'center' }}>
+              <MaterialCommunityIcons name="camera"
+                color={captureMode == 'camera' ? 'white' : 'gray'}
+                size={26} />
+              <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setCaptureMode('video')}
+              style={{ alignItems: 'center' }}>
+              <MaterialCommunityIcons name="video"
+                color={captureMode == 'video' ? 'white' : 'gray'}
+                size={26} />
+              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
+            </TouchableOpacity>
+          </View>
+
+
+          {/* <Tab.Navigator
+            initialRouteName="Home"
+            activeColor="#f0edf6"
+            inactiveColor="#444"
+            onTabPress={p => console.log(p)}
+            barStyle={{ height: 60, backgroundColor: '#121212' }}
+          >
+            <Tab.Screen
+              name="Camera"
+              children={() => <View></View>}
+              options={{
+                tabBarLabel: 'Take Photo',
+                tabBarIcon: ({ color }) => (
+                  <MaterialCommunityIcons name="camera" color={color} size={26} />
+                ),
+              }} />
+            <Tab.Screen
+              name="Gallery"
+            children={() => <View></View>}
+              options={{
+                tabBarLabel: 'Take Video',
+                tabBarIcon: ({ color }) => (
+                  <MaterialCommunityIcons name="video" color={color} size={26} />
+                ),
+              }} />
+          </Tab.Navigator> */}
+        </View>}
 
     </View>
   )

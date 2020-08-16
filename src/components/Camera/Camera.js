@@ -61,6 +61,10 @@ export default class CameraScreen extends React.Component {
     barcodes: [],
   };
 
+  componentDidMount() {
+    console.log(this.props)
+  }
+
   componentWillUnmount() {
     this.stopVideo()
   }
@@ -167,6 +171,7 @@ export default class CameraScreen extends React.Component {
     const backgroundColor = isRecording ? 'white' : 'darkred';
     const action = isRecording ? this.stopVideo : this.takeVideo;
     const button = isRecording ? this.renderStopRecBtn() : this.renderRecBtn();
+
     return (
       <TouchableOpacity
         style={[
@@ -233,32 +238,32 @@ export default class CameraScreen extends React.Component {
         </View>
 
 
-
         <View style={{ width: '100%', alignItems: 'center', marginBottom: 30 }}>
 
-          {this.props.takePicture &&
+          {this.props.mode == 'camera' &&
             <TouchableOpacity
               style={[
                 styles.flipButton,
               ]}
               onPress={() => this.takePicture()}
             >
-              {/* <Text style={styles.flipText}> SNAP </Text> */}
               <MaterialCommunityIcons name="circle" color={'#fff'} size={75} />
+              <Text style={{ color: '#fff' }}>Camera Ready</Text>
             </TouchableOpacity>}
 
-          {this.props.takeVideo &&
+          {this.props.mode == 'video' &&
             <TouchableOpacity
               style={[
                 styles.flipButton,
               ]}
               onPress={() => this.takeVideo()}
             >
-              {/* <Text style={styles.flipText}> SNAP </Text> */}
-            <MaterialCommunityIcons name="circle"
-              color={this.state.isRecording ? 'red' : 'white'} size={75} />
+              <MaterialCommunityIcons name="circle"
+                color={this.state.isRecording ? 'darkred' : 'skyblue'} size={75} />
+              <Text style={{ color: '#fff' }}>
+                {!this.state.isRecording ? 'Record Ready' : 'Recording'}
+              </Text>
             </TouchableOpacity>}
-
         </View>
 
       </RNCamera>
