@@ -18,30 +18,7 @@ function UpdateProfile({ navigation }) {
   const { name, bio, mood } = user && user
   const [capturedMood, setCapturedMood] = React.useState(null)
 
-  const [formState, setFormState] = React.useState({
-    name, bio, mood: mood ? { ...mood } : { id: 0 }
-  })
-
-
-  const handleCapturedMood = () => {
-    setLoading(true)
-    setTimeout(() => {
-      if (typeof capturedMood !== 'object' || !user.uid) {
-        console.log('Missing Mood Param')
-        return
-      }
-
-      const usrRef = database.ref(`users/${user.uid}`)
-      usrRef.update({
-        mood: capturedMood
-      })
-
-      setLoading(false)
-      navigation.goBack()
-    }, 250)
-  }
-
-  const handleCancel = async () => {
+  const handleGoBack = async () => {
     navigation.goBack()
   }
 
@@ -49,23 +26,29 @@ function UpdateProfile({ navigation }) {
     if (capturedMood && 'id' in capturedMood) {
       console.log('Mood Changed', capturedMood.id)
       authDispatch.setUser({ ...user, mood: capturedMood })
+      const usrRef = database.ref(`users/${user.uid}`)
+      usrRef.update({
+        mood: capturedMood
+      })
     }
+    return () => { }
   }, [capturedMood])
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <Button style={{ marginLeft: 20 }} onPress={handleCancel}>
+        <Button style={{ marginLeft: 20 }} onPress={handleGoBack}>
           {'Cancel'}
         </Button>
       ),
       headerRight: () => (
-        <Button disabled={!capturedMood}
-          style={{ marginRight: 20 }} onPress={handleCapturedMood}>
+        <Button disabled={!mood}
+          style={{ marginRight: 20 }} onPress={handleGoBack}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
     })
+    return () => { }
   }, [loading])
 
 
@@ -87,10 +70,7 @@ function UpdateProfile({ navigation }) {
         </View>}
 
       {moodArray.map((itm, idx) => (
-        <TouchableOpacity key={idx} onPress={() => {
-          setCapturedMood(itm)
-          // handleCapturedMood(itm)
-        }}>
+        <TouchableOpacity key={idx} onPress={() => setCapturedMood(itm)}>
           <Divider />
           <List.Item
             title={itm.title}

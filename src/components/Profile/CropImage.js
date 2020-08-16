@@ -7,26 +7,28 @@ import { height, width } from '../../constants'
 
 
 function CropImage(props) {
-  const [croppedUri, setCroppedUri] = React.useState('file:///var/mobile/Containers/Data/Application/AC3D50E1-167F-4ADA-B3DC-1E8728929EFE/Library/Caches/Camera/D122703E-A25A-4425-A5F6-DCCA28181057.jpg')
+  const [croppedUri, setCroppedUri] = React.useState(null)
 
 
-  // React.useLayoutEffect(() => {
-  //   if (!croppedUri) {
-  //     ImagePicker.openCropper({
-  //       path: props.captured,
-  //       width: 720,
-  //       height: 1080
-  //     }).then(image => {
-  //       setCroppedUri(image.path)
-  //     });
-  //   }
-  //   return () => {
-  //     ImagePicker.clean().then(() => {
-  //       console.log('removed all tmp images from tmp directory');
-  //     }).catch(e => {
-  //     });
-  //   }
-  // }, [])
+  React.useLayoutEffect(() => {
+    if (!croppedUri) {
+      ImagePicker.openCropper({
+        path: props.captured,
+        width: 400,
+        height: 400
+      }).then(image => {
+        setCroppedUri(image.path)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    return () => {
+      ImagePicker.clean().then(() => {
+        console.log('removed all tmp images from tmp directory');
+      }).catch(e => {
+      });
+    }
+  }, [])
 
 
   return (

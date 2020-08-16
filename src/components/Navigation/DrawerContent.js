@@ -9,7 +9,7 @@ import { useAuth, useStore, trimWWWString } from '../../utils'
 const DrawerContent = (props) => {
   const { navigation, user } = props
   const [authState, authDispatch] = useAuth()
-  const { name, avatar } = authState
+  const { name, avatar } = user
 
 
   return (
@@ -17,7 +17,7 @@ const DrawerContent = (props) => {
       <View style={styles.root} >
         {avatar ?
           <Image source={{ uri: avatar }}
-            style={{ height: 200, width: 200, borderRadius: 200 / 2 }} />
+            style={{ height: 100, width: 100, borderRadius: 100 / 2 }} />
           :
           <Avatar.Text size={100} label={'iP'}
             style={{ backgroundColor: '#444' }} />}
@@ -58,7 +58,7 @@ const DrawerContent = (props) => {
             navigation.navigate('Settings');
           }}
         />
-        
+
         <Divider style={{ marginVertical: 20 }} />
 
         <DrawerItem
