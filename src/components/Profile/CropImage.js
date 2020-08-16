@@ -7,31 +7,32 @@ import { height, width } from '../../constants'
 
 
 function CropImage(props) {
-  const [croppedUri, setCroppedUri] = React.useState(null)
+  const [croppedUri, setCroppedUri] = React.useState('file:///var/mobile/Containers/Data/Application/AC3D50E1-167F-4ADA-B3DC-1E8728929EFE/Library/Caches/Camera/D122703E-A25A-4425-A5F6-DCCA28181057.jpg')
 
 
-  React.useLayoutEffect(() => {
-    if (!croppedUri) {
-      ImagePicker.openCropper({
-        path: props.captured,
-        width: 720,
-        height: 1080
-      }).then(image => {
-        setCroppedUri(image.path)
-      });
-    }
-    return () => {
-      ImagePicker.clean().then(() => {
-        console.log('removed all tmp images from tmp directory');
-      }).catch(e => {
-      });
-    }
-  }, [])
+  // React.useLayoutEffect(() => {
+  //   if (!croppedUri) {
+  //     ImagePicker.openCropper({
+  //       path: props.captured,
+  //       width: 720,
+  //       height: 1080
+  //     }).then(image => {
+  //       setCroppedUri(image.path)
+  //     });
+  //   }
+  //   return () => {
+  //     ImagePicker.clean().then(() => {
+  //       console.log('removed all tmp images from tmp directory');
+  //     }).catch(e => {
+  //     });
+  //   }
+  // }, [])
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#121212',justifyContent:'center' }}>
-      <Image source={{ uri: croppedUri }} style={{ height: 560, borderRadius: 5 }} />
+    <View style={{ flex: 1 }}>
+      <Image source={{ uri: croppedUri }}
+        style={{ height: 550, borderRadius: 0 }} />
     </View>
   )
 }

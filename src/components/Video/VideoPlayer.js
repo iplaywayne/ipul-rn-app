@@ -28,7 +28,7 @@ function VideoPlayer({ source, resetSource }) {
         volume={1}
       />
       <TouchableOpacity onPress={() => playerRef.current.seek(0)}
-        style={{ position: 'absolute', top: 200, left: 50, zIndex: 10 }}>
+        style={{ position: 'absolute', top: 50, left: 50, zIndex: 10 }}>
         <Icons name='repeat' size={35} style={{ color: 'white' }} />
       </TouchableOpacity>
     </>
@@ -38,7 +38,6 @@ function VideoPlayer({ source, resetSource }) {
 const styles = StyleSheet.create({
   backgroundVideo: {
     height: 550,
-    top: -25,
   }
 });
 

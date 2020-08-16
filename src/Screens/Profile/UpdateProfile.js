@@ -12,6 +12,7 @@ import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
 import Btn from '../../components/Prebuilt/Button'
 import CropImage from '../../components/Profile/CropImage'
+import { ProfileService } from '../../utils/profile'
 
 
 const options = {
@@ -29,6 +30,7 @@ function UpdateProfile({ navigation }) {
   const { user } = authState
   const { name, avatar, bio, occupation } = user && user
   const [capturedImage, setCapturedImage] = React.useState(null)
+  const profileService = ProfileService()
 
   const [formState, setFormState] = React.useState({
     name: name,
@@ -36,14 +38,21 @@ function UpdateProfile({ navigation }) {
     occupation: occupation
   })
 
+  const handleUpdateProfile = async () => {
+    await wait(() => setLoading(true))
+    profileService.putAvatarImage(user.uid, image.path,
+      progress => console.log(progress))
+    await wait(() => setLoading(false), 750)
+  }
+
   const handleSelectImage = () => {
     ImagePicker.openCamera({
       width: 400,
       height: 400,
       cropping: true,
     }).then(image => {
-      setCapturedImage(image.path)
       console.log(formState)
+      setCapturedImage(image.path)
     });
   }
 
@@ -65,13 +74,21 @@ function UpdateProfile({ navigation }) {
       ),
       headerRight: () => (
         <Button disabled={!capturedImage}
-          style={{ marginRight: 20 }} onPress={handleGoBack}>
+          style={{ marginRight: 20 }} onPress={handleUpdateProfile}>
           {loading ? <ActivityIndicator style={{ marginRight: 30 }} /> : 'Done'}
         </Button>
       )
     })
   }, [loading, capturedImage])
 
+  React.useEffect(() => {
+    return () => {
+      ImagePicker.clean().then(() => {
+        console.log('removed all tmp images from tmp directory');
+      }).catch(e => {
+      });
+    }
+  }, [])
 
 
   return (
@@ -84,7 +101,7 @@ function UpdateProfile({ navigation }) {
             <Image source={capturedImage ? { uri: capturedImage } : { uri: avatar }}
               style={{ height: 200, width: 200, borderRadius: 200 / 2 }} />
             :
-            <Avatar.Text size={100} label={'iP'}
+            <Avatar.Text size={200} label={'iP'}
               style={{ backgroundColor: '#444' }} />}
         </TouchableOpacity>
 
