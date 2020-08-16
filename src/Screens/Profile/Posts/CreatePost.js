@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image'
 import { Input as TextInput } from 'galio-framework'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Camera from '../../../components/Camera/Camera'
 import VideoPlayer from '../../../components/Video/VideoPlayer'
@@ -14,8 +15,8 @@ import CropImage from '../../../components/Profile/CropImage'
 import { firebase, useAuth } from '../../../utils'
 
 
-const Tab = createMaterialTopTabNavigator();
-const TypeTab = createMaterialBottomTabNavigator();
+// const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 
 export function CreatePost({ navigation }) {
@@ -67,23 +68,36 @@ export function CreatePost({ navigation }) {
 
   if (!captured) {
     return (
-      <Tab.Navigator>
-        <Tab.Screen name="Camera" children={() => (<Camera
+      <Tab.Navigator
+        initialRouteName="Home"
+        activeColor="#f0edf6"
+        inactiveColor="#444"
+        barStyle={{ height: 60, backgroundColor: '#121212' }}>
+        <Tab.Screen
+          name="Camera"
+          children={() => (<Camera
           dataUri={uri => setCaptured(uri)}
           dataType={type => setCaptureType(type)}
-        />)} />
-        <Tab.Screen name="Gallery" children={() => <View><Text>Gallery</Text></View>} />
+          />)}
+          options={{
+            tabBarLabel: 'Take Photo',
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="camera" color={color} size={26} />
+            ),
+          }}/>
+        <Tab.Screen
+          name="Gallery"
+          children={() => <View><Text>Gallery</Text></View>}
+          options={{
+            tabBarLabel: 'Take Video',
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="video" color={color} size={26} />
+            ),
+          }}/>
       </Tab.Navigator>
     )
   }
 
-  const CapturedImage = () => (
-    <FastImage
-      source={{ uri: captured, priority: FastImage.priority.normal }}
-      style={{ flex: 1, borderRadius: 0, width: width, height: height + 200 }}
-      resizeMode={FastImage.resizeMode.cover}
-    />
-  )
 
   const CapturedVideo = () => (
     <View style={{ flex: 1 }}>
