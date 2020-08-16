@@ -6,7 +6,7 @@ import { firebase, storage } from '../firebase'
 
 function PostService() {
 
-  const test = (details, progress) => {
+  const putPost = (details, progress) => {
     if (!details) throw new Error('Missing details to complete post task')
     const { type, image, video } = details
 
@@ -23,21 +23,21 @@ function PostService() {
     const storageRef = storage.ref()
     const uploadTask = storageRef.child(`demo/demo${ext}`).putFile(file, metadata)
 
-    var next = function (snapshot) {
-      var percent = snapshot.bytesTransferred / snapshot.totalBytes
-      progress(percent)
-    };
-    var error = function (error) { console.log(error) };
-    var complete = function () { console.log('Done!') };
+    // var next = function (snapshot) {
+    //   var percent = snapshot.bytesTransferred / snapshot.totalBytes
+    //   progress(percent)
+    // };
+    // var error = function (error) { console.log(error) };
+    // var complete = function () { console.log('Done!') };
 
-    uploadTask.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      next,
-      error,
-      complete);
+    // uploadTask.on(
+    //   firebase.storage.TaskEvent.STATE_CHANGED,
+    //   next,
+    //   error,
+    //   complete);
   }
 
-  return { test }
+  return { putPost }
 }
 
 export default PostService

@@ -87,10 +87,14 @@ export default class CameraScreen extends React.Component {
 
   takePicture = async function () {
     if (this.camera) {
-      const data = await this.camera.takePictureAsync();
-      console.log(data)
-      this.props.dataUri(data.uri)
-      this.props.dataType('image')
+      try {
+        const data = await this.camera.takePictureAsync();
+        console.log(data)
+        this.props.dataUri(data.uri)
+        this.props.dataType('image')
+      } catch (e) {
+        console.error('Picture was not captured')
+      }
     }
   };
 
@@ -107,7 +111,7 @@ export default class CameraScreen extends React.Component {
           this.props.dataType('video')
         }
       } catch (e) {
-        console.error(e);
+        console.error('Video was not captured');
       }
     } else {
       this.stopVideo()

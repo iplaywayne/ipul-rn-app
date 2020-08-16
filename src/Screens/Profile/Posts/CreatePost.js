@@ -6,6 +6,7 @@ import { Input as TextInput } from 'galio-framework'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Modal, Portal, Provider } from 'react-native-paper';
 
 import Camera from '../../../components/Camera/Camera'
 import VideoPlayer from '../../../components/Video/VideoPlayer'
@@ -28,22 +29,19 @@ export function CreatePost({ navigation }) {
   const playerRef = React.useRef(null)
   const [authState] = useAuth()
   const { user } = authState
+  const [visible, setVisible] = React.useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
 
   const handlePostTask = () => {
-    // if (!postCaption) {
-    //   console.log({ message: 'Missing handlePostTask param', postCaption })
-    //   return
-    // }
     const details = {
-      uid: user.uid,
-      // caption: postCaption,
       type: captureType,
       [captureType]: captured,
       createdAt: firebase.database.ServerValue.TIMESTAMP
     }
-    // navigation.navigate('Profile', {
-    //   details
-    // })
+    navigation.navigate('Profile', {
+      details
+    })
     console.log(details)
   }
 
@@ -153,34 +151,8 @@ export function CreatePost({ navigation }) {
             </TouchableOpacity>
           </View>
 
-
-          {/* <Tab.Navigator
-            initialRouteName="Home"
-            activeColor="#f0edf6"
-            inactiveColor="#444"
-            onTabPress={p => console.log(p)}
-            barStyle={{ height: 60, backgroundColor: '#121212' }}
-          >
-            <Tab.Screen
-              name="Camera"
-              children={() => <View></View>}
-              options={{
-                tabBarLabel: 'Take Photo',
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="camera" color={color} size={26} />
-                ),
-              }} />
-            <Tab.Screen
-              name="Gallery"
-            children={() => <View></View>}
-              options={{
-                tabBarLabel: 'Take Video',
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="video" color={color} size={26} />
-                ),
-              }} />
-          </Tab.Navigator> */}
         </View>}
+
 
     </View>
   )
