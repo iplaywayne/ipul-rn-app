@@ -16,7 +16,7 @@ import Button from 'react-native-button'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
-import MediaService from '../../utils/media/MediaService'
+import TrackService from '../../utils/media/TrackService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 import Camera from '../../components/Camera/Camera'
@@ -24,12 +24,10 @@ import Camera from '../../components/Camera/Camera'
 
 function Home(props) {
   const { navigation } = props
-  const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
-  const { tracks } = storeState
-  const { user } = authState
+  const { user, isAdmin, tracks } = storeState
   const name = user && user.name
-  const mediaService = MediaService()
+  const trackService = TrackService()
   const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('r&'))
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
@@ -54,7 +52,7 @@ function Home(props) {
   React.useEffect(() => {
     setTimeout(() => {
       if (tracks.length) {
-        mediaService.setup()
+        trackService.setup()
         setLoading(false)
       }
     }, 1500)
@@ -73,7 +71,9 @@ function Home(props) {
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
       <View>
-        <Text style={styles.title}>Welcome, {name}</Text>
+        <Text style={styles.title}>
+          {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
+        </Text>
       </View>
 
       <Divider style={{ marginBottom: 20 }} />
@@ -105,7 +105,7 @@ function Home(props) {
         ))}
       </View>
 
-      {/* <Text>{JSON.stringify(topRemixes, null, 2)}</Text> */}
+      {/* <Text>{JSON.stringify(storeState.user, null, 2)}</Text> */}
     </ScrollView>
   )
 }

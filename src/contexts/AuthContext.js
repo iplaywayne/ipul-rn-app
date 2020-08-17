@@ -3,6 +3,9 @@ import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 
 import firebase, { auth, database } from '../utils/firebase/Firebase'
+import { useStore } from './StoreContext'
+import { IS_ADMIN, IS_VERIFIED } from '../constants'
+
 
 export const AuthContext = React.createContext({})
 export const useAuth = () => React.useContext(AuthContext)
@@ -10,6 +13,7 @@ export const useAuth = () => React.useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
   const [authorizedUser, setAuthorizedUser] = React.useState(null)
+  const [{ name }, storeDispatch] = useStore()
 
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -62,9 +66,13 @@ export default function AuthProvider({ children }) {
       if (userToken) {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });
         const usrRef = database.ref(`/users/${userToken}`)
-        usrRef.on('value', snap => {
+        usrRef.once('value', snap => {
+          let isAdmin = IS_ADMIN.includes(snap.val().email.toLowerCase())
+          let isVerified = IS_VERIFIED.includes(snap.val().email.toLowerCase())
           dispatch({ type: 'SET_USER', val: snap.val() })
           authDispatch.setToken(userToken)
+          storeDispatch.setUser(snap.val())
+          storeDispatch.setAdmin(isAdmin)
         })
       } else {
         dispatch({ type: 'RESTORE_TOKEN', token: userToken });

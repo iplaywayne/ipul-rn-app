@@ -74,7 +74,7 @@ function App() {
     })
   }
 
-  if (user && !('name' in user)) return <Center>
+  if (userToken && user && !('name' in user)) return <Center>
     <Text style={{ fontWeight: '700', fontSize: 25, marginBottom: 10 }}>Create Username</Text>
     <View style={{ width: 300, alignItems: 'center' }}>
       <Input

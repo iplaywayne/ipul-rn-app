@@ -6,19 +6,19 @@ import App from './src/App';
 import { name as appName } from './app.json';
 
 import AuthProvider from './src/contexts/AuthContext'
-import { StoreProvider } from './src/utils/store'
+import StoreProvider from './src/contexts/StoreContext'
 
 
 export default function Main() {
   LogBox.ignoreAllLogs()
 
   return (
-    <AuthProvider>
-      <StatusBar barStyle='dark-content' />
-      <StoreProvider>
+    <StoreProvider>
+      <AuthProvider>
+        <StatusBar barStyle='dark-content' />
         <App />
-      </StoreProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </StoreProvider>
   );
 }
 

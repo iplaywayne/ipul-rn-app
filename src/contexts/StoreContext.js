@@ -1,10 +1,16 @@
 import React from 'react';
 import TrackPlayer from 'react-native-track-player'
 
+import { IS_ADMIN, IS_VERIFIED } from '../constants'
+
+
 const StoreContext = React.createContext({})
 export const useStore = () => React.useContext(StoreContext)
 
 
+const SET_USER = 'SET_USER'
+const SET_ADMIN = 'SET_ADMIN'
+const SET_VERIFIED = 'SET_VERIFIED'
 const SET_TRACKS = 'SET_TRACKS'
 const SET_QUEUED = 'SET_QUEUED'
 const SET_CURRENT = 'SET_CURRENT'
@@ -14,7 +20,9 @@ const SET_PLAYING = 'SET_PLAYING'
 const SET_LOADING = 'SET_LOADING'
 
 const initialState = {
-  name: '',
+  user: {},
+  isAdmin: false,
+  isVerified: false,
   tracks: [],
   queued: [],
   currentTrack: {},
@@ -24,6 +32,12 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    case SET_USER:
+      return { ...state, user: action.val };
+    case SET_ADMIN:
+      return { ...state, isAdmin: action.val };
+    case SET_VERIFIED:
+      return { ...state, isVerified: action.val };
     case SET_TRACKS:
       return { ...state, tracks: action.val };
     case SET_QUEUED:
@@ -49,6 +63,9 @@ function StoreProvider({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState)
 
   const storeDispatch = {
+    setUser: user => dispatch({ type: SET_USER, val: user }),
+    setAdmin: user => dispatch({ type: SET_ADMIN, val: user }),
+    setVerified: user => dispatch({ type: SET_VERIFIED, val: user }),
     setTracks: tracks => dispatch({ type: SET_TRACKS, val: tracks }),
     setQueued: track => dispatch({ type: SET_QUEUED, val: track }),
     setCurrentTrack: track => dispatch({ type: SET_CURRENT, val: track }),
@@ -58,11 +75,11 @@ function StoreProvider({ children }) {
     removeFromQueue: async track => {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
       await TrackPlayer.removeUpcomingTracks()
-        if (state.queued.length > 0) {
-          const updatedQueue = state.queued.filter(t => t.idx !== track.idx)
-          await TrackPlayer.add(updatedQueue)
-          await TrackPlayer.play()
-        }
+      if (state.queued.length > 0) {
+        const updatedQueue = state.queued.filter(t => t.idx !== track.idx)
+        await TrackPlayer.add(updatedQueue)
+        await TrackPlayer.play()
+      }
       storeDispatch.setLoading(false)
     },
     setPlaying: val => {
@@ -73,7 +90,7 @@ function StoreProvider({ children }) {
 
   return (
     <StoreContext.Provider value={[state, storeDispatch]}>
-      
+
       {children}
 
     </StoreContext.Provider>

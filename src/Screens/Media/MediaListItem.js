@@ -7,7 +7,9 @@ import FastImage from 'react-native-fast-image'
 import { Text } from 'galio-framework'
 import Button from 'react-native-button'
 import { List, Divider, Searchbar, Colors } from 'react-native-paper';
-import { siteLogo, logo, width, height, truncate } from '../../constants'
+
+import { siteLogo, logo, width, height } from '../../constants'
+import { truncate } from '../../utils'
 
 
 export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) => {
@@ -41,7 +43,7 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
           {currentTrack !== item &&
             <Button style={{ fontSize: 15, padding: 10, color: Colors.red500 }}
               onPress={() => handleAddQueue(item)}>
-            {loading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
+              {loading ? <ActivityIndicator style={{ paddingLeft: 10 }} /> : 'Add'}
             </Button>}
         </View>
       </View>

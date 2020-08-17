@@ -12,8 +12,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Divider, Snackbar } from 'react-native-paper'
 
 import { useAuth, useStore } from '../../contexts'
-import { logo, siteLogo, truncate } from '../../constants'
-import { firebase, database, auth, trimWWWString } from '../../utils'
+import { logo, siteLogo } from '../../constants'
+import { firebase, database, auth, truncate, trimWWWString } from '../../utils'
 import { SendPlayerDetails } from '../../utils/media/functions'
 import MediaService from '../../utils/media/MediaService'
 

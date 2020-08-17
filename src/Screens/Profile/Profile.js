@@ -18,6 +18,7 @@ import BottomSheet from 'reanimated-bottom-sheet'
 import { ExploreCard, Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
+import TrackService from '../../utils/media/TrackService'
 import { logo, width, height } from '../../constants'
 import { styles } from './styles'
 import Camera from '../../components/Camera/Camera'
@@ -32,14 +33,14 @@ import PostCard from '../../components/Post/PostCard'
 const BUTTON_WIDTH = 100
 
 function Profile({ route, navigation }) {
-  const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
-  const { user } = authState
+  const { user } = storeState
   const { name, website, avatar, bio, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
-  const { queued, isPlaying, isLoading } = storeState
+  const { queued, isAdmin, isPlaying, isLoading } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
+  const trackService = TrackService()
   const [ready, setReady] = React.useState(false)
   const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
   const [loading, setLoading] = React.useState(false)
@@ -60,7 +61,6 @@ function Profile({ route, navigation }) {
       if (tracks.length) {
         setLoading(false)
         storeDispatch.setLoading(false)
-
       }
     }, 250)
   }, [tracks])
@@ -74,11 +74,8 @@ function Profile({ route, navigation }) {
     PostService.getUserPosts(user.uid,
       posts => setUserPosts(posts))
 
-    mediaService.setup()
-    mediaService.getTracks(result => setTracks(result))
-    mediaService.getFavorites(user.uid, result => {
-      // console.log('[FAVORITES] Loaded', result.length)
-    })
+    trackService.setup()
+    trackService.getTracks(result => setTracks(result))
 
     return () => { }
   }, [navigation])
