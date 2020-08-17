@@ -7,6 +7,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Modal, Portal, Provider } from 'react-native-paper';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Camera from '../../../components/Camera/Camera'
 import VideoPlayer from '../../../components/Video/VideoPlayer'
@@ -142,20 +143,32 @@ export function CreatePost({ navigation }) {
               <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
             </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setCaptureMode('video')}
-            style={{ alignItems: 'center' }}>
-            <MaterialCommunityIcons name="video"
-              color={captureMode == 'video' ? 'white' : 'gray'}
-              size={26} />
-            <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setCaptureMode('video')}
-            style={{ alignItems: 'center' }}>
-            <MaterialCommunityIcons name="list"
-              color={captureMode == 'video' ? 'white' : 'gray'}
-              size={26} />
-            <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setCaptureMode('video')}
+              style={{ alignItems: 'center' }}>
+              <MaterialCommunityIcons name="video"
+                color={captureMode == 'video' ? 'white' : 'gray'}
+                size={26} />
+              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              ImagePicker.openPicker({
+                width: 400,
+                height: 400,
+                mediaType: 'any'
+              }).then(image => {
+                console.log(image.path, image.mime)
+                setCaptured(image.path);
+                setCaptureMode(image.mime === 'video/mp4' ? 'video' : 'camera')
+                setCaptureType(image.mime === 'video/mp4' ? 'video' : 'image')
+              });
+            }}
+              style={{ alignItems: 'center' }}>
+              <MaterialCommunityIcons name="image-search-outline"
+                color={captureMode == 'video' ? 'white' : 'gray'}
+                size={26} />
+              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
+            </TouchableOpacity>
           </View>
 
         </View>}
