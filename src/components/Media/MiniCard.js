@@ -15,6 +15,7 @@ import { useAuth, useStore } from '../../contexts'
 import { logo, siteLogo, truncate } from '../../constants'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { SendPlayerDetails } from '../../utils/media/functions'
+import MediaService from '../../utils/media/MediaService'
 
 
 const elements = [
@@ -53,7 +54,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const [alertMessage, setAlertMessage] = React.useState({
     visible: false, message: 'Test'
   })
-  
+
   if (!item) item = {}
   let newItem = { ...item, id: item.acid }
 

@@ -77,7 +77,7 @@ export function MediaDetails({ route, navigation }) {
     <ScrollView style={{ flex: 1 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}
         style={{ position: 'absolute', top: 60, left: 25, zIndex: 10 }}>
-        <Text style={{ fontWeight: '1000' }}>
+        <Text style={{ fontWeight: '700' }}>
           <Icons style={{ fontSize: 25, color: 'white' }} name='arrow-down' />
         </Text>
       </TouchableOpacity>

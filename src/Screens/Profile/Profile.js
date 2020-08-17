@@ -59,6 +59,8 @@ function Profile({ route, navigation }) {
     setTimeout(() => {
       if (tracks.length) {
         setLoading(false)
+        storeDispatch.setLoading(false)
+
       }
     }, 250)
   }, [tracks])
@@ -77,10 +79,7 @@ function Profile({ route, navigation }) {
     mediaService.getFavorites(user.uid, result => {
       // console.log('[FAVORITES] Loaded', result.length)
     })
-    if (tracks.length > 0) {
-      storeDispatch.setLoading(false)
-    }
-    setReady(true)
+
     return () => { }
   }, [navigation])
 

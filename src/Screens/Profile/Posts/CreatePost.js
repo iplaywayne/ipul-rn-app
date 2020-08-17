@@ -142,13 +142,20 @@ export function CreatePost({ navigation }) {
               <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setCaptureMode('video')}
-              style={{ alignItems: 'center' }}>
-              <MaterialCommunityIcons name="video"
-                color={captureMode == 'video' ? 'white' : 'gray'}
-                size={26} />
-              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => setCaptureMode('video')}
+            style={{ alignItems: 'center' }}>
+            <MaterialCommunityIcons name="video"
+              color={captureMode == 'video' ? 'white' : 'gray'}
+              size={26} />
+            <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setCaptureMode('video')}
+            style={{ alignItems: 'center' }}>
+            <MaterialCommunityIcons name="list"
+              color={captureMode == 'video' ? 'white' : 'gray'}
+              size={26} />
+            <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
+          </TouchableOpacity>
           </View>
 
         </View>}

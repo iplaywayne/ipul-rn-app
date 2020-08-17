@@ -5,4 +5,4 @@ export { firebase, database, auth } from './firebase'
 export { default as MediaService } from './media/MediaService'
 export { trimWWWString, wait } from './functions'
 
-export const truncate = (val, size) => val.length > size ? val.slice(0, size) + '...' : val
+export const truncate = (val, size) => Object.keys(val).length > size ? val.slice(0, size) + '...' : val

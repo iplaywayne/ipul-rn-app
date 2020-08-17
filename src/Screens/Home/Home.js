@@ -30,7 +30,7 @@ function Home(props) {
   const { user } = authState
   const name = user && user.name
   const mediaService = MediaService()
-  const topRemixes = tracks.filter(trk => trk.genre.toString().toLowerCase().includes('r&'))
+  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('r&'))
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
 

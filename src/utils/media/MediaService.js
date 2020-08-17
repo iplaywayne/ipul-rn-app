@@ -51,7 +51,7 @@ function MediaService() {
   React.useEffect(() => {
     if (!auth) return
     getTracks(result => storeDispatch.setTracks(result))
-    console.log('[MEDIASERVICE] [', auth.currentUser.displayName ? 'Ready' : 'Accounts needs setup', ']')
+    // console.log('[MEDIASERVICE] [', auth.currentUser.displayName ? 'Ready' : 'Accounts needs setup', ']')
   }, [])
 
   React.useEffect(() => {
@@ -124,8 +124,39 @@ function MediaService() {
     })
   }
 
+  const addMediaView = acid => {
+    if (!acid) {
+      console.log('Missing ACID')
+      return
+    }
+    const userRef = database.ref(`mediaTracks/${acid}`)
 
-  return { setup, addAllToQueue, getTracks, getFavorites }
+    userRef.transaction(data => {
+      if (!data) {
+        return { views: 0 }
+      } else {
+        return { ...data, views: firebase.database.ServerValue.increment(1) }
+      }
+    })
+  }
+
+  const addMediaPlay = acid => {
+    if (!acid) {
+      console.log('Missing ACID')
+      return
+    }
+    const userRef = database.ref(`mediaTracks/${acid}`)
+
+    userRef.transaction(data => {
+      if (!data) {
+        return { plays: 0 }
+      } else {
+        return { ...data, plays: firebase.database.ServerValue.increment(1) }
+      }
+    })
+  }
+
+  return { setup, addAllToQueue, getTracks, getFavorites, addMediaView }
 }
 
 export default MediaService

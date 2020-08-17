@@ -9,6 +9,8 @@ import { FastImage as Image } from 'react-native-fast-image'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
+import MediaService from '../../utils/media/MediaService'
+
 
 const elements = [
   <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
@@ -42,16 +44,21 @@ function ExploreCard(props) {
   const { user } = authState
   const [storeState] = useStore()
   const { tracks } = storeState
-
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+  const mediaService = MediaService()
+  
+  const handleMediaView = () => {
+    mediaService.addMediaView(item.acid)
+    navigation.navigate('MediaDetails', {
+      item: item,
+      user: user,
+      tracks: tracks
+    })
+  }
 
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={() => navigation.navigate('MediaDetails', {
-        item: item,
-        user: user,
-        tracks: tracks
-      })}>
+      <TouchableOpacity onPress={handleMediaView}>
 
         <View>
           <Card
@@ -64,9 +71,13 @@ function ExploreCard(props) {
             avatar={item && item.art_link || siteLogo}
             imageStyle={{ borderRadius: 10, height: 300 }}
             image={item && trimWWWString(item.art_link) || siteLogo}
+            children={<View style={{ marginLeft: 70, marginBottom: 15 }}>
+              <Text>Views: {item.views}</Text>
+            </View>}
           />
           <Divider />
         </View>
+
       </TouchableOpacity>
     </ScrollView>
   )
