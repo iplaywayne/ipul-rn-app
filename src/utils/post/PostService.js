@@ -38,9 +38,9 @@ const PostService = (function () {
     var error = function (error) { console.log(error) };
     var complete = function (data) {
       childRef.getDownloadURL().then(url => {
-        next(url)
         image && keyRef.update({ image: url })
         video && keyRef.update({ video: url })
+        next(url)
       })
     };
 

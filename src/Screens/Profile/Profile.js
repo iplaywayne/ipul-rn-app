@@ -35,7 +35,7 @@ const BUTTON_WIDTH = 100
 function Profile({ route, navigation }) {
   const [storeState, storeDispatch] = useStore()
   const { user } = storeState
-  const { name, website, avatar, bio, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
+  const { name, website, avatar, bio, occupation, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
   const { queued, isAdmin, isPlaying, isLoading } = storeState
   const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
@@ -103,8 +103,12 @@ function Profile({ route, navigation }) {
   const ProfileHeader = () => (
     <View style={{ flex: 1 }}>
       <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
+
         {avatar ?
-          <TouchableOpacity onPress={() => navigation.push('UpdateProfile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile', {
+            test: () => console.log('Passing Function From Profile Works!')
+          })}>
+
             <FastImage
               style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
               source={{
@@ -120,6 +124,7 @@ function Profile({ route, navigation }) {
 
         <View style={{ marginLeft: 15, justifyContent: 'center', marginTop: 5 }}>
           <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
+          <Text h7 style={{ color: 'gray' }}>{occupation}</Text>
           <View>
             {mood && 'id' in mood ?
               <View style={{ flexDirection: 'row' }}>
@@ -248,6 +253,8 @@ function Profile({ route, navigation }) {
 
         <View style={{ marginBottom: 40 }}></View>
       </ScrollView >
+
+      {/* <Text>{JSON.stringify(user.occupation, null, 2)}</Text> */}
     </>
   )
 }
