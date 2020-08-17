@@ -16,7 +16,7 @@ function Explore(props) {
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
   const mediaService = MediaService()
-  const topRemixes = tracks.filter(trk => JSON.stringify(trk).toString().toLowerCase() === 'remix')
+  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toString().toLowerCase().includes('remi'))
   const [loading, setLoading] = React.useState(true)
 
 

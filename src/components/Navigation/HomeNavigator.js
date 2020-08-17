@@ -11,6 +11,7 @@ import { Settings as SettingsScreen } from '../../screens/Settings'
 import DrawerContent from './DrawerContent'
 import { Home as HomeScreen } from '../../screens/Home'
 import { MediaDetails } from '../../screens/Media/MediaDetails'
+import { Media as MediaScreen } from '../../screens/Media'
 
 
 const MediaStack = createStackNavigator();

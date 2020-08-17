@@ -111,7 +111,7 @@ const SignIn = (props) => {
             >
               {signInLoading ? <ActivityIndicator /> : 'Sign In'}
             </Button>
-            <Button
+            {/* <Button
               style={{ fontSize: 15, color: 'white', width: '100%' }}
               styleDisabled={{ color: 'white' }}
               // disabled={isLoading}
@@ -120,7 +120,7 @@ const SignIn = (props) => {
               onPress={() => navigation.push('Sign Up')}
             >
               {signUpLoading ? <ActivityIndicator /> : 'Sign Up'}
-            </Button>
+            </Button> */}
           </View>
         </View>
         {/* <Text>

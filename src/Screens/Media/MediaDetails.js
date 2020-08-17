@@ -69,7 +69,7 @@ export function MediaDetails({ route, navigation }) {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: null
+      headerShown: false
     })
   }, [])
 

@@ -110,7 +110,7 @@ function MediaService() {
     if (!uid) return cb('Missing UID Param')
 
     const trkRef = firebase.database().ref(`${favsPath}${uid}`)
-    trkRef.on('value', snap => {
+    trkRef.once('value', snap => {
       let list = []
       snap.forEach(child => {
         list.push({
@@ -130,14 +130,14 @@ function MediaService() {
       return
     }
     const userRef = database.ref(`mediaTracks/${acid}`)
-
-    userRef.transaction(data => {
-      if (!data) {
-        return { views: 0 }
-      } else {
-        return { ...data, views: firebase.database.ServerValue.increment(1) }
-      }
-    })
+    userRef.update({ views: firebase.database.ServerValue.increment(1) })
+    // userRef.transaction(data => {
+    //   if (!data) {
+    //     return { views: 0 }
+    //   } else {
+    //     return { ...data, views: firebase.database.ServerValue.increment(1) }
+    //   }
+    // })
   }
 
   const addMediaPlay = acid => {

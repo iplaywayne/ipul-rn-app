@@ -10,6 +10,7 @@ import { FastImage as Image } from 'react-native-fast-image'
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
 import MediaService from '../../utils/media/MediaService'
+import { firebase, database } from '../../utils'
 
 
 const elements = [
@@ -46,14 +47,19 @@ function ExploreCard(props) {
   const { tracks } = storeState
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
   const mediaService = MediaService()
-  
+
   const handleMediaView = () => {
-    mediaService.addMediaView(item.acid)
+
     navigation.navigate('MediaDetails', {
       item: item,
       user: user,
       tracks: tracks
     })
+
+    // setTimeout(() => {
+    //   const userRef = database.ref(`mediaTracks/${item.acid}`)
+    //   userRef.update({ views: firebase.database.ServerValue.increment(1) })
+    // }, 1000)
   }
 
   return (
@@ -70,9 +76,9 @@ function ExploreCard(props) {
             location={item && item.genre || 'n/a'}
             avatar={item && item.art_link || siteLogo}
             imageStyle={{ borderRadius: 10, height: 300 }}
-            image={item && trimWWWString(item.art_link) || siteLogo}
+            image={item && item.art_link || siteLogo}
             children={<View style={{ marginLeft: 70, marginBottom: 15 }}>
-              <Text>Views: {item.views}</Text>
+              {item.views && <Text>Views: {item.views}</Text>}
             </View>}
           />
           <Divider />
