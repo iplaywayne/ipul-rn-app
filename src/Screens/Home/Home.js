@@ -29,7 +29,7 @@ function Home(props) {
   const { user, isAdmin, tracks } = storeState
   const name = user && user.name
   const trackService = TrackService()
-  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('s')).slice(0,11)
+  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('s')).slice(0, 11)
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
 
@@ -60,23 +60,22 @@ function Home(props) {
     console.log(navigation)
   }, [tracks])
 
-  if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-    <Text style={{ fontSize: 15 }}>We need to create your username to continue</Text>
-    <Text>{JSON.stringify(user, null, 2)}</Text>
-  </View>
-
 
   if (loading) return <Center><Spinner type='Wave' /></Center>
+
+  const HomeHeader = () => (
+    <View>
+      <Text style={styles.title}>
+        {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
+      </Text>
+    </View>
+  )
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
       <ErrorBoundary caller='Home Header'>
-        <View>
-          <Text style={styles.title}>
-            {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
-          </Text>
-        </View>
+        <HomeHeader />
       </ErrorBoundary>
 
       <Divider style={{ marginBottom: 20 }} />

@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, SafeAreaView, ScrollView, StyleSheet, Image,
+  View, SafeAreaView, ScrollView, StyleSheet, Image, Alert,
   Dimensions, TouchableOpacity, StatusBar, Animated, ActivityIndicator
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
@@ -28,6 +28,7 @@ import Btn from '../../components/Prebuilt/Button'
 import PendingPost from './Posts/PendingPost'
 import AppHeader from '../../components/Header/AppHeader'
 import PostCard from '../../components/Post/PostCard'
+import { ErrorBoundary } from '../../components'
 
 
 const BUTTON_WIDTH = 100
@@ -83,7 +84,7 @@ function Profile({ route, navigation }) {
 
   const playNowTapped = async () => {
     if (!queued.length) {
-      console.log('Select a song to start playlist')
+      Alert.alert('Select a song to start your playlist')
       return
     }
     setTimeout(() => {
@@ -215,8 +216,9 @@ function Profile({ route, navigation }) {
 
   return (
     <>
-      <AppHeader navigation={navigation} user={user} />
-
+      <ErrorBoundary caller='Profile App Header'>
+        <AppHeader navigation={navigation} user={user} />
+      </ErrorBoundary>
 
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
@@ -244,14 +246,16 @@ function Profile({ route, navigation }) {
 
         <Divider />
 
-        <View style={{
-          paddingTop: 20,
-          paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
-        }}>
-          {userPosts.map((itm, idx) => (
-            <PostCard navigation={navigation} key={idx} item={itm} />
-          ))}
-        </View>
+        <ErrorBoundary caller='Profile Post Cards'>
+          <View style={{
+            paddingTop: 20,
+            paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
+          }}>
+            {userPosts.map((itm, idx) => (
+              <PostCard navigation={navigation} key={idx} item={itm} />
+            ))}
+          </View>
+        </ErrorBoundary>
 
         <View style={{ marginBottom: 40 }}></View>
       </ScrollView >

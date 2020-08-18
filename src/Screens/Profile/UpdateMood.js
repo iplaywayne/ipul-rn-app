@@ -11,16 +11,15 @@ import { firebase, database } from '../../utils/firebase'
 
 
 function UpdateProfile({ navigation }) {
-  const [authState, authDispatch] = useAuth()
-  const [storeState] = useStore()
+  const [storeState, storeDispatch] = useStore()
   const [loading, setLoading] = React.useState(false)
-  const { user } = authState
+  const { user } = storeState
   const { name, bio, mood } = user && user
   const [capturedMood, setCapturedMood] = React.useState(null)
   const previousMood = mood
 
   const handleGoBack = async () => {
-    authDispatch.setUser({ ...user, mood: previousMood })
+    storeDispatch.setUser({ ...user, mood: previousMood })
     navigation.goBack()
   }
 
@@ -35,7 +34,7 @@ function UpdateProfile({ navigation }) {
   React.useEffect(() => {
     if (capturedMood && 'id' in capturedMood) {
       console.log('Mood Changed', capturedMood.id)
-      authDispatch.setUser({ ...user, mood: capturedMood })
+      storeDispatch.setUser({ ...user, mood: capturedMood })
     }
     return () => { }
   }, [capturedMood])

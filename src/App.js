@@ -50,6 +50,7 @@ function App() {
       Alert.alert('Please complete the form to continue')
       return
     }
+    
     const usrRef = firebase.database().ref(`users/`)
     usrRef.once('value', snap => {
       let list = []
@@ -74,33 +75,33 @@ function App() {
     })
   }
 
-  if (userToken && user && !('name' in user)) return <Center>
-    <Text style={{ fontWeight: '700', fontSize: 25, marginBottom: 10 }}>Create Username</Text>
-    <View style={{ width: 300, alignItems: 'center' }}>
-      <Input
-        placeholder="Enter your unique Username"
-        right
-        icon="check"
-        family="antdesign"
-        type='twitter'
-        iconSize={14}
-        iconColor="green"
-        placeholderTextColor={'#121212'}
-        onChange={e => setNewUserName(e.nativeEvent.text.replace(/[^\x00-\x7F]+/ig, ''))}
-      />
-      <Button
-        style={{ fontSize: 15, color: 'white', width: '100%' }}
-        containerStyle={{
-          padding: 10, marginTop: 25, height: 40, width: 150,
-          overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212'
-        }}
-        disabledContainerStyle={{ backgroundColor: '#ddd' }}
-        onPress={handleCreateName}
-      >
-        {loading ? <ActivityIndicator /> : 'Continue'}
-      </Button>
-    </View>
-  </Center>
+  // if (user && !('name' in user)) return <Center>
+  //   <Text style={{ fontWeight: '700', fontSize: 25, marginBottom: 10 }}>Create Username</Text>
+  //   <View style={{ width: 300, alignItems: 'center' }}>
+  //     <Input
+  //       placeholder="Enter your unique Username"
+  //       right
+  //       icon="check"
+  //       family="antdesign"
+  //       type='twitter'
+  //       iconSize={14}
+  //       iconColor="green"
+  //       placeholderTextColor={'#121212'}
+  //       onChange={e => setNewUserName(e.nativeEvent.text.replace(/[^\x00-\x7F]+/ig, ''))}
+  //     />
+  //     <Button
+  //       style={{ fontSize: 15, color: 'white', width: '100%' }}
+  //       containerStyle={{
+  //         padding: 10, marginTop: 25, height: 40, width: 150,
+  //         overflow: 'hidden', borderRadius: 5, backgroundColor: '#121212'
+  //       }}
+  //       disabledContainerStyle={{ backgroundColor: '#ddd' }}
+  //       onPress={handleCreateName}
+  //     >
+  //       {loading ? <ActivityIndicator /> : 'Continue'}
+  //     </Button>
+  //   </View>
+  // </Center>
 
 
   return (
