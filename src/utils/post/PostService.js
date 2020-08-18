@@ -12,7 +12,6 @@ const PostService = (function () {
     const { type, image, video } = details
 
     if (!image && !video) {
-      console.log(details)
       console.log({ message: 'Missing Media Param', details })
       return
     }
@@ -25,7 +24,6 @@ const PostService = (function () {
     const userPush = userRef.push({ ...details, uid, image: '' })
     const keyRef = database.ref(`channels/posts/${uid}/${userPush.key}`)
     keyRef.update({ key: userPush.key })
-    console.log(uid, userPush.key)
 
     const storageRef = storage.ref(`channels/posts/${uid}/`)
     const childRef = storageRef.child(`${userPush.key}/${userPush.key}${ext}`)
@@ -59,7 +57,6 @@ const PostService = (function () {
       let list = []
       snap.forEach(child => {
         list.push(child.val())
-        console.log(child.val().caption)
       })
       next(list)
     })

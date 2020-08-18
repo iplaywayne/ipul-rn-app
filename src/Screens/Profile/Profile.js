@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
-import { Avatar } from 'react-native-paper'
+import { Avatar } from 'react-native-elements'
 import { Text } from 'galio-framework'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider, TextInput } from 'react-native-paper'
@@ -14,6 +14,8 @@ import Button from 'react-native-button'
 import FastImage from 'react-native-fast-image'
 import Spinner from 'react-native-spinkit'
 import BottomSheet from 'reanimated-bottom-sheet'
+import axios from 'axios'
+
 
 import { ExploreCard, Center, MiniCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -83,21 +85,29 @@ function Profile({ route, navigation }) {
     return () => { }
   }, [navigation])
 
+  const readApi = async () => {
+    const { data } = await axios.post(`http://localhost:3000/api/test`, {
+      user: user.name
+    })
+    console.log(data)
+  }
 
   const playNowTapped = async () => {
-    if (!queued.length) {
-      Alert.alert('Select a song to start your playlist')
-      return
-    }
-    setTimeout(() => {
-      if (!isPlaying) {
-        TrackPlayer.play()
-        storeDispatch.setPlaying(true)
-      } else {
-        TrackPlayer.pause()
-        storeDispatch.setPlaying(false)
-      }
-    }, 500)
+    readApi()
+
+    // if (!queued.length) {
+    //   Alert.alert('Select a song to start your playlist')
+    //   return
+    // }
+    // setTimeout(() => {
+    //   if (!isPlaying) {
+    //     TrackPlayer.play()
+    //     storeDispatch.setPlaying(true)
+    //   } else {
+    //     TrackPlayer.pause()
+    //     storeDispatch.setPlaying(false)
+    //   }
+    // }, 500)
   }
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>

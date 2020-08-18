@@ -4,7 +4,9 @@ import {
   Block, Button as Btn, Card, Icon, Input, NavBar, Text as GalText,
   DeckSwiper
 } from 'galio-framework';
-import { Divider } from 'react-native-paper'
+// import { Divider } from 'react-native-paper'
+// import Divider from 'react-native-divider'
+import Divider from '../Prebuilt/Divider'
 import { FastImage as Image } from 'react-native-fast-image'
 import Button from 'react-native-button'
 import { Shadow } from 'react-native-neomorph-shadows';
@@ -77,7 +79,7 @@ function SponsoredCard(props) {
               imageStyle={{ borderRadius: 10, height: 300 }}
               image={image}
             />
-            <Divider />
+            <Divider orientation="center" >Shop</Divider>
             <Button style={{ fontSize: 15, marginTop: 15, marginBottom: 15 }}
               onPress={() => onOpen()}>Shop Now</Button>
           </View>

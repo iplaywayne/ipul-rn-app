@@ -4,11 +4,12 @@ import {
   Dimensions, StatusBar, Animated, ActivityIndicator, ActionSheetIOS, Text
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { Avatar } from 'react-native-elements'
 
 import Btn from '../../components/Prebuilt/Button'
 
 
-const ProfileHeader = ({ user, navigation }) => {
+const ProfileHeader = ({ user, navigation, playNowTapped }) => {
   const { avatar, name, mood, bio, occupation, isLoading, isPlaying } = user
 
   return (
