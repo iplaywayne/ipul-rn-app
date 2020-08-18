@@ -43,9 +43,9 @@ class ErrorBoundary extends React.Component {
 
     if (this.state.hasError) {
       return (
-        <View style={{ flex: 1, marginHorizontal: 40, justifyContent: 'center', alignItems: 'center', }}>
+        <View style={{ marginHorizontal: 20, justifyContent: 'center', alignItems: 'center' }}>
           <Divider />
-          
+
           <Text style={{ margin: 20 }}>
             {this.state.admin && <Text style={{ fontSize: 11 }}>{this.state.error && this.state.error.toString()}</Text>}
           </Text>

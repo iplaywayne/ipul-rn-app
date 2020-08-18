@@ -207,7 +207,7 @@ function Profile({ route, navigation }) {
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 25, flexDirection: 'row' }}>
-        {tracks.slice(0, 5).map((itm, idx) => (
+        {tracks.slice(0, 5).map((itm, iddx) => (
           <MiniCard key={idx} item={itm} idx={idx} />
         ))}
       </ScrollView>
@@ -215,34 +215,44 @@ function Profile({ route, navigation }) {
   )
 
   return (
-    <>
+    <ErrorBoundary caller='Profile'>
       <ErrorBoundary caller='Profile App Header'>
         <AppHeader navigation={navigation} user={user} />
       </ErrorBoundary>
 
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
-        {/* Post Details from CreatePost will Store with PendingPost */}
-        <PendingPost
-          user={user}
-          postDetails={postDetailsPending}
-          onChange={val => setPostDetailsPending(val)}
-          onComplete={() => setPostDetailsPending(null)}
-        />
+        <ErrorBoundary caller='Profile Pending Post'>
+          {/* Post Details from CreatePost will Store with PendingPost */}
+          <PendingPost
+            user={user}
+            postDetails={postDetailsPending}
+            onChange={val => setPostDetailsPending(val)}
+            onComplete={() => setPostDetailsPending(null)}
+          />
+        </ErrorBoundary>
 
-        <ProfileHeader />
-
-        <Divider />
-
-        <ProfileRecent />
-
-        <Divider />
-
-        <ProfileQueued />
+        <ErrorBoundary caller='Profile Profile Header'>
+          <ProfileHeader />
+        </ErrorBoundary>
 
         <Divider />
 
-        <ProfileFavorites />
+        <ErrorBoundary caller='Profile Profile Recent'>
+          <ProfileRecent />
+        </ErrorBoundary>
+
+        <Divider />
+
+        <ErrorBoundary caller='Profile Profile Queued'>
+          <ProfileQueued />
+        </ErrorBoundary>
+
+        <Divider />
+
+        <ErrorBoundary caller='Profile Profile Favorites'>
+          <ProfileFavorites />
+        </ErrorBoundary>
 
         <Divider />
 
@@ -261,7 +271,7 @@ function Profile({ route, navigation }) {
       </ScrollView >
 
       {/* <Text>{JSON.stringify(user.occupation, null, 2)}</Text> */}
-    </>
+    </ErrorBoundary>
   )
 }
 
