@@ -48,8 +48,8 @@ function ExploreCard(props) {
   const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
   const mediaService = MediaService()
 
-  const handleMediaView = () => {
 
+  const handleMediaView = () => {
     navigation.navigate('MediaDetails', {
       item: item,
       user: user,
@@ -62,6 +62,7 @@ function ExploreCard(props) {
     }, 250)
   }
 
+  
   return (
     <ScrollView style={styles.root}>
       <TouchableOpacity onPress={handleMediaView}>

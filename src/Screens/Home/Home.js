@@ -20,6 +20,7 @@ import TrackService from '../../utils/media/TrackService'
 import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 import Camera from '../../components/Camera/Camera'
+import { ErrorBoundary } from '../../components'
 
 
 function Home(props) {
@@ -69,42 +70,50 @@ function Home(props) {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
-      <View>
-        <Text style={styles.title}>
-          {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
-        </Text>
-      </View>
+      <ErrorBoundary caller='Home Header'>
+        <View>
+          <Text style={styles.title}>
+            {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
+          </Text>
+        </View>
+      </ErrorBoundary>
 
       <Divider style={{ marginBottom: 20 }} />
 
-      <MediaRow title='Top Remixes' query='rem' tracks={tracks} />
-      <MediaRow title='Top Hip Hop' query='hip' tracks={tracks} />
-      <MediaRow title='Top R & B' query='r&' tracks={tracks} />
-      <MediaRow title='Top Reggae' query='regg' tracks={tracks} />
+      <ErrorBoundary caller='Home Media Row'>
+        <MediaRow title='Top Remixes' query='rem' tracks={tracks} />
+        <MediaRow title='Top Hip Hop' query='hip' tracks={tracks} />
+        <MediaRow title='Top R & B' query='r&' tracks={tracks} />
+        <MediaRow title='Top Reggae' query='regg' tracks={tracks} />
+      </ErrorBoundary>
 
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
-      <View style={{
-        flex: 1, marginBottom: 20,
-        justifyContent: 'center', alignItems: 'center'
-      }}>
 
-        <SponsoredCard
-          title={'Stock up on your travel essentials!'}
-          caption={'Shop Zorei'}
-          location={'Zorei.co'}
-          image={'https://iplayulisten.com/zorei-logo.png'}
-          avatar={'https://iplayulisten.com/zorei-logo.png'}
-          onOpen={() => openLink('https://www.zorei.co')} />
-      </View>
+      <ErrorBoundary caller='Home Sponsored Card'>
+        <View style={{
+          flex: 1, marginBottom: 20,
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          <SponsoredCard
+            title={'Stock up on your travel essentials!'}
+            caption={'Shop Zorei'}
+            location={'Zorei.co'}
+            image={'https://iplayulisten.com/zorei-logo.png'}
+            avatar={'https://iplayulisten.com/zorei-logo.png'}
+            onOpen={() => openLink('https://www.zorei.co')} />
+        </View>
+      </ErrorBoundary>
 
-      <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
-        {topRemixes.map((itm, idx) => (
-          <ExploreCard {...props} key={idx} item={itm} />
-        ))}
-      </View>
+      <ErrorBoundary caller='Home Explore Cards'>
+        <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
+          {topRemixes.map((itm, idx) => (
+            <ExploreCard {...props} key={idx} item={itm} />
+          ))}
+        </View>
+      </ErrorBoundary>
 
-      {/* <Text>{JSON.stringify(storeState.user, null, 2)}</Text> */}
+      <View style={{ height: 100 }}></View>
     </ScrollView>
   )
 }

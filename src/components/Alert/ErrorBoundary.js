@@ -1,7 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { View, Button, Text } from 'react-native'
+import { Divider } from 'react-native-paper'
+
+import { StoreContext } from '../../contexts/StoreContext'
+import { IS_ADMIN, IS_VERIFIED } from '../../constants'
 
 
 class ErrorBoundary extends React.Component {
+
+  static contextType = StoreContext
+
   constructor(props) {
     super(props)
     this.state = { hasError: false }
@@ -12,6 +21,9 @@ class ErrorBoundary extends React.Component {
       ...state,
       admin: null
     }))
+    const [storeState, storeDispatch] = this.context
+    const email = storeState.user.email.toLowerCase()
+    if (IS_ADMIN.includes(email)) this.setState({ admin: true })
   }
 
   static getDerivedStateFromError(error) {
@@ -30,28 +42,30 @@ class ErrorBoundary extends React.Component {
     const { caller } = this.props
 
     if (this.state.hasError) {
-      return <View style={{ marginTop: '4rem', textAlign: 'center' }}>
-        <Text variant='h4'>
-          <Text style={{ marginBottom: 20 }}>
-            <Text role='img' aria-label='emoji' style={{ marginRight: 10 }}>⚙️</Text>
-            Something went wrong {this.state.admin && `at [${caller}]`}
-          </Text>
-          <Text>
-            <Text>It's not your fault, we're working on this issue</Text>
+      return (
+        <View style={{ flex: 1, marginHorizontal: 40, justifyContent: 'center', alignItems: 'center', }}>
+          <Divider />
+          
+          <Text style={{ margin: 20 }}>
+            {this.state.admin && <Text style={{ fontSize: 11 }}>{this.state.error && this.state.error.toString()}</Text>}
           </Text>
 
-          <Text style={{ margin: 20 }}>
-            {this.state.admin && <Text style={{ fontSize: 11 }}>{this.state.error && this.state.error.toString()}</p>}
-          </Text>
-        </View>
-        <View m='auto' paddingTop={5} style={{ flex: 1, alignContent: 'center' }}>
-          <View style={{ marginBottom: '2rem' }}>
+          <View style={{ marginBottom: 20 }}>
             <Text role='img' aria-label='emoji' style={{ fontSize: 50 }}>🤪</Text>
           </View>
 
-            <Button variant='contained' color='primary'>Continue</Button>
+          <Text style={{ marginBottom: 10, fontWeight: '700' }}>
+            Oops, something went wrong here
+          </Text>
+          <Text style={{ marginBottom: 20 }}>
+            {this.state.admin &&
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ color: 'red', fontWeight: '700', marginRight: 5 }}>Inspect</Text>
+                <Text>[{caller}]</Text>
+              </View>}
+          </Text>
         </View>
-      </View >
+      )
     }
     return this.props.children
   }

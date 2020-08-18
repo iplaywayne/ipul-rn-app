@@ -4,7 +4,7 @@ import TrackPlayer from 'react-native-track-player'
 import { IS_ADMIN, IS_VERIFIED } from '../constants'
 
 
-const StoreContext = React.createContext({})
+export const StoreContext = React.createContext({})
 export const useStore = () => React.useContext(StoreContext)
 
 
