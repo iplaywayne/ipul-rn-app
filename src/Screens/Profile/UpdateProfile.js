@@ -19,7 +19,7 @@ import { ProfileService } from '../../utils/profile'
 
 
 
-function UpdateProfile({ navigation }) {
+function UpdateProfile({ route, navigation }) {
   const [authState] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const [loading, setLoading] = React.useState(false)
@@ -29,41 +29,27 @@ function UpdateProfile({ navigation }) {
   const profileService = ProfileService()
 
   const [formState, formDispatch] = React.useReducer((state, action) => {
-    console.log(state)
     switch (action.type) {
       case 'SET_NAME':
         return { ...state, name: action.val }
       case 'SET_BIO':
         return { ...state, bio: action.val }
       case 'SET_OCCUPATION':
-        console.log('changing occ!', state)
         return { ...state, occupation: action.val }
       default:
         return state
     }
   }, {
     uid: user.uid,
-    name: user.name,
-    bio: user.bio,
-    occupation: user.occupation,
+    name: '',
+    bio: '',
+    occupation: '',
   })
-
-
-  React.useEffect(() => {
-    return () => {
-      if (capturedImage) {
-        ImagePicker.clean().then(() => {
-          console.log('Image cache cleared');
-        }).catch(e => {
-        });
-      }
-    }
-  }, [])
 
 
   const handleDone = async (state) => {
     try {
-      await wait(() => setLoading(true), 500)
+      await wait(() => setLoading(true))
       profileService.putAvatarImage(state, capturedImage,
         progress => console.log('PROGRESS', progress),
         next => {
@@ -80,7 +66,7 @@ function UpdateProfile({ navigation }) {
     } catch (e) {
       console.log('We could not save your image', e)
     } finally {
-      await wait(() => setLoading(false))
+      // await wait(() => setLoading(false))
     }
   }
 
@@ -102,10 +88,6 @@ function UpdateProfile({ navigation }) {
 
   const handleGoBack = async () => {
     await wait(() => setLoading(true))
-    await wait(() => setLoading(false), 750)
-  }
-
-  const handleCancel = async () => {
     navigation.goBack()
   }
 
@@ -113,7 +95,7 @@ function UpdateProfile({ navigation }) {
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <Button style={{ marginLeft: 20 }} onPress={handleCancel}>
+        <Button style={{ marginLeft: 20 }} onPress={handleGoBack}>
           {'Cancel'}
         </Button>
       ),
@@ -125,16 +107,26 @@ function UpdateProfile({ navigation }) {
         </Button>
       )
     })
+
   }, [loading, capturedImage, formState])
 
 
-  const handleUpdateSubmit = e => {
-    console.log(e)
-  }
-
   React.useEffect(() => {
-    console.log(navigation)
-  }, [navigation])
+    if (route) {
+      formDispatch({ type: 'SET_NAME', val: route.params.user.name })
+      formDispatch({ type: 'SET_OCCUPATION', val: route.params.user.occupation })
+      formDispatch({ type: 'SET_BIO', val: route.params.user.bio })
+    }
+    return () => {
+      if (capturedImage) {
+        ImagePicker.clean().then(() => {
+          console.log('Image cache cleared');
+        }).catch(e => {
+        });
+      }
+    }
+  }, [route])
+
 
 
   return (

@@ -97,7 +97,6 @@ function Profile({ route, navigation }) {
     }, 500)
   }
 
-  if (!user.name) return <Center><Text>Let's finish the setup</Text></Center>
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
   const ProfileHeader = () => (
@@ -106,7 +105,7 @@ function Profile({ route, navigation }) {
 
         {avatar ?
           <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile', {
-            test: () => console.log('Passing Function From Profile Works!')
+            user
           })}>
 
             <FastImage
@@ -147,7 +146,9 @@ function Profile({ route, navigation }) {
       }}>
         <Btn
           title='Update Profile'
-          onPress={() => navigation.push('UpdateProfile')}
+          onPress={() => navigation.navigate('UpdateProfile', {
+            user,
+          })}
         />
         <Btn
           title='Set Your Mood'
