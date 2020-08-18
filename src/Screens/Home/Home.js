@@ -29,7 +29,7 @@ function Home(props) {
   const { user, isAdmin, tracks } = storeState
   const name = user && user.name
   const trackService = TrackService()
-  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('r&'))
+  const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('s')).slice(0,11)
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
 
@@ -57,6 +57,7 @@ function Home(props) {
         setLoading(false)
       }
     }, 1500)
+    console.log(navigation)
   }, [tracks])
 
   if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
@@ -113,7 +114,7 @@ function Home(props) {
         </View>
       </ErrorBoundary>
 
-      <View style={{ height: 100 }}></View>
+      <View style={{ height: 50 }}></View>
     </ScrollView>
   )
 }

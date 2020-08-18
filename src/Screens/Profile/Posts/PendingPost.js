@@ -9,6 +9,7 @@ import Btn from '../../../components/Prebuilt/Button'
 const PendingPost = ({ user, postDetails, onChange, onComplete }) => {
   const [loading, setLoading] = React.useState(false)
 
+  
   const handlePostTask = details => {
     setLoading(true)
     PostService.putPost(user.uid, details,
