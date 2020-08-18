@@ -17,7 +17,6 @@ import PreviewImage from '../../../components/Profile/PreviewImage'
 import { firebase, useAuth, useStore } from '../../../utils'
 
 
-// const Tab = createMaterialTopTabNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 

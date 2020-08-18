@@ -6,7 +6,7 @@ import { Input as TextInput } from 'galio-framework'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Modal, Portal, Provider } from 'react-native-paper';
+import { Modal, Portal, Provider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import Camera from '../../../components/Camera/Camera'
@@ -23,7 +23,12 @@ import PendingPost from '../../../screens/Profile/Posts/PendingPost'
 
 export const CreateCaption = ({ route, navigation }) => {
   const [loading, setLoading] = React.useState(false)
+  const [caption, setCaption] = React.useState('')
   const { user, details } = route.params
+
+  const handlePostTask = () => {
+    navigation.goBack()
+  }
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,8 +43,8 @@ export const CreateCaption = ({ route, navigation }) => {
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
           <Button
-          // disabled={!captured || !captureMode}
-          // onPress={handlePostTask}
+            disabled={!caption}
+            onPress={handlePostTask}
           >
             {loading ? <ActivityIndicator /> : 'Done'}
           </Button>
@@ -51,12 +56,12 @@ export const CreateCaption = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ErrorBoundary caller='Profile Pending Post'>
+      <ErrorBoundary caller='Create Caption'>
         <PendingPost
           user={user}
-        postDetails={details}
-        onChange={val => console.log(val)}
-        onComplete={() => console.log(null)}
+          postDetails={details}
+          onChange={val => setCaption(val)}
+          onComplete={() => navigation.navigate('Profile')}
         />
       </ErrorBoundary>
     </View>

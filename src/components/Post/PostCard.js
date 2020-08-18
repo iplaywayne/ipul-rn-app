@@ -12,27 +12,33 @@ import { FastImage as Image } from 'react-native-fast-image'
 import * as timeago from 'timeago.js';
 import Video from 'react-native-video'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
 import FireStore from '../../utils/firebase/FireStore'
+import PostService from '../../utils/post/PostService'
 
 
 function PostCard(props) {
   const { item, navigation, isAuthor } = props
-  const [authState, authDispatch] = useAuth()
-  const { user } = authState
   const [storeState] = useStore()
+  const { user } = storeState
   const [postAuthor, setPostAuthor] = React.useState(null)
+
 
   React.useEffect(() => {
     FireStore.readUserById(item.uid,
       user => setPostAuthor(user))
   }, [])
 
-  const onPress = () =>
+  const handlePostLike = () => {
+    console.log('TODO like post', item.key)
+  }
+
+  const handlePostMenu = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ["Cancel", "Edit Post", "Remove Post"],
+        options: ["Cancel", "Remove Post"],
         destructiveButtonIndex: 2,
         cancelButtonIndex: 0
       },
@@ -40,9 +46,11 @@ function PostCard(props) {
         if (buttonIndex === 0) {
           // cancel action
         } else if (buttonIndex === 1) {
-          console.log(Math.floor(Math.random() * 100) + 1);
-        } else if (buttonIndex === 2) {
-          console.log("🔮");
+          try {
+            PostService.removePost(user.uid, item.key)
+          } catch (e) {
+            console.log('Post was not removed, try again', e)
+          }
         }
       }
     );
@@ -59,11 +67,12 @@ function PostCard(props) {
             flex
             borderless
             shadow
-            title={item && item.caption}
-            caption={timeago.format(item.createdAt)}
+            // title={item && item.caption}
+            title={(postAuthor || {}).name}
+            caption={(postAuthor || {}).occupation}
             style={{ padding: 0 }}
-            location={(postAuthor || {}).name}
-            avatar={(postAuthor || {}).avatar || siteLogo}
+            location={timeago.format(item.createdAt)}
+            avatar={(postAuthor || {}).avatar}
             children={<TouchableHighlight onPress={() => { }}>
               <Img
                 source={{ uri: item.image }}
@@ -77,15 +86,24 @@ function PostCard(props) {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
           <View style={{ flexDirection: 'row' }}>
             {/* <Text style={{ marginRight: 20 }}><MaterialCommunityIcons name='share' size={25} /></Text> */}
-            <TouchableOpacity onPress={() => console.log('Liked Post!', item)}>
+            <TouchableOpacity onPress={handlePostLike} style={{ marginLeft: 10 }}>
               <Text><MaterialCommunityIcons name='heart-outline' size={25} /></Text>
             </TouchableOpacity>
           </View>
           {isAuthor &&
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={handlePostMenu}>
               <Text><MaterialCommunityIcons name='dots-horizontal' size={25} /></Text>
             </TouchableOpacity>}
         </View>
+
+        <View style={{
+          marginHorizontal: 15, marginBottom: 15, flexDirection: 'row',
+          justifyContent: 'flex-start'
+        }}>
+          <Text style={{ marginRight: 5, fontWeight: '700' }}>{user.name}</Text>
+          <Text>{item.caption}</Text>
+        </View>
+
         <Divider />
 
         {item.video ?

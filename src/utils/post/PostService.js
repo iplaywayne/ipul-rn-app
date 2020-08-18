@@ -6,8 +6,7 @@ import { firebase, storage, database } from '../firebase'
 
 const PostService = (function () {
 
-  const putPost = (uid, details, progress,next) => {
-
+  const putPost = (uid, details, progress, next) => {
     if (!details) throw new Error('Missing details to complete post task')
     const { type, image, video } = details
 
@@ -49,6 +48,22 @@ const PostService = (function () {
       complete);
   }
 
+  const removePost = (uid, key) => {
+    if (!uid || !key) throw new Error('Missing removePost param')
+    const userRef = database.ref(`channels/posts/${uid}/${key}`)
+    const storageRef = storage.ref(`channels/posts/${uid}/${key}/${key}.png`)
+    const storageRefB = storage.ref(`channels/posts/${uid}/${key}/${key}_350x350.png`)
+    userRef.remove().then(_ => {
+      console.log(key, 'Post Data Removed!')
+    })
+    storageRef.delete().then(_ => {
+      console.log(key, 'Post Media Removed!')
+    })
+    storageRefB.delete().then(_ => {
+      console.log(key, 'Post MediaB Removed!')
+    })
+  }
+
   const getUserPosts = (uid, next) => {
     if (!uid) return
     let list;
@@ -56,13 +71,13 @@ const PostService = (function () {
     userRef.on('value', snap => {
       let list = []
       snap.forEach(child => {
-        list.push(child.val())
+        list.unshift(child.val())
       })
       next(list)
     })
   }
 
-  return { putPost, getUserPosts }
+  return { putPost, removePost, getUserPosts }
 })()
 
 export default PostService

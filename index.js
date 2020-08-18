@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { AppRegistry, LogBox, StatusBar } from 'react-native';
 import TrackPlayer from 'react-native-track-player'
 

@@ -33,6 +33,7 @@ import PostCard from '../../components/Post/PostCard'
 import { ErrorBoundary } from '../../components'
 import ProfileHeader from './ProfileHeader'
 import ProfileCards from './ProfileCards'
+import FetchTracks from '../../utils/media/functions/FetchTracks'
 
 
 const BUTTON_WIDTH = 100
@@ -59,11 +60,14 @@ function Profile({ route, navigation }) {
       if (params && 'details' in params)
         setPostDetailsPending(params.details)
     }
+    (async () => {
+      console.log(await FetchTracks())
+    })()
   }, [route])
 
   React.useEffect(() => {
-    setTimeout(() => {
-      if (tracks.length) {
+    setTimeout(async () => {
+     if (tracks.length) {
         setLoading(false)
         storeDispatch.setLoading(false)
       }
@@ -86,28 +90,28 @@ function Profile({ route, navigation }) {
   }, [navigation])
 
   const readApi = async () => {
-    const { data } = await axios.post(`http://localhost:3000/api/test`, {
-      user: user.name
-    })
-    console.log(data)
+    try {
+      const { data } = await axios.post(`http://localhost:5000/api/media`)
+      console.log(data)
+    } catch (e) {
+      console.log('Could not read media')
+    }
   }
 
   const playNowTapped = async () => {
-    readApi()
-
-    // if (!queued.length) {
-    //   Alert.alert('Select a song to start your playlist')
-    //   return
-    // }
-    // setTimeout(() => {
-    //   if (!isPlaying) {
-    //     TrackPlayer.play()
-    //     storeDispatch.setPlaying(true)
-    //   } else {
-    //     TrackPlayer.pause()
-    //     storeDispatch.setPlaying(false)
-    //   }
-    // }, 500)
+    if (!queued.length) {
+      Alert.alert('Select a song to start your playlist')
+      return
+    }
+    setTimeout(() => {
+      if (!isPlaying) {
+        TrackPlayer.play()
+        storeDispatch.setPlaying(true)
+      } else {
+        TrackPlayer.pause()
+        storeDispatch.setPlaying(false)
+      }
+    }, 500)
   }
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>

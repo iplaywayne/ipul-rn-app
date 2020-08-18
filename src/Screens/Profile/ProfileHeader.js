@@ -4,7 +4,7 @@ import {
   Dimensions, StatusBar, Animated, ActivityIndicator, ActionSheetIOS, Text
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import { Avatar } from 'react-native-elements'
+import { Avatar } from 'react-native-paper'
 
 import Btn from '../../components/Prebuilt/Button'
 
