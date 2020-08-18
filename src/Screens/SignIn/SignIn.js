@@ -23,8 +23,8 @@ const { width, height } = Dimensions.get('window')
 const SignIn = (props) => {
   const { signIn, navigation } = props
   const [state, dispatch] = useStore()
-  const [username, setUsername] = React.useState('stylz@iplayulisten.com')
-  const [password, setPassword] = React.useState('admin20')
+  const [username, setUsername] = React.useState()
+  const [password, setPassword] = React.useState()
   const [authState, authDispatch] = useAuth()
   const { isLoading } = authState
   const [signInLoading, setSignInLoading] = React.useState(false)

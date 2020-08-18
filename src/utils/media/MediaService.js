@@ -5,6 +5,7 @@ import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } f
 import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
+
 const tracksPath = `/mediaTracks`
 const favsPath = `/favorites/`
 
@@ -19,7 +20,7 @@ function MediaService() {
   if (!auth) return
   const [storeState, storeDispatch] = useStore()
   const { queued, currentTrack } = storeState
-
+  
   // useTrackPlayerEvents(events, async (event) => {
   //   switch (event.type) {
   //     case TrackPlayerEvents.PLAYBACK_ERROR:
@@ -101,6 +102,11 @@ function MediaService() {
           .catch(e => console.log(e))
       })
       .catch(err => console.warn('error', err))
+  }
+
+  const getTrackById = acid => {
+    const result = getTracks(result => result.filter(t => t.acid === acid))
+    console.log(result)
   }
 
   const getTracks = cb => ReadTracks(cb)

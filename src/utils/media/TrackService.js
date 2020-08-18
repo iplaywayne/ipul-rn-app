@@ -5,6 +5,9 @@ import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } f
 import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
+import MediaService from '../media/MediaService'
+
+
 const tracksPath = `/mediaTracks`
 const favsPath = `/favorites/`
 
@@ -20,6 +23,7 @@ function TrackService() {
   if (!auth) return
   const [storeState, storeDispatch] = useStore()
   const { tracks, queued, currentTrack } = storeState
+  const mediaService = MediaService()
 
   useTrackPlayerEvents(events, async (event) => {
     switch (event.type) {
@@ -32,6 +36,7 @@ function TrackService() {
         const isIdle = event.state === 'idle'
         if (isPlaying) {
           storeDispatch.setPlaying(true)
+          console.log(event)
         } else {
           storeDispatch.setPlaying(false)
         }
@@ -58,7 +63,8 @@ function TrackService() {
     if (storeState.tracks.length && storeDispatch.isPlaying) {
       const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
         const track = await TrackPlayer.getTrack(data.nextTrack);
-        console.log('[TODO] send track change listener data to store')
+        console.log('[TODO] send track change listener data to store', data.nextTrack)
+
       })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[TRACKSERVICE] Your playlist has ended`);

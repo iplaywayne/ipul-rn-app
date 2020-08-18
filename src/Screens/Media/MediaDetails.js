@@ -6,9 +6,10 @@ import { Card, Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
 
 import { siteLogo, logo } from '../../constants'
-import { useStore } from '../../utils'
+import { useStore, wait } from '../../utils'
 import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 import MediaService from '../../utils/media/MediaService'
+import TrackService from '../../utils/media/TrackService'
 
 export function MediaDetails({ route, navigation }) {
   const { item, user, tracks } = route.params
@@ -16,6 +17,7 @@ export function MediaDetails({ route, navigation }) {
   const [tracksLikeThis, setTracksLikeThis] = React.useState(null)
   const { isPlaying, currentTrack, queued } = storeState
   const mediaService = MediaService()
+  const trackService = TrackService()
 
   const handleAddMediaLike = () => {
     console.log(item, 'is ready to be liked!')
@@ -55,6 +57,7 @@ export function MediaDetails({ route, navigation }) {
       await TrackPlayer.play()
       storeDispatch.setPlaying(true)
       storeDispatch.setCurrentTrack(item)
+      mediaService.addMediaPlay(item.acid)
     }
     setTimeout(async () => {
       const queued = await TrackPlayer.getQueue()
@@ -103,11 +106,12 @@ export function MediaDetails({ route, navigation }) {
       }}>
         <Icons name='repeat' size={65} />
 
-        <TouchableOpacity onPress={() => addQueue(item)}>
+        <TouchableOpacity onPress={() => wait(() => addQueue(item))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => playNow(item)}>
+        <TouchableOpacity onPress={() => wait(() => playNow(item), 250)
+        }>
           {isPlaying && currentTrack !== item && <Icons name='play-circle' size={100} />}
           {isPlaying && currentTrack === item && <Icons name='pause-circle' size={100} />}
           {!isPlaying && <Icons name='play-circle' size={100} />}
@@ -166,9 +170,10 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {queued && queued.map((itm, idx) => (
-          <TouchableOpacity onPress={() => navigation.push('MediaDetails', {
-            item: itm, user: user, tracks: tracks
-          })}
+          <TouchableOpacity key={idx}
+            onPress={() => navigation.push('MediaDetails', {
+              item: itm, user: user, tracks: tracks
+            })}
             style={{
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
               alignItems: 'center'
