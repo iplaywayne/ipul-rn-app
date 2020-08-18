@@ -91,7 +91,7 @@ function Profile({ route, navigation }) {
 
   const readApi = async () => {
     try {
-      const { data } = await axios.post(`http://localhost:5000/api/media`)
+      const { data } = await axios.post(`http://localhost:5001/ipul-firebase-functions-demo/us-central1/helloWorld`)
       console.log(data)
     } catch (e) {
       console.log('Could not read media')
@@ -99,19 +99,20 @@ function Profile({ route, navigation }) {
   }
 
   const playNowTapped = async () => {
-    if (!queued.length) {
-      Alert.alert('Select a song to start your playlist')
-      return
-    }
-    setTimeout(() => {
-      if (!isPlaying) {
-        TrackPlayer.play()
-        storeDispatch.setPlaying(true)
-      } else {
-        TrackPlayer.pause()
-        storeDispatch.setPlaying(false)
-      }
-    }, 500)
+    await readApi()
+    // if (!queued.length) {
+    //   Alert.alert('Select a song to start your playlist')
+    //   return
+    // }
+    // setTimeout(() => {
+    //   if (!isPlaying) {
+    //     TrackPlayer.play()
+    //     storeDispatch.setPlaying(true)
+    //   } else {
+    //     TrackPlayer.pause()
+    //     storeDispatch.setPlaying(false)
+    //   }
+    // }, 500)
   }
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>

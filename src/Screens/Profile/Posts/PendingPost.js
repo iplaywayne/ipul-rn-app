@@ -9,7 +9,7 @@ import Btn from '../../../components/Prebuilt/Button'
 const PendingPost = ({ user, postDetails, onChange, onComplete }) => {
   const [loading, setLoading] = React.useState(false)
 
-  
+
   const handlePostTask = details => {
     setLoading(true)
     PostService.putPost(user.uid, details,
@@ -43,13 +43,14 @@ const PendingPost = ({ user, postDetails, onChange, onComplete }) => {
               clearButtonMode={'while-editing'}
               height={80}
               maxLength={100}
-              onChange={e => {
-                console.log(e.nativeEvent.text)
-                onChange(state => ({
-                  ...postDetails,
-                  caption: e.nativeEvent.text
-                }))
-              }}
+              onChange={onChange}
+            // onChange={e => {
+            //   console.log(e.nativeEvent.text)
+            //   onChange(state => ({
+            //     ...postDetails,
+            //     caption: e.nativeEvent.text
+            //   }))
+            // }}
             />
             <Btn
               title='Post Now'
