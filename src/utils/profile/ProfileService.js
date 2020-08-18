@@ -24,7 +24,7 @@ function ProfileService() {
       setTimeout(() => {
         next(formState)
       }, 1000)
-
+      
     } else {
       const metadata = { contentType: 'image/jpeg' }
       const storageRef = storage.ref()

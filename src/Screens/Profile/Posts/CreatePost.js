@@ -10,11 +10,11 @@ import { Modal, Portal, Provider } from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import Camera from '../../../components/Camera/Camera'
-import VideoPlayer from '../../../components/Video/VideoPlayer'
+import PreviewVideo from '../../../components/Profile/PreviewVideo'
 import Btn from '../../../components/Prebuilt/Button'
 import { height, width } from '../../../constants'
-import CropImage from '../../../components/Profile/CropImage'
-import { firebase, useAuth } from '../../../utils'
+import PreviewImage from '../../../components/Profile/PreviewImage'
+import { firebase, useAuth, useStore } from '../../../utils'
 
 
 // const Tab = createMaterialTopTabNavigator();
@@ -29,7 +29,8 @@ export function CreatePost({ navigation }) {
   const [postCaption, setPostCaption] = React.useState('')
   const playerRef = React.useRef(null)
   const [authState] = useAuth()
-  const { user } = authState
+  const [storeState, storeDispatch] = useStore()
+  const { user, isAdmin } = storeState
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -108,13 +109,13 @@ export function CreatePost({ navigation }) {
 
 
       {captureType == 'image' &&
-        <CropImage
+        <PreviewImage
           captured={captured}
           onComplete={uri => console.log('[CROPIMAGE]', uri)}
         />}
 
       {captureType == 'video' &&
-        <VideoPlayer
+        <PreviewVideo
           source={captured}
           resetSource={() => setCaptured(null)}
         />}
@@ -123,53 +124,54 @@ export function CreatePost({ navigation }) {
         <View style={{ flex: 1 }}>
           <View style={{ flex: 11 }}>
             <Camera
-              mode={captureMode}
+              mode={'camera'}
               setCameraFlip={flip => setCameraFlip(flip)}
               dataUri={uri => setCaptured(uri)}
               dataType={type => setCaptureType(type)}
             />
           </View>
 
-          <View style={{
-            flex: 1, flexDirection: 'row', alignItems: 'center',
-            justifyContent: 'space-around', marginHorizontal: 25
-          }}>
+          {isAdmin &&
+            <View style={{
+              flex: 1, flexDirection: 'row', alignItems: 'center',
+              justifyContent: 'space-around', marginHorizontal: 25
+            }}>
 
-            <TouchableOpacity onPress={() => setCaptureMode('camera')}
-              style={{ alignItems: 'center' }}>
-              <MaterialCommunityIcons name="camera"
-                color={captureMode == 'camera' ? 'white' : 'gray'}
-                size={26} />
-              <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => setCaptureMode('camera')}
+                style={{ alignItems: 'center' }}>
+                <MaterialCommunityIcons name="camera"
+                  color={captureMode == 'camera' ? 'white' : 'gray'}
+                  size={26} />
+                <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setCaptureMode('video')}
-              style={{ alignItems: 'center' }}>
-              <MaterialCommunityIcons name="video"
-                color={captureMode == 'video' ? 'white' : 'gray'}
-                size={26} />
-              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => setCaptureMode('video')}
+                style={{ alignItems: 'center' }}>
+                <MaterialCommunityIcons name="video"
+                  color={captureMode == 'video' ? 'white' : 'gray'}
+                  size={26} />
+                <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => {
-              ImagePicker.openPicker({
-                width: 400,
-                height: 400,
-                mediaType: 'any'
-              }).then(image => {
-                console.log(image.path, image.mime)
-                setCaptured(image.path);
-                setCaptureMode(image.mime === 'video/mp4' ? 'video' : 'camera')
-                setCaptureType(image.mime === 'video/mp4' ? 'video' : 'image')
-              });
-            }}
-              style={{ alignItems: 'center' }}>
-              <MaterialCommunityIcons name="image-search-outline"
-                color={captureMode == 'video' ? 'white' : 'gray'}
-                size={26} />
-              <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity onPress={() => {
+                ImagePicker.openPicker({
+                  width: 1080,
+                  height: 1080,
+                  mediaType: 'any'
+                }).then(image => {
+                  console.log(image.path, image.mime)
+                  setCaptured(image.path);
+                  setCaptureMode(image.mime === 'video/mp4' ? 'video' : 'camera')
+                  setCaptureType(image.mime === 'video/mp4' ? 'video' : 'image')
+                });
+              }}
+                style={{ alignItems: 'center' }}>
+                <MaterialCommunityIcons name="image-search-outline"
+                  color={captureMode == 'video' ? 'white' : 'gray'}
+                  size={26} />
+                <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
+              </TouchableOpacity>
+            </View>}
 
         </View>}
 
