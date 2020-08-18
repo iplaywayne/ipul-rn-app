@@ -220,6 +220,7 @@ function Profile({ route, navigation }) {
 
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
+        {/* Post Details from CreatePost will Store with PendingPost */}
         <PendingPost
           user={user}
           postDetails={postDetailsPending}

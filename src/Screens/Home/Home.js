@@ -56,7 +56,6 @@ function Home(props) {
         setLoading(false)
       }
     }, 1500)
-
   }, [tracks])
 
   if (user && !('name' in user)) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>

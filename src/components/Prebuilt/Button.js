@@ -20,7 +20,7 @@ export default function (props) {
       onPress={onPress}
     >
 
-      {loading ? <ActivityIndicator /> : title || children}
+      {loading ? <ActivityIndicator style={{ marginTop: -2 }} /> : title || children}
     </Button>
   )
 }

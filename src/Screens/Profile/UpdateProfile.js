@@ -14,7 +14,6 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
 import Btn from '../../components/Prebuilt/Button'
-import CropImage from '../../components/Profile/CropImage'
 import { ProfileService } from '../../utils/profile'
 
 

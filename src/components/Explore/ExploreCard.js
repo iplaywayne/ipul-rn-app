@@ -56,10 +56,10 @@ function ExploreCard(props) {
       tracks: tracks
     })
 
-    // setTimeout(() => {
-    //   const userRef = database.ref(`mediaTracks/${item.acid}`)
-    //   userRef.update({ views: firebase.database.ServerValue.increment(1) })
-    // }, 1000)
+    setTimeout(() => {
+      const userRef = database.ref(`mediaTracks/${item.acid}`)
+      userRef.update({ views: firebase.database.ServerValue.increment(1) })
+    }, 250)
   }
 
   return (
@@ -77,8 +77,12 @@ function ExploreCard(props) {
             avatar={item && item.art_link || siteLogo}
             imageStyle={{ borderRadius: 10, height: 300 }}
             image={item && item.art_link || siteLogo}
-            children={<View style={{ marginLeft: 70, marginBottom: 15 }}>
+            children={<View style={{
+              marginHorizontal: 70, marginBottom: 15, flexDirection: 'row', justifyContent: 'space-between'
+            }}>
               {item.views && <Text>Views: {item.views}</Text>}
+              {item.plays && <Text>Plays: {item.plays}</Text>}
+              {item.likes && <Text>Likes: {item.likes}</Text>}
             </View>}
           />
           <Divider />

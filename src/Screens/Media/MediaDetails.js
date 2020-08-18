@@ -8,15 +8,19 @@ import TrackPlayer from 'react-native-track-player'
 import { siteLogo, logo } from '../../constants'
 import { useStore } from '../../utils'
 import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
-
+import MediaService from '../../utils/media/MediaService'
 
 export function MediaDetails({ route, navigation }) {
   const { item, user, tracks } = route.params
   const [storeState, storeDispatch] = useStore()
   const [tracksLikeThis, setTracksLikeThis] = React.useState(null)
   const { isPlaying, currentTrack, queued } = storeState
+  const mediaService = MediaService()
 
-
+  const handleAddMediaLike = () => {
+    console.log(item, 'is ready to be liked!')
+    mediaService.addMediaLike(item.acid)
+  }
 
   const addQueue = async (item) => {
     console.log(TrackPlayerStructure(item))
@@ -37,6 +41,7 @@ export function MediaDetails({ route, navigation }) {
       await TrackPlayer.play()
       storeDispatch.setPlaying(true)
       storeDispatch.setCurrentTrack(item)
+      mediaService.addMediaPlay(item.acid)
     } else if (!isPlaying && currentTrack === item) {
       TrackPlayer.play()
       storeDispatch.setPlaying(true)
@@ -108,7 +113,10 @@ export function MediaDetails({ route, navigation }) {
           {!isPlaying && <Icons name='play-circle' size={100} />}
         </TouchableOpacity>
 
-        <Icons name='heart-outline' size={30} />
+        <TouchableOpacity onPress={handleAddMediaLike}>
+          <Icons name='heart-outline' size={30} />
+        </TouchableOpacity>
+
         <Icons name='skip-next' size={65} />
       </View>
 

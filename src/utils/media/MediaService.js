@@ -123,6 +123,15 @@ function MediaService() {
     })
   }
 
+  const addMediaLike = acid => {
+    if (!acid) {
+      console.log('Missing ACID')
+      return
+    }
+    const userRef = database.ref(`mediaTracks/${acid}`)
+    userRef.update({ likes: firebase.database.ServerValue.increment(1) })
+  }
+
   const addMediaView = acid => {
     if (!acid) {
       console.log('Missing ACID')
@@ -130,13 +139,6 @@ function MediaService() {
     }
     const userRef = database.ref(`mediaTracks/${acid}`)
     userRef.update({ views: firebase.database.ServerValue.increment(1) })
-    // userRef.transaction(data => {
-    //   if (!data) {
-    //     return { views: 0 }
-    //   } else {
-    //     return { ...data, views: firebase.database.ServerValue.increment(1) }
-    //   }
-    // })
   }
 
   const addMediaPlay = acid => {
@@ -145,17 +147,11 @@ function MediaService() {
       return
     }
     const userRef = database.ref(`mediaTracks/${acid}`)
-
-    userRef.transaction(data => {
-      if (!data) {
-        return { plays: 0 }
-      } else {
-        return { ...data, plays: firebase.database.ServerValue.increment(1) }
-      }
-    })
+    userRef.update({ plays: firebase.database.ServerValue.increment(1) })
   }
 
-  return { addAllToQueue, getTracks, getFavorites, addMediaView }
+
+  return { addAllToQueue, getTracks, getFavorites, addMediaLike, addMediaView, addMediaPlay }
 }
 
 export default MediaService
