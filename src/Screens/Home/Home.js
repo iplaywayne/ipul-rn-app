@@ -57,7 +57,6 @@ function Home(props) {
         setLoading(false)
       }
     }, 1500)
-    console.log(navigation)
   }, [tracks])
 
 

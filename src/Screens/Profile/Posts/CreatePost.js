@@ -41,8 +41,8 @@ export function CreatePost({ navigation }) {
       [captureType]: captured,
       createdAt: firebase.database.ServerValue.TIMESTAMP
     }
-    navigation.navigate('Profile', {
-      details
+    navigation.navigate('CreateCaption', {
+      details, user
     })
     console.log(details)
   }

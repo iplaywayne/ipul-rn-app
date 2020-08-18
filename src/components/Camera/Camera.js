@@ -63,9 +63,9 @@ export default class CameraScreen extends React.Component {
     barcodes: [],
   };
 
-  componentWillUnmount() {
-    this.stopVideo()
-  }
+  // componentDidUnmount() {
+  //   this.stopVideo()
+  // }
 
   toggleFacing() {
     this.setState({

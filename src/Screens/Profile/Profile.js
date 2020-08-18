@@ -1,7 +1,7 @@
 import React from 'react'
 import {
-  View, SafeAreaView, ScrollView, StyleSheet, Image, Alert,
-  Dimensions, TouchableOpacity, StatusBar, Animated, ActivityIndicator
+  View, SafeAreaView, ScrollView, StyleSheet, Image, Alert, TouchableOpacity,
+  Dimensions, StatusBar, Animated, ActivityIndicator, ActionSheetIOS
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -29,6 +29,8 @@ import PendingPost from './Posts/PendingPost'
 import AppHeader from '../../components/Header/AppHeader'
 import PostCard from '../../components/Post/PostCard'
 import { ErrorBoundary } from '../../components'
+import ProfileHeader from './ProfileHeader'
+import ProfileCards from './ProfileCards'
 
 
 const BUTTON_WIDTH = 100
@@ -100,69 +102,6 @@ function Profile({ route, navigation }) {
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
-  const ProfileHeader = () => (
-    <View style={{ flex: 1 }}>
-      <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
-
-        {avatar ?
-          <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile', {
-            user
-          })}>
-
-            <FastImage
-              style={{ width: 100, height: 100, borderRadius: 100 / 2 }}
-              source={{
-                uri: avatar,
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-          </TouchableOpacity>
-          :
-          <Avatar.Text size={100} label={name.substring(0, 2)}
-            style={{ backgroundColor: '#444' }} />}
-
-        <View style={{ marginLeft: 15, justifyContent: 'center', marginTop: 5 }}>
-          <Text h6 style={{ fontWeight: 'bold' }}>{name}</Text>
-          <Text h7 style={{ color: 'gray' }}>{occupation}</Text>
-          <View>
-            {mood && 'id' in mood ?
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ fontWeight: '700', marginRight: 2 }}>Mood</Text>
-                <Text>{mood.title}</Text>
-              </View>
-              :
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ fontWeight: '700', marginRight: 2 }}>Mood</Text><Text>not set</Text>
-              </View>}
-          </View>
-
-          <Text>{bio}</Text>
-        </View>
-      </View>
-
-      <View style={{
-        justifyContent: 'center',
-        paddingHorizontal: 5, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
-      }}>
-        <Btn
-          title='Update Profile'
-          onPress={() => navigation.navigate('UpdateProfile', {
-            user,
-          })}
-        />
-        <Btn
-          title='Set Your Mood'
-          onPress={() => navigation.push('UpdateMood')}
-        />
-        <Btn
-          color='#350DB6'
-          title={isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
-          onPress={() => playNowTapped()}
-        />
-      </View>
-    </View>
-  )
 
   const ProfileQueued = () => (
     <View>
@@ -207,7 +146,7 @@ function Profile({ route, navigation }) {
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 25, flexDirection: 'row' }}>
-        {tracks.slice(0, 5).map((itm, iddx) => (
+        {tracks.slice(0, 5).map((itm, idx) => (
           <MiniCard key={idx} item={itm} idx={idx} />
         ))}
       </ScrollView>
@@ -222,49 +161,39 @@ function Profile({ route, navigation }) {
 
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
-        <ErrorBoundary caller='Profile Pending Post'>
-          {/* Post Details from CreatePost will Store with PendingPost */}
-          <PendingPost
+        <ErrorBoundary caller='Profile Header'>
+          <ProfileHeader
             user={user}
-            postDetails={postDetailsPending}
-            onChange={val => setPostDetailsPending(val)}
-            onComplete={() => setPostDetailsPending(null)}
+            navigation={navigation}
+            playNowTapped={playNowTapped}
           />
-        </ErrorBoundary>
-
-        <ErrorBoundary caller='Profile Profile Header'>
-          <ProfileHeader />
         </ErrorBoundary>
 
         <Divider />
 
-        <ErrorBoundary caller='Profile Profile Recent'>
+        <ErrorBoundary caller='Profile Recent'>
           <ProfileRecent />
         </ErrorBoundary>
 
         <Divider />
 
-        <ErrorBoundary caller='Profile Profile Queued'>
+        <ErrorBoundary caller='Profile Queued'>
           <ProfileQueued />
         </ErrorBoundary>
 
         <Divider />
 
-        <ErrorBoundary caller='Profile Profile Favorites'>
+        <ErrorBoundary caller='Profile Favorites'>
           <ProfileFavorites />
         </ErrorBoundary>
 
         <Divider />
 
         <ErrorBoundary caller='Profile Post Cards'>
-          <View style={{
-            paddingTop: 20,
-            paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
-          }}>
-            {userPosts.map((itm, idx) => (
-              <PostCard navigation={navigation} key={idx} item={itm} />
-            ))}
-          </View>
+          <ProfileCards
+            user={user}
+            navigation={navigation}
+            userPosts={userPosts} />
         </ErrorBoundary>
 
         <View style={{ marginBottom: 40 }}></View>

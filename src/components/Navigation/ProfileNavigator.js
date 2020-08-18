@@ -10,11 +10,13 @@ import { CommonActions } from '@react-navigation/native';
 import { Profile as ProfileScreen } from '../../screens/Profile'
 import { default as UpdateProfileScreen } from '../../screens/Profile/UpdateProfile'
 import { default as UpdateMoodScreen } from '../../screens/Profile/UpdateMood'
-import { useAuth ,useStore} from '../../contexts'
+import { useAuth, useStore } from '../../contexts'
 import { NavigationDrawerStructure } from './NavigationDrawerStructure'
 import { Settings as SettingsScreen } from '../../screens/Settings'
 import DrawerContent from './DrawerContent'
 import { CreatePost as CreatePostScreen } from '../../screens/Profile/Posts/CreatePost'
+import { CreateCaption as CreateCaptionScreen } from '../../screens/Profile/Posts/CreateCaption'
+import PendingPost from '../../screens/Profile/Posts/PendingPost'
 
 
 const ProfileStack = createStackNavigator();
@@ -29,30 +31,14 @@ const AdsScreen = () => (
 )
 
 export const ProfileNavigator = ({ navigation }) => {
-  const [authState] = useAuth()
-  const { user } = authState
+  const [storeState,storeDispatch] = useStore()
+  const { user } = storeState
 
   return (
     <ProfileStack.Navigator mode='modal'>
 
-      {/* Profile Screen */}
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{
-        // title: user && user.name || 'iPlayuListen',
-        // headerLeft: props => (
-        //   <NavigationDrawerStructure
-        //     navigationProps={navigation}
-        //     onPress={() => navigation.navigate('CreatePost')}
-        //     icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
-        //   />
-        // ),
-        // headerRight: props => (
-        //   <NavigationDrawerStructure
-        //     navigationProps={navigation}
-        //     onPress={() => navigation.toggleDrawer()}
-        //     icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
-        //   />
-        // )
-      }} />
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+
       <ProfileStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',
       }} />
@@ -60,10 +46,14 @@ export const ProfileNavigator = ({ navigation }) => {
         title: 'Update Mood',
       }} />
 
-      
       <ProfileStack.Screen name="CreatePost" component={CreatePostScreen} options={{
         title: 'Create Post',
       }} />
+
+      <ProfileStack.Screen name="CreateCaption" component={CreateCaptionScreen} options={{
+        title: 'Your Caption',
+      }} />
+
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />
