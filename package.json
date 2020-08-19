@@ -43,6 +43,7 @@
     "react": "16.13.1",
     "react-border-wrapper": "^1.0.3",
     "react-dynamic-vector-icons": "0.0.7",
+    "react-intersection-observer": "^8.26.2",
     "react-native": "^0.63.2",
     "react-native-androw": "0.0.34",
     "react-native-button": "^3.0.1",

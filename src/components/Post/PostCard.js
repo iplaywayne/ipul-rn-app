@@ -26,7 +26,8 @@ function PostCard(props) {
   const { user } = storeState
   const [postAuthor, setPostAuthor] = React.useState(null)
   const [isLiked, setIsLiked] = React.useState(false)
-
+  const [isPostPaused, setIsPostPaused] = React.useState(true)
+  const videoRef = React.useRef()
 
   React.useEffect(() => {
     FireStore.readUserById(item.uid,
@@ -39,6 +40,11 @@ function PostCard(props) {
       setIsLiked(liked)
     })()
   }, [isLiked])
+
+  const handlePostPlay = () => {
+    videoRef.current.seek(0)
+    setIsPostPaused(false)
+  }
 
   const handlePostLike = async () => {
     await PostService.addPostLike(user.uid, item.key, !isLiked)
@@ -80,82 +86,85 @@ function PostCard(props) {
   return (
     <ScrollView style={styles.root}>
 
-      {item.image ?
-        <Card
-          flex
-          borderless
-          shadow
-          title={(postAuthor || {}).name}
-          caption={(postAuthor || {}).occupation}
-          style={{ padding: 0 }}
-          location={timeago.format(item.createdAt)}
-          avatar={(postAuthor || {}).avatar}
-          children={<DoubleClick
-            doubleTap={handlePostLike}
-            delay={200}
-          ><Img
-              source={{ uri: item.image }}
-              style={{ height: 500, width: '100%', maxWidth: 600 }}
-              paused={true}
-            />
-          </DoubleClick>}
+      <View>
+        {item.image ?
+          <Card
+            flex
+            borderless
+            shadow
+            title={(postAuthor || {}).name}
+            caption={(postAuthor || {}).occupation}
+            style={{ padding: 0 }}
+            location={timeago.format(item.createdAt)}
+            avatar={(postAuthor || {}).avatar}
+            children={<DoubleClick
+              doubleTap={handlePostLike}
+              delay={200}
+            ><Img
+                source={{ uri: item.image }}
+                style={{ height: 500, width: '100%', maxWidth: 600 }}
+              />
+            </DoubleClick>}
 
-        /> : null}
+          /> : null}
 
-      {item.video ?
-        <Card
-          flex
-          borderless
-          shadow
-          title={(postAuthor || {}).name}
-          caption={(postAuthor || {}).occupation}
-          style={{ padding: 0 }}
-          location={timeago.format(item.createdAt)}
-          avatar={(postAuthor || {}).avatar}
-          imageStyle={{ borderRadius: 10, height: 400 }}
-          children={<DoubleClick
-            doubleTap={handlePostLike}
-            delay={200}
-          ><Video
-              source={{ uri: item.video }}
-              style={{ flex: 1, height: 500, width: '100%', maxWidth: 600 }}
-              paused={true}
-            /></DoubleClick>}
-        >
-        </Card> : null}
+        {item.video ?
+          <Card
+            flex
+            borderless
+            shadow
+            title={(postAuthor || {}).name}
+            caption={(postAuthor || {}).occupation}
+            style={{ padding: 0 }}
+            location={timeago.format(item.createdAt)}
+            avatar={(postAuthor || {}).avatar}
+            imageStyle={{ borderRadius: 10, height: 400 }}
+            children={<DoubleClick
+              singleTap={handlePostPlay}
+              doubleTap={handlePostLike}
+              delay={200}
+            ><Video
+                ref={ref => videoRef.current = ref}
+                source={{ uri: item.video }}
+                style={{ height: 500, width: '100%', maxWidth: 600 }}
+                paused={isPostPaused}
+              /></DoubleClick>}
+          >
+          </Card> : null}
 
 
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15 }}>
-        <View style={{ flexDirection: 'row' }}>
-          {/* <Text style={{ marginRight: 20 }}><MaterialCommunityIcons name='share' size={25} /></Text> */}
-          <TouchableOpacity onPress={handlePostLike} style={{ marginHorizontal: 10 }}>
-            <Text style={{ color: isLiked === true ? 'red' : 'black' }}>
-              <MaterialCommunityIcons
-                name={isLiked === true ? 'heart' : 'heart-outline'}
-                size={25} />
-            </Text>
-          </TouchableOpacity>
-          {item.video &&
-            <TouchableOpacity onPress={() => console.log('Play TODO')} style={{ marginLeft: 20 }}>
-              <Text style={{ color: 'black' }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
+            {/* <Text style={{ marginRight: 20 }}><MaterialCommunityIcons name='share' size={25} /></Text> */}
+            <TouchableOpacity onPress={handlePostLike} style={{ marginHorizontal: 10 }}>
+              <Text style={{ color: isLiked === true ? 'red' : 'black' }}>
                 <MaterialCommunityIcons
-                  name={'play'}
+                  name={isLiked === true ? 'heart' : 'heart-outline'}
                   size={25} />
               </Text>
+            </TouchableOpacity>
+            {item.video &&
+              <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 20 }}>
+                <Text style={{ color: 'black' }}>
+                  <MaterialCommunityIcons
+                    name={'play'}
+                    size={25} />
+                </Text>
+              </TouchableOpacity>}
+          </View>
+          {isAuthor &&
+            <TouchableOpacity onPress={handlePostMenu}>
+              <Text><MaterialCommunityIcons name='dots-horizontal' size={25} /></Text>
             </TouchableOpacity>}
         </View>
-        {isAuthor &&
-          <TouchableOpacity onPress={handlePostMenu}>
-            <Text><MaterialCommunityIcons name='dots-horizontal' size={25} /></Text>
-          </TouchableOpacity>}
-      </View>
 
-      <View style={{
-        marginHorizontal: 15, marginBottom: 15, flexDirection: 'row',
-        justifyContent: 'flex-start'
-      }}>
-        <Text style={{ marginRight: 5, fontWeight: '700' }}>{(postAuthor || {}).name}</Text>
-        <Text>{item.caption}</Text>
+        <View style={{
+          marginHorizontal: 15, marginBottom: 15, flexDirection: 'row',
+          justifyContent: 'flex-start'
+        }}>
+          <Text style={{ marginRight: 5, fontWeight: '700' }}>{(postAuthor || {}).name}</Text>
+          <Text>{item.caption}</Text>
+        </View>
       </View>
 
       <Divider />
