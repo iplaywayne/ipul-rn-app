@@ -36,13 +36,13 @@ function PostCard(props) {
   const [isInView, setIsInView] = React.useState(false)
   const checkVisible = (isVisible, item) => {
     if (isVisible) {
-      setIsInView(isVisible)
-      if (item.video && isPostPaused && !didTapPlay && postPlays < 3) {
+      // setIsInView(isVisible)
+      if (item.video && isPostPaused && didTapPlay && postPlays < 3) {
         postPlay()
         console.log(item.caption, 'VIDEO IN VIEW', postPlays)
       }
     } else {
-      setIsInView(isVisible)
+      // setIsInView(isVisible)
       if (!isPostPaused) setIsPostPaused(true)
     }
   }
@@ -76,11 +76,12 @@ function PostCard(props) {
 
   const handlePostPlay = () => {
     if (!isPostPaused) {
+      setDidTapPlay(false)
       postPause()
-      return
+    } else {
+      setDidTapPlay(true)
+      postPlay()
     }
-    setDidTapPlay(true)
-    postPlay()
   }
 
   const handlePostLike = async () => {
@@ -181,7 +182,7 @@ function PostCard(props) {
               </Text>
             </TouchableOpacity>
             {item.video &&
-              <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 10 }}>
+              <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 5 }}>
                 <Text style={{ color: 'black' }}>
                   <MaterialCommunityIcons
                     name={isPostPaused ? 'play' : 'pause'}

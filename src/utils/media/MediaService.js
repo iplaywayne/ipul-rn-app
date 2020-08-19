@@ -1,6 +1,6 @@
 import React from 'react'
 import { Player } from '@react-native-community/audio-toolkit'
-import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
+import TrackPlayer from 'react-native-track-player';
 
 import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
@@ -9,12 +9,6 @@ import { useStore } from '../store'
 const tracksPath = `/channels/media`
 const favsPath = `/favorites/`
 
-// Subscribing to the following events inside MyComponent
-const events = [
-  TrackPlayerEvents.PLAYBACK_STATE,
-  TrackPlayerEvents.PLAYBACK_ERROR,
-  TrackPlayerEvents.PLAYBACK_QUEUE_ENDED
-];
 
 function MediaService() {
   const [storeState, storeDispatch] = useStore()

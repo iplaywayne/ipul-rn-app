@@ -84,9 +84,9 @@ function ExploreCard(props) {
             children={<View style={{
               marginHorizontal: 70, marginBottom: 15, flexDirection: 'row', justifyContent: 'space-between'
             }}>
-              {item.views && <Text>Views: {item.views}</Text>}
-              {item.plays && <Text>Plays: {item.plays}</Text>}
-              {item.likes && <Text>Likes: {item.likes}</Text>}
+              {item.views && <Text><Text style={{fontWeight:'700'}}>Views</Text> {item.views}</Text>}
+              {item.plays && <Text><Text style={{ fontWeight: '700' }}>Plays</Text> {item.plays}</Text>}
+              {item.likes && <Text><Text style={{ fontWeight: '700' }}>Likes</Text> {item.likes}</Text>}
             </View>}
           />
           <Divider />
