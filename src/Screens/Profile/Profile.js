@@ -119,7 +119,7 @@ function Profile({ route, navigation }) {
 
 
   const ProfileQueued = () => (
-    <View>
+    <View style={{ marginBottom: 20 }}>
       {queued && queued.length > 0 ?
         <View>
           <Text style={styles.title}>You have {queued.length} queued</Text>
@@ -200,18 +200,18 @@ function Profile({ route, navigation }) {
 
           <Divider />
 
-          <ErrorBoundary caller='Profile Favorites'>
+          {/* <ErrorBoundary caller='Profile Favorites'>
             <ProfileFavorites />
           </ErrorBoundary>
 
-          <Divider />
+          <Divider /> */}
 
-          {/* <ErrorBoundary caller='Profile Post Cards'>
+          <ErrorBoundary caller='Profile Post Cards'>
             <ProfileCards
               user={user}
               navigation={navigation}
               userPosts={userPosts} />
-          </ErrorBoundary> */}
+          </ErrorBoundary>
 
           <View style={{ marginBottom: 40 }}></View>
         </ScrollView >
