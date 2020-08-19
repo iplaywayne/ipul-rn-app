@@ -21,6 +21,8 @@ import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 import Camera from '../../components/Camera/Camera'
 import { ErrorBoundary } from '../../components'
+import PostService from '../../utils/post/PostService'
+import PostCard from '../../components/Post/PostCard'
 
 
 function Home(props) {
@@ -32,6 +34,7 @@ function Home(props) {
   const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('s')).slice(0, 11)
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
+  const [globalPosts, setGlobalPosts] = React.useState(null)
 
   const onOpen = () => {
     modalizeRef.current?.open();
@@ -51,12 +54,15 @@ function Home(props) {
   )
 
   React.useEffect(() => {
+    PostService.getGlobalPosts(posts => {
+      setGlobalPosts(posts)
+    })
     setTimeout(() => {
       if (tracks.length) {
         trackService.setup()
         setLoading(false)
       }
-    }, 1500)
+    }, 1000)
   }, [tracks])
 
 
@@ -106,10 +112,26 @@ function Home(props) {
 
       <ErrorBoundary caller='Home Explore Cards'>
         <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
-          {topRemixes.map((itm, idx) => (
+          
+          {topRemixes.slice(0, 2).map((itm, idx) => (
             <ExploreCard {...props} key={idx} item={itm} />
           ))}
-        </View>
+
+          {globalPosts && globalPosts.slice(0,2).map((itm, idx) => (
+            <PostCard navigation={navigation} key={idx} item={itm}
+              isAuthor={itm.uid === user.uid} />
+          ))}
+
+          {topRemixes.slice(3, 6).map((itm, idx) => (
+            <ExploreCard {...props} key={idx} item={itm} />
+          ))}
+
+          {globalPosts && globalPosts.slice(3, 6).map((itm, idx) => (
+            <PostCard navigation={navigation} key={idx} item={itm}
+              isAuthor={itm.uid === user.uid} />
+          ))}
+
+       </View>
       </ErrorBoundary>
 
       <View style={{ height: 50 }}></View>

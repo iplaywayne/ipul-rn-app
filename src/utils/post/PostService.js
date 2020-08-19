@@ -22,21 +22,21 @@ const PostService = (function () {
     const userRef = database.ref(`channels/posts/${uid}/`)
     const userPush = userRef.push({ ...details, uid, image: '' })
     const keyRef = database.ref(`channels/posts/${uid}/${userPush.key}`)
-    keyRef.update({ key: userPush.key })
 
     const storageRef = storage.ref(`channels/posts/${uid}/`)
     const childRef = storageRef.child(`${userPush.key}/${userPush.key}${ext}`)
-    const childRefKey = childRef.key
+
     const uploadTask = childRef.putFile(file, metadata)
+
     var task = function (snapshot) {
       var percent = snapshot.bytesTransferred / snapshot.totalBytes
-      progress(percent)
+      progress(Math.round(percent * 100))
     };
     var error = function (error) { console.log(error) };
     var complete = function (data) {
       childRef.getDownloadURL().then(url => {
-        image && keyRef.update({ image: url })
-        video && keyRef.update({ video: url })
+        image && keyRef.update({ key: userPush.key, image: url })
+        video && keyRef.update({ key: userPush.key, video: url })
         next(url)
       })
     };
@@ -64,6 +64,23 @@ const PostService = (function () {
     })
   }
 
+  const addPostLike = async (uid, key, val) => {
+    if (!uid || !key) throw new Error('Missing addPostLike param')
+
+    const postRef = database.ref(`likes/posts/${key}/${uid}`)
+    postRef.update({ liked: val })
+  }
+
+  const isPostLiked = async (uid, key) => {
+    if (!uid || !key) throw new Error('Missing isPostLiked param')
+    const postRef = database.ref(`likes/posts/${key}`)
+    try {
+      return postRef.once('value').then(res => res.val()[uid].liked)
+    } catch (e) {
+      return false
+    }
+  }
+
   const getUserPosts = (uid, next) => {
     if (!uid) return
     let list;
@@ -77,7 +94,21 @@ const PostService = (function () {
     })
   }
 
-  return { putPost, removePost, getUserPosts }
+  const getGlobalPosts = (next) => {
+    let list;
+    const userRef = database.ref(`channels/posts/`)
+    userRef.on('value', snap => {
+      let list = []
+      snap.forEach(child => {
+        child.forEach(baby => {
+          list.push(baby.val())
+        })
+      })
+      next(list)
+    })
+  }
+
+  return { putPost, removePost, addPostLike, isPostLiked, getUserPosts, getGlobalPosts }
 })()
 
 export default PostService
