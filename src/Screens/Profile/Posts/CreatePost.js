@@ -123,7 +123,7 @@ export function CreatePost({ navigation }) {
         <View style={{ flex: 1 }}>
           <View style={{ flex: 11 }}>
             <Camera
-              mode={'camera'}
+              mode={isAdmin ? captureMode : 'image'}
               setCameraFlip={flip => setCameraFlip(flip)}
               dataUri={uri => setCaptured(uri)}
               dataType={type => setCaptureType(type)}

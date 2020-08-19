@@ -63,9 +63,9 @@ export default class CameraScreen extends React.Component {
     barcodes: [],
   };
 
-  // componentDidUnmount() {
-  //   this.stopVideo()
-  // }
+componentDidMount() {
+  console.log(RNCamera.Constants.VideoQuality['1080p'])
+}
 
   toggleFacing() {
     this.setState({
@@ -137,6 +137,7 @@ export default class CameraScreen extends React.Component {
           flex: 1,
           justifyContent: 'space-between',
         }}
+        recordOptions={{maxDuration:10,quality:RNCamera.Constants.VideoQuality['1080p']}}
         type={this.state.type}
         flashMode={this.state.flash}
         autoFocus={this.state.autoFocus}
