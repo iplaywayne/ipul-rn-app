@@ -82,7 +82,7 @@ export function MediaDetails({ route, navigation }) {
   }, [])
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <TouchableOpacity onPress={() => navigation.goBack()}
         style={{ position: 'absolute', top: 60, left: 25, zIndex: 10 }}>
         <Text style={{ fontWeight: '700' }}>

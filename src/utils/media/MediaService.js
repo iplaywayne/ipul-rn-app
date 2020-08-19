@@ -6,7 +6,7 @@ import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 
-const tracksPath = `/mediaTracks`
+const tracksPath = `/channels/media`
 const favsPath = `/favorites/`
 
 // Subscribing to the following events inside MyComponent
@@ -69,7 +69,7 @@ function MediaService() {
       console.log('Missing ACID')
       return
     }
-    const userRef = database.ref(`mediaTracks/${acid}`)
+    const userRef = database.ref(`channels/media/${acid}`)
     userRef.update({ likes: firebase.database.ServerValue.increment(1) })
   }
 
@@ -78,7 +78,7 @@ function MediaService() {
       console.log('Missing ACID')
       return
     }
-    const userRef = database.ref(`mediaTracks/${acid}`)
+    const userRef = database.ref(`channels/media/${acid}`)
     userRef.update({ views: firebase.database.ServerValue.increment(1) })
   }
 
@@ -87,12 +87,15 @@ function MediaService() {
       console.log('Missing ACID')
       return
     }
-    const userRef = database.ref(`mediaTracks/${acid}`)
+    const userRef = database.ref(`channels/media/${acid}`)
     userRef.update({ plays: firebase.database.ServerValue.increment(1) })
   }
 
 
-  return { addAllToQueue, getTracks, getFavorites, addMediaLike, addMediaView, addMediaPlay }
+  return {
+    addAllToQueue, getTracks, getFavorites, addMediaLike, addMediaView,
+    addMediaPlay
+  }
 }
 
 export default MediaService

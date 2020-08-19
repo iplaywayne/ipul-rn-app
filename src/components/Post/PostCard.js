@@ -181,7 +181,7 @@ function PostCard(props) {
               </Text>
             </TouchableOpacity>
             {item.video &&
-              <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 20 }}>
+              <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 10 }}>
                 <Text style={{ color: 'black' }}>
                   <MaterialCommunityIcons
                     name={isPostPaused ? 'play' : 'pause'}

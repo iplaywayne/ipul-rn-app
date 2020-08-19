@@ -6,6 +6,7 @@ import {
 } from 'galio-framework';
 import { Divider } from 'react-native-paper'
 import { FastImage as Image } from 'react-native-fast-image'
+import DoubleClick from 'react-native-double-tap'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
@@ -65,7 +66,9 @@ function ExploreCard(props) {
   
   return (
     <ScrollView style={styles.root}>
-      <TouchableOpacity onPress={handleMediaView}>
+      <DoubleClick
+        doubleTap={handleMediaView}
+      >
 
         <View>
           <Card
@@ -89,7 +92,7 @@ function ExploreCard(props) {
           <Divider />
         </View>
 
-      </TouchableOpacity>
+      </DoubleClick>
     </ScrollView>
   )
 }

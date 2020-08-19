@@ -23,7 +23,7 @@ export const HomeNavigator = ({ navigation }) => {
   const { user } = authState
 
   return (
-    <MediaStack.Navigator mode='modal'>
+    <MediaStack.Navigator mode='card'>
 
       {/* Media Screen */}
       <MediaStack.Screen name="Home" component={HomeScreen} options={{

@@ -16,11 +16,11 @@ export const ReadTracks = cb => {
       })
     })
 
-    list.forEach(t => {
-      const newTrkRef = firebase.database().ref(`/channels/media/${t.acid}`)
-      newTrkRef.set(t)
-      newTrkRef.off()
-    })
+    // list.forEach(t => {
+    //   const newTrkRef = firebase.database().ref(`/channels/media/${t.acid}`)
+    //   newTrkRef.set(t)
+    //   newTrkRef.off()
+    // })
 
     if (cb) cb(list)
     if (!cb) console.log('Callback Missing', list.length)
