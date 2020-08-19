@@ -17,21 +17,19 @@ import DrawerContent from './DrawerContent'
 import { CreatePost as CreatePostScreen } from '../../screens/Profile/Posts/CreatePost'
 import { CreateCaption as CreateCaptionScreen } from '../../screens/Profile/Posts/CreateCaption'
 import PendingPost from '../../screens/Profile/Posts/PendingPost'
+import { default as NotifsScreen } from '../../screens/Profile/Notifs/Notifs'
 
 
 const ProfileStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
-const NotifsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Notifications Coming</Text></View>
-)
 const AdsScreen = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Ads Coming</Text></View>
 )
 
 export const ProfileNavigator = ({ navigation }) => {
-  const [storeState,storeDispatch] = useStore()
+  const [storeState, storeDispatch] = useStore()
   const { user } = storeState
 
   return (
@@ -42,6 +40,7 @@ export const ProfileNavigator = ({ navigation }) => {
       <ProfileStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',
       }} />
+
       <ProfileStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
         title: 'Update Mood',
       }} />
@@ -57,9 +56,11 @@ export const ProfileNavigator = ({ navigation }) => {
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />
+
       <ProfileStack.Screen name="Notifications" component={NotifsScreen} options={{
         title: 'Notifications',
       }} />
+
       <ProfileStack.Screen name="Ads" component={AdsScreen} options={{
         title: 'Advertisements',
       }} />
