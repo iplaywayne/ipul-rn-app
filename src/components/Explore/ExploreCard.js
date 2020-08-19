@@ -58,7 +58,7 @@ function ExploreCard(props) {
     })
 
     setTimeout(() => {
-      const userRef = database.ref(`mediaTracks/${item.acid}`)
+      const userRef = database.ref(`channels/media/${item.acid}`)
       userRef.update({ views: firebase.database.ServerValue.increment(1) })
     }, 250)
   }
