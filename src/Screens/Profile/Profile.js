@@ -68,7 +68,7 @@ function Profile({ route, navigation }) {
 
   React.useEffect(() => {
     setTimeout(async () => {
-     if (tracks.length) {
+      if (tracks.length) {
         setLoading(false)
         storeDispatch.setLoading(false)
       }
@@ -100,7 +100,7 @@ function Profile({ route, navigation }) {
   }
 
   const playNowTapped = async () => {
-    if (!queued.length) {
+    if (!isPlaying && !queued.length) {
       Alert.alert('Select a song to start your playlist')
       return
     }
@@ -112,7 +112,7 @@ function Profile({ route, navigation }) {
         TrackPlayer.pause()
         storeDispatch.setPlaying(false)
       }
-    }, 500)
+    }, 250)
   }
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
@@ -169,54 +169,56 @@ function Profile({ route, navigation }) {
   )
 
   return (
-    <ErrorBoundary caller='Profile'>
-      <ErrorBoundary caller='Profile App Header'>
-        <AppHeader navigation={navigation} user={user} />
+    <View style={{ flex: 1 }}>
+      <ErrorBoundary caller='Profile'>
+        <ErrorBoundary caller='Profile App Header'>
+          <AppHeader navigation={navigation} user={user} />
+        </ErrorBoundary>
+
+        <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+
+          <ErrorBoundary caller='Profile Header'>
+            <ProfileHeader
+              user={user}
+              navigation={navigation}
+              playNowTapped={playNowTapped}
+              isPlaying={isPlaying}
+            />
+          </ErrorBoundary>
+
+          <Divider />
+
+          <ErrorBoundary caller='Profile Recent'>
+            <ProfileRecent />
+          </ErrorBoundary>
+
+          <Divider />
+
+          <ErrorBoundary caller='Profile Queued'>
+            <ProfileQueued />
+          </ErrorBoundary>
+
+          <Divider />
+
+          <ErrorBoundary caller='Profile Favorites'>
+            <ProfileFavorites />
+          </ErrorBoundary>
+
+          <Divider />
+
+          {/* <ErrorBoundary caller='Profile Post Cards'>
+            <ProfileCards
+              user={user}
+              navigation={navigation}
+              userPosts={userPosts} />
+          </ErrorBoundary> */}
+
+          <View style={{ marginBottom: 40 }}></View>
+        </ScrollView >
+
+        {/* <Text>{JSON.stringify(user.occupation, null, 2)}</Text> */}
       </ErrorBoundary>
-
-      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-
-        <ErrorBoundary caller='Profile Header'>
-          <ProfileHeader
-            user={user}
-            navigation={navigation}
-            playNowTapped={playNowTapped}
-            isPlaying={isPlaying}
-          />
-        </ErrorBoundary>
-
-        <Divider />
-
-        <ErrorBoundary caller='Profile Recent'>
-          <ProfileRecent />
-        </ErrorBoundary>
-
-        <Divider />
-
-        <ErrorBoundary caller='Profile Queued'>
-          <ProfileQueued />
-        </ErrorBoundary>
-
-        <Divider />
-
-        <ErrorBoundary caller='Profile Favorites'>
-          <ProfileFavorites />
-        </ErrorBoundary>
-
-        <Divider />
-
-        <ErrorBoundary caller='Profile Post Cards'>
-          <ProfileCards
-            user={user}
-            navigation={navigation}
-            userPosts={userPosts} />
-        </ErrorBoundary>
-
-        <View style={{ marginBottom: 40 }}></View>
-      </ScrollView >
-
-      {/* <Text>{JSON.stringify(user.occupation, null, 2)}</Text> */}
-    </ErrorBoundary>
+    </View>
   )
 }
 

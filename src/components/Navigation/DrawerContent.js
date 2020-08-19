@@ -46,7 +46,7 @@ const DrawerContent = (props) => {
             navigation.navigate('Notifications');
           }}
         />
-        <DrawerItem
+        {/* <DrawerItem
           label="Advertisements"
           onPress={(): void => {
             navigation.navigate('Ads');
@@ -57,7 +57,7 @@ const DrawerContent = (props) => {
           onPress={(): void => {
             navigation.navigate('Settings');
           }}
-        />
+        /> */}
 
         <Divider style={{ marginVertical: 20 }} />
 

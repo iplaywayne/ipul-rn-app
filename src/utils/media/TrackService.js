@@ -25,33 +25,6 @@ function TrackService() {
   const { tracks, queued, currentTrack } = storeState
   const mediaService = MediaService()
 
-  useTrackPlayerEvents(events, async (event) => {
-    switch (event.type) {
-      case TrackPlayerEvents.PLAYBACK_ERROR:
-        console.warn('An error occurred while playing the current track.');
-        return
-      case TrackPlayerEvents.PLAYBACK_STATE:
-        const isPlaying = event.state === 'playing'
-        const isLoading = event.state === 'loading'
-        const isIdle = event.state === 'idle'
-        if (isPlaying) {
-          storeDispatch.setPlaying(true)
-          console.log(event)
-        } else {
-          storeDispatch.setPlaying(false)
-        }
-        return
-      case TrackPlayerEvents.PLAYBACK_QUEUE_ENDED:
-        console.log(currentTrack.acid, 'has ended')
-        TrackPlayer.reset()
-        storeDispatch.setQueued([])
-        storeDispatch.setPlaying(false)
-        return
-      default:
-        console.log('?? useTrackPlayerEvents State', event.type)
-        return
-    }
-  });
 
   React.useEffect(() => {
     if (auth && !tracks.length)
@@ -59,22 +32,63 @@ function TrackService() {
     return () => { }
   }, [])
 
-  React.useEffect(() => {
-    if (storeState.tracks.length && storeDispatch.isPlaying) {
-      const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
-        const track = await TrackPlayer.getTrack(data.nextTrack);
-        console.log('[TODO] send track change listener data to store', data.nextTrack)
 
-      })
+  setPlaybackListener = async () => {
+    TrackPlayer.addEventListener('playback-state', async (data) => {
+      const playingId = await TrackPlayer.getCurrentTrack()
+      switch (data.state) {
+        case 'loading':
+          storeDispatch.setLoading(true)
+          return
+        case 'buffering':
+          return
+        case 'ready':
+          storeDispatch.setLoading(false)
+          return
+        case 'playing':
+          if (playingId === currentTrack.acid) {
+            console.log('Playing Track', currentTrack.title)
+            storeDispatch.setPlaying(true)
+          }
+        case 'paused':
+          // if (playingId === currentTrack.acid) {
+          //   console.log('Paused Track', currentTrack.title)
+          //   storeDispatch.setPlaying(false)
+          // }
+          return
+        default:
+          console.log(data.state)
+          return
+      }
+    })
+  }
+
+
+  React.useLayoutEffect(() => {
+    let mounted = false
+    if (storeState.tracks.length && mounted === false) {
+      setPlaybackListener()
+
+      // const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
+      //   const track = await TrackPlayer.getTrack(data.nextTrack);
+      //   console.log('[TODO] send track change listener data to store', data)
+      //   storeDispatch.setPlaying(true)
+      // })
       const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
         console.log(`[TRACKSERVICE] Your playlist has ended`);
         TrackPlayer.removeUpcomingTracks()
         storeDispatch.setQueued([])
         storeDispatch.setPlaying(false)
       })
+      mounted = true
     }
-    return () => { }
-  }, [storeDispatch.isPlaying])
+    return () => {
+      mounted = true
+      TrackPlayer.remove('playback-state')
+      TrackPlayer.remove('playback-track-changed')
+      TrackPlayer.remove('playback-queue-ended')
+    }
+  }, [])
 
 
   const setup = () => {
@@ -87,21 +101,25 @@ function TrackService() {
           TrackPlayer.CAPABILITY_STOP,
           TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
           TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+          TrackPlayer.CAPABILITY_JUMP_FORWARD,
+          TrackPlayer.CAPABILITY_JUMP_BACKWARD,
         ],
       })
     })
   }
 
   const addAllToQueue = async () => {
-    TrackPlayer.add(state.tracks.map((trk) => {
-      return {
-        id: trk.acid,
-        title: trk.title,
-        artist: trk.artist,
-        url: trimWWWString(trk.song),
-        artwork: trimWWWString(trk.art_link)
-      }
-    }))
+
+    // TrackPlayer.add(state.tracks.map((trk) => {
+    //   return {
+    //     id: trk.acid,
+    //     title: trk.title,
+    //     artist: trk.artist,
+    //     url: trimWWWString(trk.song),
+    //     artwork: trimWWWString(trk.art_link)
+    //   }
+    // }))
+    TrackPlayer.add(state.tracks)
       .then(res => {
         TrackPlayer.play()
           .then(r => r.json())

@@ -1,76 +1,84 @@
 import React from 'react'
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
+import {
+  ScrollView, View, Text, TouchableOpacity, ActivityIndicator,
+  ActionSheetIOS, Alert
+} from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card, Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
+import DoubleClick from 'react-native-double-tap'
 
 import { siteLogo, logo } from '../../constants'
 import { useStore, wait } from '../../utils'
 import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 import MediaService from '../../utils/media/MediaService'
 import TrackService from '../../utils/media/TrackService'
+import MediaActionSheet from './MediaActionSheet'
+
 
 export function MediaDetails({ route, navigation }) {
   const { item, user, tracks } = route.params
   const [storeState, storeDispatch] = useStore()
   const [tracksLikeThis, setTracksLikeThis] = React.useState(null)
-  const { isPlaying, currentTrack, queued } = storeState
+  const { isPlaying, currentTrack, queued, isLoading } = storeState
   const mediaService = MediaService()
   const trackService = TrackService()
 
   const handleAddMediaLike = () => {
-    console.log(item, 'is ready to be liked!')
     mediaService.addMediaLike(item.acid)
   }
 
   const addQueue = async (item) => {
-    console.log(TrackPlayerStructure(item))
-    await TrackPlayer.setupPlayer()
-    await TrackPlayer.add(TrackPlayerStructure(item))
-    console.log('Done')
-    setTimeout(async () => {
-      const queued = await TrackPlayer.getQueue()
-      storeDispatch.setQueued(queued)
-    }, 250)
+    MediaActionSheet()
+    // console.log(TrackPlayerStructure(item))
+    // await TrackPlayer.setupPlayer()
+    // await TrackPlayer.add(TrackPlayerStructure(item))
+    // console.log('Done')
+    // setTimeout(async () => {
+    //   const queued = await TrackPlayer.getQueue()
+    //   storeDispatch.setQueued(queued)
+    // }, 250)
   }
 
   const playNow = async (item) => {
-    if (!isPlaying && currentTrack !== item) {
-      await TrackPlayer.setupPlayer()
-      await TrackPlayer.reset()
-      await TrackPlayer.add(TrackPlayerStructure(item))
-      await TrackPlayer.play()
-      storeDispatch.setPlaying(true)
-      storeDispatch.setCurrentTrack(item)
-      mediaService.addMediaPlay(item.acid)
-    } else if (!isPlaying && currentTrack === item) {
-      TrackPlayer.play()
-      storeDispatch.setPlaying(true)
-    } else if (isPlaying && currentTrack === item) {
-      TrackPlayer.pause()
-      storeDispatch.setPlaying(false)
-    } else {
-      await TrackPlayer.setupPlayer()
-      await TrackPlayer.reset()
-      await TrackPlayer.add(TrackPlayerStructure(item))
-      await TrackPlayer.play()
-      storeDispatch.setPlaying(true)
-      storeDispatch.setCurrentTrack(item)
-      mediaService.addMediaPlay(item.acid)
-    }
     setTimeout(async () => {
+      if (!isPlaying && !currentTrack) {
+        storeDispatch.setLoading(true)
+        storeDispatch.setPlaying(true)
+        storeDispatch.setCurrentTrack(item)
+        await TrackPlayer.setupPlayer()
+        await TrackPlayer.reset()
+        await TrackPlayer.add(TrackPlayerStructure(item))
+        await TrackPlayer.play()
+        mediaService.addMediaPlay(item.acid)
+      } else if (!isPlaying && currentTrack.acid === item.acid) {
+        storeDispatch.setPlaying(true)
+        TrackPlayer.play()
+      } else if (isPlaying && currentTrack.acid === item.acid) {
+        storeDispatch.setPlaying(false)
+        TrackPlayer.pause()
+      } else {
+        storeDispatch.setLoading(true)
+        storeDispatch.setPlaying(true)
+        storeDispatch.setCurrentTrack(item)
+        await TrackPlayer.setupPlayer()
+        await TrackPlayer.reset()
+        await TrackPlayer.add(TrackPlayerStructure(item))
+        await TrackPlayer.play()
+        mediaService.addMediaPlay(item.acid)
+      }
       const queued = await TrackPlayer.getQueue()
       storeDispatch.setQueued(queued)
-    }, 250)
+    }, 200)
   }
 
   React.useEffect(() => {
     if (tracks.length > 0) {
       let tracksLikeThis = tracks.filter(t => t.acid !== item.acid &&
         JSON.stringify(t).includes(item.genre)).slice(0, 3)
-      console.log(tracksLikeThis.length, item.genre)
       setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
+      storeDispatch.setLoading(false)
     }
   }, [tracks])
 
@@ -81,6 +89,27 @@ export function MediaDetails({ route, navigation }) {
     })
   }, [])
 
+  const handleNextMedia = () => {
+    TrackPlayer.skipToNext()
+      .then(async res => {
+        console.log(await TrackPlayer.getCurrentTrack())
+        // navigation.navigate('MediaDetails', {
+        //   item: item,
+        //   user: user,
+        //   tracks: tracks
+        // })
+      })
+      .catch(err => console.log('ERROR'))
+  }
+
+  const handleRepeatMedia = () => {
+    TrackPlayer.seekTo(0)
+      .then(res => console.log('Done'))
+      .catch(err => console.log('ERROR'))
+
+  }
+
+
   return (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <TouchableOpacity onPress={() => navigation.goBack()}
@@ -90,11 +119,11 @@ export function MediaDetails({ route, navigation }) {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <DoubleClick doubleTap={() => navigation.goBack()}>
         <FastImage source={item.art_link ? { uri: item.art_link } : logo}
           style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
           resizeMode='cover' />
-      </TouchableOpacity>
+      </DoubleClick>
 
       <View style={{ flex: 1, alignItems: 'center', marginTop: 10 }}>
         <Text style={{ fontWeight: '700', fontSize: 20 }}>{item.artist}</Text>
@@ -104,24 +133,35 @@ export function MediaDetails({ route, navigation }) {
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
         marginHorizontal: 20
       }}>
-        <Icons name='repeat' size={65} />
+        <TouchableOpacity onPress={handleRepeatMedia}>
+          <Icons name='repeat' size={65} />
+        </TouchableOpacity>
 
         <TouchableOpacity onPress={() => wait(() => addQueue(item))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => playNow(item), 250)
-        }>
-          {isPlaying && currentTrack !== item && <Icons name='play-circle' size={100} />}
-          {isPlaying && currentTrack === item && <Icons name='pause-circle' size={100} />}
-          {!isPlaying && <Icons name='play-circle' size={100} />}
-        </TouchableOpacity>
+        {!isLoading ?
+          <TouchableOpacity onPress={() => wait(() => playNow(item), 250)}>
+            {isPlaying && currentTrack.acid !== item.acid &&
+              <Icons name='play-circle' size={100} />}
+            {isPlaying && currentTrack.acid === item.acid &&
+              <Icons name='pause-circle' size={100} />}
+            {!isPlaying && <Icons name='play-circle' size={100} />}
+          </TouchableOpacity> :
+          <ActivityIndicator style={{
+            margin: 9,
+            backgroundColor: 'black',
+            padding: 31, borderRadius: 100 / 2
+          }} />}
 
         <TouchableOpacity onPress={handleAddMediaLike}>
           <Icons name='heart-outline' size={30} />
         </TouchableOpacity>
 
-        <Icons name='skip-next' size={65} />
+        <TouchableOpacity onPress={handleNextMedia}>
+          <Icons name='skip-next' size={65} />
+        </TouchableOpacity>
       </View>
 
       <Divider style={{ marginTop: 10 }} />
