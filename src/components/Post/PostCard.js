@@ -94,7 +94,6 @@ function PostCard(props) {
             shadow
             title={(postAuthor || {}).name}
             caption={(postAuthor || {}).occupation}
-            style={{ padding: 0 }}
             location={timeago.format(item.createdAt)}
             avatar={(postAuthor || {}).avatar}
             children={<DoubleClick
@@ -115,7 +114,6 @@ function PostCard(props) {
             shadow
             title={(postAuthor || {}).name}
             caption={(postAuthor || {}).occupation}
-            style={{ padding: 0 }}
             location={timeago.format(item.createdAt)}
             avatar={(postAuthor || {}).avatar}
             imageStyle={{ borderRadius: 10, height: 400 }}
@@ -128,6 +126,8 @@ function PostCard(props) {
                 source={{ uri: item.video }}
                 style={{ height: 500, width: '100%', maxWidth: 600 }}
                 paused={isPostPaused}
+                onEnd={() => setIsPostPaused(true)}
+                resizeMode='cover'
               /></DoubleClick>}
           >
           </Card> : null}
@@ -147,7 +147,7 @@ function PostCard(props) {
               <TouchableOpacity onPress={handlePostPlay} style={{ marginLeft: 20 }}>
                 <Text style={{ color: 'black' }}>
                   <MaterialCommunityIcons
-                    name={'play'}
+                    name={isPostPaused ? 'play' : 'pause'}
                     size={25} />
                 </Text>
               </TouchableOpacity>}
@@ -177,7 +177,7 @@ function PostCard(props) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 5,
+    padding: 0,
     marginTop: 10,
     width: '100%',
     maxWidth: 500,
@@ -204,7 +204,14 @@ const styles = StyleSheet.create({
   },
   miniCardText: {
     flex: 1
-  }
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
 })
 
 export default PostCard

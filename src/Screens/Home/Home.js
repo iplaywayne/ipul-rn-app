@@ -141,9 +141,9 @@ function Home(props) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 30,
-    flex: 1,
-    paddingBottom: 50,
+    // paddingTop: 30,
+    // flex: 1,
+    // paddingBottom: 50,
   },
   title: {
     fontSize: 28,
