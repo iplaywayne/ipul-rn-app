@@ -75,7 +75,9 @@ const PostService = (function () {
     if (!uid || !key) throw new Error('Missing isPostLiked param')
     const postRef = database.ref(`likes/posts/${key}`)
     try {
-      return postRef.once('value').then(res => res.val()[uid].liked)
+      return postRef.once('value')
+        .then(res => res.val()[uid].liked)
+        .catch(e => e)
     } catch (e) {
       return false
     }

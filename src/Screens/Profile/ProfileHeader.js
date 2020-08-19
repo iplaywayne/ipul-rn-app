@@ -9,8 +9,8 @@ import { Avatar } from 'react-native-paper'
 import Btn from '../../components/Prebuilt/Button'
 
 
-const ProfileHeader = ({ user, navigation, playNowTapped }) => {
-  const { avatar, name, mood, bio, occupation, isLoading, isPlaying } = user
+const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying }) => {
+  const { avatar, name, mood, bio, occupation, isLoading } = user
 
   return (
     <View style={{ flex: 1 }}>

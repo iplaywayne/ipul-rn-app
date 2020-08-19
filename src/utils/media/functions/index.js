@@ -2,7 +2,7 @@ import { firebase, database, auth, trimWWWString } from '../../../utils'
 export { SendPlayerDetails, TrackPlayerStructure } from './SendPlayerDetails'
 
 
-const tracksPath = `/mediaTracks`
+const tracksPath = `/channels/media`
 
 export const ReadTracks = cb => {
   const trkRef = firebase.database().ref(tracksPath)
@@ -15,6 +15,13 @@ export const ReadTracks = cb => {
         song: trimWWWString(child.val().song),
       })
     })
+
+    // list.forEach(t => {
+    //   const newTrkRef = firebase.database().ref(`/channels/media/${t.acid}`)
+    //   newTrkRef.set(t)
+    //   newTrkRef.off()
+    // })
+
     if (cb) cb(list)
     if (!cb) console.log('Callback Missing', list.length)
   })

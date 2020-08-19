@@ -17,73 +17,8 @@ const events = [
 ];
 
 function MediaService() {
-  if (!auth) return
   const [storeState, storeDispatch] = useStore()
   const { queued, currentTrack } = storeState
-  
-  // useTrackPlayerEvents(events, async (event) => {
-  //   switch (event.type) {
-  //     case TrackPlayerEvents.PLAYBACK_ERROR:
-  //       console.warn('An error occurred while playing the current track.');
-  //       return
-  //     case TrackPlayerEvents.PLAYBACK_STATE:
-  //       const isPlaying = event.state === 'playing'
-  //       const isLoading = event.state === 'loading'
-  //       const isIdle = event.state === 'idle'
-  //       if (isPlaying) {
-  //         storeDispatch.setPlaying(true)
-  //       } else {
-  //         storeDispatch.setPlaying(false)
-  //       }
-  //       return
-  //     case TrackPlayerEvents.PLAYBACK_QUEUE_ENDED:
-  //       console.log(currentTrack.acid, 'has ended')
-  //       TrackPlayer.reset()
-  //       storeDispatch.setQueued([])
-  //       storeDispatch.setPlaying(false)
-  //       return
-  //     default:
-  //       console.log('?? useTrackPlayerEvents State', event.type)
-  //       return
-  //   }
-  // });
-
-  // React.useEffect(() => {
-  //   if (!auth) return
-  //   getTracks(result => storeDispatch.setTracks(result))
-  //   // console.log('[MEDIASERVICE] [', auth.currentUser.displayName ? 'Ready' : 'Accounts needs setup', ']')
-  // }, [])
-
-  // React.useEffect(() => {
-  //   if (storeState.tracks.length && storeDispatch.isPlaying) {
-  //     const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
-  //       const track = await TrackPlayer.getTrack(data.nextTrack);
-  //     })
-  //     const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
-  //       console.log(`[MEDIASERVICE] Your playlist has ended`);
-  //       TrackPlayer.removeUpcomingTracks()
-  //       storeDispatch.setQueued([])
-  //       storeDispatch.setPlaying(false)
-  //     })
-  //   }
-  //   return () => { }
-  // }, [storeDispatch.isPlaying])
-
-
-  // const setup = () => {
-  //   TrackPlayer.setupPlayer().then(() => {
-  //     // Player setup with options
-  //     TrackPlayer.updateOptions({
-  //       capabilities: [
-  //         TrackPlayer.CAPABILITY_PLAY,
-  //         TrackPlayer.CAPABILITY_PAUSE,
-  //         TrackPlayer.CAPABILITY_STOP,
-  //         TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-  //         TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-  //       ],
-  //     })
-  //   })
-  // }
 
   const addAllToQueue = async () => {
     TrackPlayer.add(state.tracks.map((trk) => {

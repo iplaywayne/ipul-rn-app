@@ -60,6 +60,7 @@ function Profile({ route, navigation }) {
       if (params && 'details' in params)
         setPostDetailsPending(params.details)
     }
+    // mediaService.getTracks(res => console.log(res.length))
     // (async () => {
     //   console.log(await FetchTracks())
     // })()
@@ -180,6 +181,7 @@ function Profile({ route, navigation }) {
             user={user}
             navigation={navigation}
             playNowTapped={playNowTapped}
+            isPlaying={isPlaying}
           />
         </ErrorBoundary>
 
