@@ -48,19 +48,30 @@ function PostCard(props) {
   const handlePostMenu = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ["Cancel", "Remove Post"],
-        destructiveButtonIndex: 2,
+        options: ["Cancel", "View Author", "View Post", "Remove Post"],
+        destructiveButtonIndex: 3,
         cancelButtonIndex: 0
       },
       buttonIndex => {
-        if (buttonIndex === 0) {
-
-        } else if (buttonIndex === 1) {
-          try {
-            PostService.removePost(user.uid, item.key)
-          } catch (e) {
-            console.log('Post was not removed, try again', e)
-          }
+        switch (buttonIndex) {
+          case 0:
+            console.log('Cancel')
+            return
+          case 1:
+            console.log('View Author')
+            return
+          case 2:
+            console.log('View Post')
+            return
+          case 3:
+            try {
+              PostService.removePost(user.uid, item.key)
+            } catch (e) {
+              console.log('Post was not removed, try again', e)
+            }
+            return
+          default:
+            return
         }
       }
     );
@@ -82,8 +93,7 @@ function PostCard(props) {
           children={<DoubleClick
             doubleTap={handlePostLike}
             delay={200}
-          >
-            <Img
+          ><Img
               source={{ uri: item.image }}
               style={{ height: 500, width: '100%', maxWidth: 600 }}
               paused={true}
@@ -115,16 +125,24 @@ function PostCard(props) {
         </Card> : null}
 
 
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15 }}>
         <View style={{ flexDirection: 'row' }}>
           {/* <Text style={{ marginRight: 20 }}><MaterialCommunityIcons name='share' size={25} /></Text> */}
-          <TouchableOpacity onPress={handlePostLike} style={{ marginLeft: 10 }}>
+          <TouchableOpacity onPress={handlePostLike} style={{ marginHorizontal: 10 }}>
             <Text style={{ color: isLiked === true ? 'red' : 'black' }}>
               <MaterialCommunityIcons
                 name={isLiked === true ? 'heart' : 'heart-outline'}
                 size={25} />
             </Text>
           </TouchableOpacity>
+          {item.video &&
+            <TouchableOpacity onPress={() => console.log('Play TODO')} style={{ marginLeft: 20 }}>
+              <Text style={{ color: 'black' }}>
+                <MaterialCommunityIcons
+                  name={'play'}
+                  size={25} />
+              </Text>
+            </TouchableOpacity>}
         </View>
         {isAuthor &&
           <TouchableOpacity onPress={handlePostMenu}>
