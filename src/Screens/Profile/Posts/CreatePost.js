@@ -141,7 +141,7 @@ export function CreatePost({ navigation }) {
                 <MaterialCommunityIcons name="camera"
                   color={captureMode == 'camera' ? 'white' : 'gray'}
                   size={26} />
-                <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text>
+                {/* <Text style={{ color: captureMode == 'camera' ? 'white' : 'gray' }}>Take Photo</Text> */}
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => setCaptureMode('video')}
@@ -149,7 +149,7 @@ export function CreatePost({ navigation }) {
                 <MaterialCommunityIcons name="video"
                   color={captureMode == 'video' ? 'white' : 'gray'}
                   size={26} />
-                <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text>
+                {/* <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Take Video</Text> */}
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => {
@@ -166,9 +166,9 @@ export function CreatePost({ navigation }) {
               }}
                 style={{ alignItems: 'center' }}>
                 <MaterialCommunityIcons name="image-search-outline"
-                  color={captureMode == 'video' ? 'white' : 'gray'}
+                  color={'gray'}
                   size={26} />
-                <Text style={{ color: captureMode == 'video' ? 'white' : 'gray' }}>Gallery</Text>
+                {/* <Text style={{ color: 'gray' }}>Gallery</Text> */}
               </TouchableOpacity>
             </View>}
 

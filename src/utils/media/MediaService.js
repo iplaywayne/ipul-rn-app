@@ -35,7 +35,7 @@ function MediaService() {
 
   const getTrackById = acid => {
     const result = getTracks(result => result.filter(t => t.acid === acid))
-    console.log(result)
+    return result
   }
 
   const getTracks = cb => ReadTracks(cb)

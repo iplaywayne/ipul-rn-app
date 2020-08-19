@@ -92,12 +92,13 @@ export function MediaDetails({ route, navigation }) {
   const handleNextMedia = () => {
     TrackPlayer.skipToNext()
       .then(async res => {
-        console.log(await TrackPlayer.getCurrentTrack())
-        // navigation.navigate('MediaDetails', {
-        //   item: item,
-        //   user: user,
-        //   tracks: tracks
-        // })
+        const currentTrk = mediaService.getTrackById(await TrackPlayer.getCurrentTrack())
+        console.log(currentTrk)
+        navigation.replace('MediaDetails', {
+          item: currentTrk,
+          user: user,
+          tracks: tracks
+        })
       })
       .catch(err => console.log('ERROR'))
   }
@@ -155,11 +156,11 @@ export function MediaDetails({ route, navigation }) {
             padding: 31, borderRadius: 100 / 2
           }} />}
 
-        <TouchableOpacity onPress={handleAddMediaLike}>
+        <TouchableOpacity onPress={() => wait(() => handleAddMediaLike())}>
           <Icons name='heart-outline' size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleNextMedia}>
+        <TouchableOpacity onPress={() => wait(() => handleNextMedia())}>
           <Icons name='skip-next' size={65} />
         </TouchableOpacity>
       </View>

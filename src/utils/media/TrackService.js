@@ -50,12 +50,6 @@ function TrackService() {
             console.log('Playing Track', currentTrack.title)
             storeDispatch.setPlaying(true)
           }
-        case 'paused':
-          // if (playingId === currentTrack.acid) {
-          //   console.log('Paused Track', currentTrack.title)
-          //   storeDispatch.setPlaying(false)
-          // }
-          return
         default:
           console.log(data.state)
           return
