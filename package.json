@@ -48,6 +48,7 @@
     "react-native-androw": "0.0.34",
     "react-native-button": "^3.0.1",
     "react-native-camera": "^3.36.0",
+    "react-native-component-inview": "^1.0.2",
     "react-native-divider": "^1.0.3",
     "react-native-double-tap": "^1.0.1",
     "react-native-dynamic-vector-icons": "^1.0.0",

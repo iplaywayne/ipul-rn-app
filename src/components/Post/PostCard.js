@@ -13,6 +13,8 @@ import * as timeago from 'timeago.js';
 import Video from 'react-native-video'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import DoubleClick from 'react-native-double-tap'
+import InView from 'react-native-component-inview'
+
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
@@ -28,6 +30,22 @@ function PostCard(props) {
   const [isLiked, setIsLiked] = React.useState(false)
   const [isPostPaused, setIsPostPaused] = React.useState(true)
   const videoRef = React.useRef()
+  const [postPlays, setPostPlays] = React.useState(0)
+  const [didTapPlay, setDidTapPlay] = React.useState(false)
+
+  const [isInView, setIsInView] = React.useState(false)
+  const checkVisible = (isVisible, item) => {
+    if (isVisible) {
+      setIsInView(isVisible)
+      if (item.video && isPostPaused && !didTapPlay && postPlays < 3) {
+        postPlay()
+        console.log(item.caption, 'VIDEO IN VIEW', postPlays)
+      }
+    } else {
+      setIsInView(isVisible)
+      if (!isPostPaused) setIsPostPaused(true)
+    }
+  }
 
   React.useEffect(() => {
     FireStore.readUserById(item.uid,
@@ -41,9 +59,28 @@ function PostCard(props) {
     })()
   }, [isLiked])
 
-  const handlePostPlay = () => {
+  const resetPlay = () => {
+    videoRef.current.seek(0)
+    setIsPostPaused(true)
+  }
+
+  const postPlay = () => {
+    setPostPlays(postPlays + 1)
     videoRef.current.seek(0)
     setIsPostPaused(false)
+  }
+
+  const postPause = () => {
+    setIsPostPaused(true)
+  }
+
+  const handlePostPlay = () => {
+    if (!isPostPaused) {
+      postPause()
+      return
+    }
+    setDidTapPlay(true)
+    postPlay()
   }
 
   const handlePostLike = async () => {
@@ -86,7 +123,7 @@ function PostCard(props) {
   return (
     <ScrollView style={styles.root}>
 
-      <View>
+      <InView onChange={(isVisible) => checkVisible(isVisible, item)}>
         {item.image ?
           <Card
             flex
@@ -165,7 +202,7 @@ function PostCard(props) {
           <Text style={{ marginRight: 5, fontWeight: '700' }}>{(postAuthor || {}).name}</Text>
           <Text>{item.caption}</Text>
         </View>
-      </View>
+      </InView>
 
       <Divider />
 
