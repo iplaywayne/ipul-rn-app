@@ -1,9 +1,10 @@
 import React from 'react'
-import { ScrollView, View, Text, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
 import Button from 'react-native-button'
 import { List, Divider } from 'react-native-paper';
 import FastImage from 'react-native-fast-image'
 import * as timeago from 'timeago.js';
+import Video from 'react-native-video'
 
 import PostService from '../../../utils/post/PostService'
 import NotifService from '../../../utils/notifs/NotifService'
@@ -44,29 +45,34 @@ const Notifs = ({ navigation }) => {
     PostService.getUserPosts(user.uid,
       posts => setMyPosts(posts))
 
-    const data = await notifService.readLikedPosts()
+    const data = await notifService.readLikedPosts(user.uid)
     setMyNotifs(data)
   }
 
   return (
     <ScrollView>
-      {/* <Text>{JSON.stringify(myPosts, null, 2)}</Text> */}
+      {/* <Text>{JSON.stringify(myPosts[0].key, null, 2)}</Text> */}
 
       {myNotifs.map((itm, idx) => (
-        <View key={idx}>
-
+        <TouchableOpacity key={idx}>
           <List.Item
-
             title={`${itm.name} liked your post`}
             description={timeago.format(itm.createdAt)}
-            left={props => <FastImage
-              style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
-              source={{
-                uri: itm.image,
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />}
+            left={props => {
+              return (itm.image ? <FastImage
+                style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
+                source={{
+                  uri: itm.image,
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              /> : <Video
+                  source={{ uri: itm.video }}
+                  style={{ width: 50, height: 50, margin: 10, borderRadius: 5 }}
+                  resizeMode='cover'
+                  paused={true}
+                />)
+            }}
             right={props => <FastImage
               style={{ height: 50, width: 50, margin: 10, borderRadius: 50 / 2 }}
               source={{
@@ -76,8 +82,10 @@ const Notifs = ({ navigation }) => {
               resizeMode={FastImage.resizeMode.cover}
             />}
           />
+          {/* <Text>{itm.uid === user.uid ? 'Me' : 'Not Me'}</Text> */}
+          {/* <Text>{JSON.stringify(itm, null, 2)}</Text> */}
           <Divider />
-        </View>
+        </TouchableOpacity>
       ))
       }
     </ScrollView >

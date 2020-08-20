@@ -87,6 +87,20 @@ const PostService = (function () {
     }
   }
 
+  const getUserPostsSync = async uid => {
+    if (!uid) return
+    const userRef = database.ref(`channels/posts/${uid}`)
+    return userRef.once('value', snap => {
+      snap.val()
+    }).then(res => {
+      let list = []
+      res.forEach(child => {
+        list.unshift(child.val())
+      })
+      return list
+    })
+  }
+
   const getUserPosts = (uid, next) => {
     if (!uid) return
     let list;
@@ -121,7 +135,10 @@ const PostService = (function () {
     })
   }
 
-  return { putPost, removePost, addPostLike, isPostLiked, getUserPosts, getGlobalPosts }
+  return {
+    putPost, removePost, addPostLike, isPostLiked,
+    getUserPosts, getGlobalPosts, getUserPostsSync
+  }
 })()
 
 export default PostService

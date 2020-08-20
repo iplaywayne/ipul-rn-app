@@ -7,59 +7,20 @@ import FireService from '../firebase/FireService'
 
 
 const NotifService = () => {
-  const [list, setList] = React.useState([])
 
-  const getPostLikes = async (uid, next) => {
-    const users = await FireService.readUsers()
-    let list = []
-    readLikedUsers(uid, result => {
-      result.forEach(id => {
-        list.push(users.find(i => i.uid === id))
-      })
-      next(list)
-    })
-  }
-
-  const readLikedUsers = async (uid, next) => {
-    if (!uid) return
-
-    const postIDs = await readLikedUserIDs(uid)
-    const likeRef = database.ref(`likes/posts`)
-
-    likeRef.once('value', snap => {
-      let likedUsers = []
-      snap.forEach(post => {
-        if (postIDs.includes(post.key)) {
-          post.forEach(user => {
-            if (user.key === uid && user.val().liked) {
-              likedUsers.push(user.key)
-            }
-          })
-        }
-      })
-      next(likedUsers)
-    })
-  }
-
-  const readLikedUserIDs = uid => {
-    let postIDs = []
-    const userRef = database.ref(`channels/posts/${uid}`)
-    return userRef.once('value', snap => {
-      snap.forEach(baby => postIDs.push(baby.key))
-    }).then(res => {
-      return postIDs
-    })
-  }
-
-  const readLikedPosts = key => {
-    let likedPosts = []
+  const readLikedPosts = async uid => {
     const userRef = database.ref(`likes/posts`)
+    const myPosts = await PostService.getUserPostsSync(uid)
+
     return userRef.once('value', snap => {
       snap.val()
     }).then(res => {
-      res.forEach(post => {
-        post.forEach(user => {
-          likedPosts.push(user.val())
+      let likedPosts = []
+      res.forEach(doc => {
+        doc.forEach(post => {
+          if (myPosts.find(p => p.key === post.val().key)) { // && post.val().uid !== uid
+            likedPosts.unshift(post.val())
+          }
         })
       })
       return likedPosts
@@ -67,7 +28,7 @@ const NotifService = () => {
   }
 
 
-  return { getPostLikes, readLikedPosts }
+  return { readLikedPosts }
 }
 
 export default NotifService
