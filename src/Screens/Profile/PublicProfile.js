@@ -83,9 +83,9 @@ function Profile({ route, navigation }) {
 
           <Divider />
 
-          <View>
-            <Text></Text>
-          </View>
+          <Center style={{ marginTop: 30 }}>
+            <Text>We're almost there . .</Text>
+          </Center>
 
           <View style={{ marginBottom: 40 }}></View>
         </ScrollView >

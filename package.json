@@ -72,6 +72,7 @@
     "react-native-screens": "^2.10.1",
     "react-native-shared-element": "^0.7.0",
     "react-native-simple-bottom-sheet": "^1.0.1",
+    "react-native-snackbar": "^2.2.3",
     "react-native-spinkit": "^1.5.0",
     "react-native-tab-view": "^2.15.1",
     "react-native-touchable-scale": "^2.1.1",

@@ -43,10 +43,10 @@ function Explore(props) {
         <SponsoredCard
           title='Essential Fitness Apparrel'
           caption='Shop Dynamic'
-          location='DynamicFitnessLife.com'
+          location='dynamicfitnesslife.com'
           image={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
           avatar={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
-          onOpen={() => openLink('https://www.dynamicfitnesslife.com')}
+          onOpen={() => openLink('http://dynamicfitnesslife.com?afmc=1o&utm_campaign=1o&utm_source=leaddyno&utm_medium=affiliate')}
         />
       </Center>
 

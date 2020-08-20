@@ -9,7 +9,8 @@ import TrackPlayer from 'react-native-track-player'
 import { IconButton, Colors } from 'react-native-paper';
 import FastImage from 'react-native-fast-image'
 import { v4 as uuidv4 } from 'uuid';
-import { Divider, Snackbar } from 'react-native-paper'
+import { Divider } from 'react-native-paper'
+import Snackbar from 'react-native-snackbar'
 
 import { useAuth, useStore } from '../../contexts'
 import { logo, siteLogo } from '../../constants'
@@ -18,32 +19,6 @@ import { SendPlayerDetails } from '../../utils/media/functions'
 import MediaService from '../../utils/media/MediaService'
 
 
-const elements = [
-  <View style={{ backgroundColor: '#B23AFC', height: 250, width: 250 }}>
-    <Text>You wanna see a cool component?</Text>
-    <Text>Galio has this cool Deck Swiper</Text>
-  </View>,
-  <View style={{ backgroundColor: '#FE2472', height: 250, width: 250 }}>
-    <Text>What did you expect?</Text>
-    <Text>This React Native component works perfectly</Text>
-  </View>,
-  <View style={{ backgroundColor: '#FF9C09', height: 250, width: 250 }}>
-    <Text>Maybe you want to build the next Tinder</Text>
-  </View>,
-  <View style={{ backgroundColor: '#45DF31', height: 250, width: 250 }}>
-    <Text>or maybe you just want a nice deck swiper component</Text>
-    <Text>Galio has everything sorted out for you</Text>
-  </View>
-]
-
-const Swiper = () => (
-  <View style={{ flex: 1 }}>
-    <Block>
-      <DeckSwiper components={elements} />
-    </Block>
-  </View>
-)
-
 function MiniCard({ idx, item, addControl, removeControl }) {
   const auth = useAuth()
   const [storeState, storeDispatch] = useStore()
@@ -51,9 +26,6 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const { avatar, details } = user ?? { avatar: '', details: {} }
   const { queued, tracks, isPlaying, currentTrack } = storeState
   const [isAlert, setIsAlert] = React.useState()
-  const [alertMessage, setAlertMessage] = React.useState({
-    visible: false, message: 'Test'
-  })
 
   if (!item) item = {}
   let newItem = { ...item, id: item.acid }
@@ -67,6 +39,11 @@ function MiniCard({ idx, item, addControl, removeControl }) {
         return
       }
       SendPlayerDetails(item, storeDispatch)
+      Snackbar.show({
+        text: `${item.title} has been added to your Queue`,
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'purple'
+      });
     }, 250)
   }
 
@@ -111,19 +88,6 @@ function MiniCard({ idx, item, addControl, removeControl }) {
         </View>
 
       </ScrollView>
-
-      <Snackbar
-        visible={alertMessage.visible}
-        duration={3000}
-        onDismiss={() => alertMessage({ visible: false })}
-        action={{
-          label: 'OK',
-          onPress: () => {
-            () => alertMessage({ visible: false })
-          },
-        }}>
-        {alertMessage.message}
-      </Snackbar>
 
       {/* <Text>{JSON.stringify(alertMessage, null, 2)}</Text> */}
     </TouchableScale>

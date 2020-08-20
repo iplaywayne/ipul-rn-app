@@ -1,15 +1,13 @@
 import React from 'react'
 import { Player } from '@react-native-community/audio-toolkit'
 import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
+import Snackbar from 'react-native-snackbar'
 
 import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 import MediaService from '../media/MediaService'
 
-
-const tracksPath = `/mediaTracks`
-const favsPath = `/favorites/`
 
 // Subscribing to the following events inside MyComponent
 const events = [
@@ -26,7 +24,7 @@ function TrackService() {
   const mediaService = MediaService()
 
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (auth && !tracks.length)
       getTracks(result => storeDispatch.setTracks(result))
     return () => { }
@@ -59,25 +57,25 @@ function TrackService() {
 
 
   React.useLayoutEffect(() => {
-    let mounted = false
-    if (storeState.tracks.length && mounted === false) {
-      setPlaybackListener()
+    setPlaybackListener()
+    TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
+      console.log(`[TRACKSERVICE] Your playlist has ended`);
+      Snackbar.show({
+        text: `Your playlist has ended`,
+        duration: Snackbar.LENGTH_INDEFINITE,
+        backgroundColor: 'skyblue',
+        action: {
+          text: 'OK',
+          textColor: 'skyblue',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+      TrackPlayer.removeUpcomingTracks()
+      storeDispatch.setQueued([])
+      storeDispatch.setPlaying(false)
+    })
 
-      // const trkChange = TrackPlayer.addEventListener('playback-track-changed', async (data) => {
-      //   const track = await TrackPlayer.getTrack(data.nextTrack);
-      //   console.log('[TODO] send track change listener data to store', data)
-      //   storeDispatch.setPlaying(true)
-      // })
-      const queueEnd = TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
-        console.log(`[TRACKSERVICE] Your playlist has ended`);
-        TrackPlayer.removeUpcomingTracks()
-        storeDispatch.setQueued([])
-        storeDispatch.setPlaying(false)
-      })
-      mounted = true
-    }
     return () => {
-      mounted = true
       TrackPlayer.remove('playback-state')
       TrackPlayer.remove('playback-track-changed')
       TrackPlayer.remove('playback-queue-ended')
@@ -103,16 +101,6 @@ function TrackService() {
   }
 
   const addAllToQueue = async () => {
-
-    // TrackPlayer.add(state.tracks.map((trk) => {
-    //   return {
-    //     id: trk.acid,
-    //     title: trk.title,
-    //     artist: trk.artist,
-    //     url: trimWWWString(trk.song),
-    //     artwork: trimWWWString(trk.art_link)
-    //   }
-    // }))
     TrackPlayer.add(state.tracks)
       .then(res => {
         TrackPlayer.play()

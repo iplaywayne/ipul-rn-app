@@ -12,7 +12,7 @@ import { Shadow } from 'react-native-neomorph-shadows';
 import Popover from 'react-native-popover-view';
 import Spinner from 'react-native-spinkit'
 import Button from 'react-native-button'
-
+import Snackbar from 'react-native-snackbar'
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -35,6 +35,7 @@ function Home(props) {
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
   const [globalPosts, setGlobalPosts] = React.useState(null)
+  const [alertMessage, setAlertMessage] = React.useState('asdf')
 
   const onOpen = () => {
     modalizeRef.current?.open();
@@ -53,7 +54,7 @@ function Home(props) {
     </View>
   )
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     PostService.getGlobalPosts(posts => {
       setGlobalPosts(posts)
     })
@@ -112,12 +113,12 @@ function Home(props) {
 
       <ErrorBoundary caller='Home Explore Cards'>
         <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
-          
+
           {topRemixes.slice(0, 2).map((itm, idx) => (
             <ExploreCard {...props} key={itm.acid} item={itm} />
           ))}
 
-          {globalPosts && globalPosts.slice(0,2).map((itm, idx) => (
+          {globalPosts && globalPosts.slice(0, 2).map((itm, idx) => (
             <PostCard navigation={navigation} key={itm.key} item={itm}
               isAuthor={itm.uid === user.uid} />
           ))}
@@ -131,8 +132,10 @@ function Home(props) {
               isAuthor={itm.uid === user.uid} />
           ))}
 
-       </View>
+        </View>
       </ErrorBoundary>
+
+
 
       <View style={{ height: 50 }}></View>
     </ScrollView>
