@@ -18,7 +18,7 @@ import InView from 'react-native-component-inview'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
 import { siteLogo } from '../../constants'
-import FireStore from '../../utils/firebase/FireStore'
+import FireService from '../../utils/firebase/FireService'
 import PostService from '../../utils/post/PostService'
 
 
@@ -36,19 +36,17 @@ function PostCard(props) {
   const [isInView, setIsInView] = React.useState(false)
   const checkVisible = (isVisible, item) => {
     if (isVisible) {
-      // setIsInView(isVisible)
       if (item.video && isPostPaused && didTapPlay && postPlays < 3) {
         postPlay()
         console.log(item.caption, 'VIDEO IN VIEW', postPlays)
       }
     } else {
-      // setIsInView(isVisible)
       if (!isPostPaused) setIsPostPaused(true)
     }
   }
 
   React.useEffect(() => {
-    FireStore.readUserById(item.uid,
+    FireService.readUserById(item.uid,
       user => setPostAuthor(user))
   }, [])
 
@@ -85,7 +83,12 @@ function PostCard(props) {
   }
 
   const handlePostLike = async () => {
-    await PostService.addPostLike(user.uid, item.key, !isLiked)
+    let postDetails = {
+      uid: user.uid, key: item.key, avatar: user.avatar, name: user.name,
+      image: item.image && item.image, video: item.video && item.video,
+      caption: item.caption
+    }
+    await PostService.addPostLike(postDetails, !isLiked)
     setIsLiked(!isLiked)
   }
 

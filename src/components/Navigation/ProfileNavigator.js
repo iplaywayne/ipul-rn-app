@@ -21,6 +21,7 @@ import { default as NotifsScreen } from '../../screens/Profile/Notifs/Notifs'
 
 
 const ProfileStack = createStackNavigator();
+const NotifsStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
@@ -28,7 +29,9 @@ const AdsScreen = () => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Ads Coming</Text></View>
 )
 
+
 export const ProfileNavigator = ({ navigation }) => {
+  const [authState] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { user } = storeState
 
@@ -57,10 +60,6 @@ export const ProfileNavigator = ({ navigation }) => {
         title: 'Settings',
       }} />
 
-      <ProfileStack.Screen name="Notifications" component={NotifsScreen} options={{
-        title: 'Notifications',
-      }} />
-
       <ProfileStack.Screen name="Ads" component={AdsScreen} options={{
         title: 'Advertisements',
       }} />
@@ -68,14 +67,24 @@ export const ProfileNavigator = ({ navigation }) => {
   )
 }
 
+
+export const NotifsNavigator = () => (
+  <NotifsStack.Navigator>
+    <NotifsStack.Screen name="Notifications" component={NotifsScreen}/>
+  </NotifsStack.Navigator>)
+
+
 export const ProfileDrawerNavigator = () => {
-  const [storeState] = useStore()
   const [authState] = useAuth()
+  const [storeState] = useStore()
   const { user } = authState
 
   return (
-    <Drawer.Navigator drawerType='back' drawerContent={(props) => <DrawerContent {...props} user={user} />}>
+    <Drawer.Navigator
+      drawerType='back'
+      drawerContent={(props) => <DrawerContent {...props} user={user} />}>
       <Drawer.Screen name="Profile" component={ProfileNavigator} />
+      <Drawer.Screen name="Notifications" component={NotifsNavigator} />
     </Drawer.Navigator >
   )
 }

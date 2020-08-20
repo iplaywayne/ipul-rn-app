@@ -64,11 +64,15 @@ const PostService = (function () {
     })
   }
 
-  const addPostLike = async (uid, key, val) => {
+  const addPostLike = async (postDetails, val) => {
+    const { uid, key, name, avatar, image, video, caption } = postDetails
     if (!uid || !key) throw new Error('Missing addPostLike param')
 
     const postRef = database.ref(`likes/posts/${key}/${uid}`)
-    postRef.update({ liked: val })
+    postRef.update({
+      ...postDetails, liked: val,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    })
   }
 
   const isPostLiked = async (uid, key) => {
@@ -94,6 +98,13 @@ const PostService = (function () {
       })
       next(list)
     })
+  }
+
+  const getPostByID = (uid, key, next) => {
+    const userRef = database.ref(`channels/posts/${uid}/${key}`)
+    return userRef.once('value', snap => {
+      return snap.val()
+    }).then(res => res.val())
   }
 
   const getGlobalPosts = (next) => {

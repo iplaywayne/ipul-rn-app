@@ -4,7 +4,7 @@ import { DrawerItem, SafeAreaView } from '@react-navigation/drawer';
 import { Avatar, Divider } from 'react-native-paper'
 
 import { useAuth, useStore, trimWWWString } from '../../utils'
-
+import { width } from '../../constants'
 
 const DrawerContent = (props) => {
   const { navigation, user } = props
