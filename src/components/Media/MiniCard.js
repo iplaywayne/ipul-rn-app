@@ -33,16 +33,13 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const addQueue = async () => {
     if (removeControl) return
     setTimeout(() => storeDispatch.setLoading(true), 250)
-    setTimeout(async () => {
-      if (idx < 0) {
-        console.log('Missing media index', item.title, idx)
-        return
-      }
+    setTimeout(() => {
       SendPlayerDetails(item, storeDispatch)
       Snackbar.show({
         text: `${item.title} has been added to your Queue`,
+        textColor: 'black',
         duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: 'purple'
+        backgroundColor: 'skyblue'
       });
     }, 250)
   }
@@ -51,6 +48,12 @@ function MiniCard({ idx, item, addControl, removeControl }) {
     setTimeout(() => storeDispatch.setLoading(true), 250)
     setTimeout(async () => {
       await storeDispatch.removeFromQueue(item)
+      Snackbar.show({
+        text: `${item.title} has been removed from your Queue`,
+        textColor: 'black',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'skyblue'
+      });
     }, 500)
   }
 
