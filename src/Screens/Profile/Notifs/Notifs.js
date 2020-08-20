@@ -11,7 +11,7 @@ import NotifService from '../../../utils/notifs/NotifService'
 import { useStore } from '../../../utils/store'
 
 
-const Notifs = ({ navigation }) => {
+const Notifs = ({ route, navigation }) => {
   const notifService = NotifService()
   const [loading, setLoading] = React.useState(false)
   const [storeState, storeDispatch] = useStore()
@@ -21,13 +21,6 @@ const Notifs = ({ navigation }) => {
 
   React.useEffect(() => {
     navigation.setOptions({
-      // headerLeft: () => (
-      //   <Button style={{ marginLeft: 20 }} onPress={() => {
-      //     navigation.goBack()
-      //   }}>
-      //     Back
-      //   </Button>
-      // ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
           <Button onPress={() => navigation.navigate('Profile')}>
@@ -38,7 +31,7 @@ const Notifs = ({ navigation }) => {
     })
     handleShowNotifs()
     return () => { }
-  }, [user])
+  }, [route, navigation])
 
 
   const handleShowNotifs = async () => {

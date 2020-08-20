@@ -51,10 +51,14 @@ const PostService = (function () {
   const removePost = (uid, key) => {
     if (!uid || !key) throw new Error('Missing removePost param')
     const userRef = database.ref(`channels/posts/${uid}/${key}`)
+    const likesRef = database.ref(`likes/posts/${key}/${uid}`)
     const storageRef = storage.ref(`channels/posts/${uid}/${key}/${key}.png`)
     const storageRefB = storage.ref(`channels/posts/${uid}/${key}/${key}_350x350.png`)
     userRef.remove().then(_ => {
       console.log(key, 'Post Data Removed!')
+    })
+    likesRef.remove().then(_ => {
+      console.log(key, 'Post Like Removed!')
     })
     storageRef.delete().then(_ => {
       console.log(key, 'Post Media Removed!')
@@ -70,7 +74,7 @@ const PostService = (function () {
 
     const postRef = database.ref(`likes/posts/${key}/${uid}`)
     postRef.update({
-      ...postDetails, liked: val,
+      ...postDetails, liked: val ? true : false,
       createdAt: firebase.database.ServerValue.TIMESTAMP
     })
   }
@@ -80,7 +84,7 @@ const PostService = (function () {
     const postRef = database.ref(`likes/posts/${key}`)
     try {
       return postRef.once('value')
-        .then(res => res.val()[uid].liked)
+        .then(res => (res.val()[uid] || {}).liked)
         .catch(e => e)
     } catch (e) {
       return false

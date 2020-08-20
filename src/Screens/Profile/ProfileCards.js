@@ -13,7 +13,7 @@ const ProfileCards = ({ user, userPosts, navigation }) => {
         paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
       }}>
         {userPosts.map((itm, idx) => (
-          <PostCard navigation={navigation} key={idx} item={itm}
+          <PostCard navigation={navigation} key={itm.key} item={itm}
             isAuthor={itm.uid === user.uid} />
         ))}
       </View>

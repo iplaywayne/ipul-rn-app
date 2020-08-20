@@ -51,11 +51,15 @@ function PostCard(props) {
   }, [])
 
   React.useEffect(() => {
-    (async () => {
-      const liked = await PostService.isPostLiked(user.uid, item.key)
-      setIsLiked(liked)
-    })()
-  }, [isLiked])
+    if (user.uid && item.key) {
+      readIsPostLiked()
+    }
+  }, [])
+
+  const readIsPostLiked = async () => {
+    const liked = await PostService.isPostLiked(user.uid, item.key)
+    setIsLiked(liked === true ? true : false)
+  }
 
   const resetPlay = () => {
     videoRef.current.seek(0)
@@ -88,6 +92,7 @@ function PostCard(props) {
       image: item.image && item.image, video: item.video && item.video,
       caption: item.caption
     }
+    let newLike = !isLiked ? true : false
     await PostService.addPostLike(postDetails, !isLiked)
     setIsLiked(!isLiked)
   }

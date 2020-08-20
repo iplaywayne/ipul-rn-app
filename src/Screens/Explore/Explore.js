@@ -55,7 +55,7 @@ function Explore(props) {
         paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
       }}>
         {topRemixes.map((itm, idx) => (
-          <ExploreCard {...props} key={idx} item={itm} />
+          <ExploreCard {...props} key={itm.acid} item={itm} />
         ))}
       </View>
 

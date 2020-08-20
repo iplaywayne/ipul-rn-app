@@ -15,7 +15,7 @@ function CropImage(props) {
       ImagePicker.openCropper({
         path: props.captured,
         width: 400,
-        height: 400
+        height: 500
       }).then(image => {
         setCroppedUri(image.path)
       }).catch(err => {

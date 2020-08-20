@@ -119,12 +119,12 @@ function Profile({ route, navigation }) {
 
 
   const ProfileQueued = () => (
-    <View style={{ marginBottom: 20 }}>
+    <View>
       {queued && queued.length > 0 ?
         <View>
           <Text style={styles.title}>You have {queued.length} queued</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-            style={{ flexDirection: 'row', marginTop: -15 }}>
+            style={{ marginBottom: 25, flexDirection: 'row', marginTop: -15 }}>
             {queued.map((itm, idx) => (
               <MiniCard key={idx} item={itm} removeControl />
             ))}
@@ -139,7 +139,7 @@ function Profile({ route, navigation }) {
   )
 
   const ProfileFavorites = () => (
-    <View style={{ marginBottom: 0 }}>
+    <View>
       {favorites && favorites.length > 0 ?
         <View>
           <Text style={styles.title}>Your favorites</Text>
