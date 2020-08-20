@@ -83,6 +83,10 @@ function Profile({ route, navigation }) {
 
           <Divider />
 
+          <View>
+            <Text></Text>
+          </View>
+
           <View style={{ marginBottom: 40 }}></View>
         </ScrollView >
       </ErrorBoundary>

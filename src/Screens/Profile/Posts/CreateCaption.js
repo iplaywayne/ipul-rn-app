@@ -59,8 +59,8 @@ export const CreateCaption = ({ route, navigation }) => {
       <ErrorBoundary caller='Create Caption'>
         <PendingPost
           user={user}
-          postDetails={details}
-          onChange={val => setCaption(val)}
+          postDetails={{ ...details, caption }}
+          onChange={e => setCaption(e.nativeEvent.text)}
           onComplete={() => navigation.navigate('Profile')}
         />
       </ErrorBoundary>

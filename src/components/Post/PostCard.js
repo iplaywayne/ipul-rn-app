@@ -97,6 +97,18 @@ function PostCard(props) {
     setIsLiked(!isLiked)
   }
 
+  const handleNavigateProfile = () => {
+    navigation.navigate('PublicProfile', {
+      authorId: postAuthor.uid
+    })
+  }
+
+  const handleNavigatePost = () => {
+    navigation.navigate('PostView', {
+      postId: item.key
+    })
+  }
+
   const handlePostMenu = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -111,9 +123,11 @@ function PostCard(props) {
             return
           case 1:
             console.log('View Author')
+            handleNavigateProfile()
             return
           case 2:
             console.log('View Post')
+            handleNavigatePost()
             return
           case 3:
             try {
@@ -179,10 +193,13 @@ function PostCard(props) {
           </Card> : null}
 
 
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 15 }}>
+        <View style={{
+          flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 10,
+          marginTop: 10
+        }}>
           <View style={{ flexDirection: 'row' }}>
             {/* <Text style={{ marginRight: 20 }}><MaterialCommunityIcons name='share' size={25} /></Text> */}
-            <TouchableOpacity onPress={handlePostLike} style={{ marginHorizontal: 10 }}>
+            <TouchableOpacity onPress={handlePostLike} style={{ marginHorizontal: 3 }}>
               <Text style={{ color: isLiked === true ? 'red' : 'black' }}>
                 <MaterialCommunityIcons
                   name={isLiked === true ? 'heart' : 'heart-outline'}

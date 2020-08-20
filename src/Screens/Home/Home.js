@@ -114,20 +114,20 @@ function Home(props) {
         <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
           
           {topRemixes.slice(0, 2).map((itm, idx) => (
-            <ExploreCard {...props} key={idx} item={itm} />
+            <ExploreCard {...props} key={itm.acid} item={itm} />
           ))}
 
           {globalPosts && globalPosts.slice(0,2).map((itm, idx) => (
-            <PostCard navigation={navigation} key={idx} item={itm}
+            <PostCard navigation={navigation} key={itm.key} item={itm}
               isAuthor={itm.uid === user.uid} />
           ))}
 
           {topRemixes.slice(3, 6).map((itm, idx) => (
-            <ExploreCard {...props} key={idx} item={itm} />
+            <ExploreCard {...props} key={itm.acid} item={itm} />
           ))}
 
           {globalPosts && globalPosts.slice(3, 6).map((itm, idx) => (
-            <PostCard navigation={navigation} key={idx} item={itm}
+            <PostCard navigation={navigation} key={itm.key} item={itm}
               isAuthor={itm.uid === user.uid} />
           ))}
 

@@ -62,10 +62,10 @@ export const ProfileNavigator = ({ navigation }) => {
         title: 'Your Caption',
       }} />
 
-      {/* <ProfileStack.Screen name="PostView" component={PostScreen} options={{
+      <ProfileStack.Screen name="PostView" component={PostScreen} options={{
         title: 'Post',
       }} />
- */}
+
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />
