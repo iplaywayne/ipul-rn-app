@@ -21,13 +21,13 @@ const Notifs = ({ navigation }) => {
 
   React.useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <Button style={{ marginLeft: 20 }} onPress={() => {
-          navigation.goBack()
-        }}>
-          Back
-        </Button>
-      ),
+      // headerLeft: () => (
+      //   <Button style={{ marginLeft: 20 }} onPress={() => {
+      //     navigation.goBack()
+      //   }}>
+      //     Back
+      //   </Button>
+      // ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
           <Button onPress={() => navigation.navigate('Profile')}>

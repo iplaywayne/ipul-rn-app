@@ -183,6 +183,7 @@ function Profile({ route, navigation }) {
               navigation={navigation}
               playNowTapped={playNowTapped}
               isPlaying={isPlaying}
+              showButtons
             />
           </ErrorBoundary>
 

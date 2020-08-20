@@ -4,7 +4,7 @@ import { NavigationDrawerStructure } from '../Navigation/NavigationDrawerStructu
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
-const AppHeader = ({ user, navigation }) => {
+const AppHeader = ({ title, leftIcon, leftPress, rightIcon, rightPress, user, navigation }) => {
   return (
     <View style={{
       paddingTop: 55, height: 89, flexDirection: 'row', paddingHorizontal: 7,
@@ -13,14 +13,14 @@ const AppHeader = ({ user, navigation }) => {
     }}>
       <NavigationDrawerStructure
         navigationProps={navigation}
-        onPress={() => navigation.navigate('CreatePost')}
-        icon={<Icon name='rocket' size={25} style={{ marginLeft: 20 }} />}
+        onPress={leftPress ? leftPress : () => navigation.navigate('CreatePost')}
+        icon={<Icon name={leftIcon || 'rocket'} size={25} style={{ marginLeft: 20 }} />}
       />
-      <Text style={{ fontWeight: '800', fontSize: 20 }}>{user.name}</Text>
+      <Text style={{ fontWeight: '800', fontSize: 20 }}>{title || user.name}</Text>
       <NavigationDrawerStructure
         navigationProps={navigation}
-        onPress={() => navigation.toggleDrawer()}
-        icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
+        onPress={rightPress ? rightPress : () => navigation.toggleDrawer()}
+        icon={<Icon name={rightIcon || 'dots-horizontal'} size={25} style={{ marginRight: 20 }} />}
       />
     </View>
   )

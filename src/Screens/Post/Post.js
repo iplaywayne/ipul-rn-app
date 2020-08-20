@@ -3,6 +3,7 @@ import { ScrollView, View, Text } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Video from 'react-native-video'
 import Spinner from 'react-native-spinkit'
+import Button from 'react-native-button'
 
 import PostService from '../../utils/post/PostService'
 import { useStore } from '../../utils/store'
@@ -36,6 +37,13 @@ const Post = ({ route, navigation }) => {
           {post && <PostCard navigation={navigation} item={post}
             isAuthor={post.uid === user.uid} />}
         </View>
+
+        <Button style={{ marginTop: 18 }}
+          onPress={() => navigation.navigate('PublicProfile', {
+            authorId: post.uid
+          })}>
+          Profile View
+          </Button>
       </ErrorBoundary>
     </ScrollView>
   )

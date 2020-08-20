@@ -9,7 +9,7 @@ import { Avatar } from 'react-native-paper'
 import Btn from '../../components/Prebuilt/Button'
 
 
-const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying }) => {
+const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying, isAuthor, showButtons }) => {
   const { avatar, name, mood, bio, occupation, isLoading } = user
 
   return (
@@ -53,26 +53,27 @@ const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying }) => {
         </View>
       </View>
 
-      <View style={{
-        justifyContent: 'center',
-        paddingHorizontal: 5, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
-      }}>
-        <Btn
-          title='Update Profile'
-          onPress={() => navigation.navigate('UpdateProfile', {
-            user,
-          })}
-        />
-        <Btn
-          title='Set Your Mood'
-          onPress={() => navigation.push('UpdateMood')}
-        />
-        <Btn
-          color='#350DB6'
-          title={isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
-          onPress={() => playNowTapped()}
-        />
-      </View>
+      {showButtons &&
+        <View style={{
+          justifyContent: 'center',
+          paddingHorizontal: 5, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
+        }}>
+          <Btn
+            title='Update Profile'
+            onPress={() => navigation.navigate('UpdateProfile', {
+              user,
+            })}
+          />
+          <Btn
+            title='Set Your Mood'
+            onPress={() => navigation.push('UpdateMood')}
+          />
+          <Btn
+            color='#350DB6'
+            title={isLoading ? <ActivityIndicator /> : `${isPlaying ? 'Pause Now' : 'Play Now'}`}
+            onPress={() => playNowTapped()}
+          />
+        </View>}
     </View>
   )
 }

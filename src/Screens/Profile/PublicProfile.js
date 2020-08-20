@@ -34,64 +34,50 @@ import { ErrorBoundary } from '../../components'
 import ProfileHeader from './ProfileHeader'
 import ProfileCards from './ProfileCards'
 import FetchTracks from '../../utils/media/functions/FetchTracks'
+import FireService from '../../utils/firebase/FireService'
 
-
-const BUTTON_WIDTH = 100
 
 function Profile({ route, navigation }) {
   const [storeState, storeDispatch] = useStore()
-  const { user } = storeState
-  const { name, website, avatar, bio, occupation, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
-  const { queued, isAdmin, isPlaying, isLoading } = storeState
-  const [tracks, setTracks] = React.useState({})
-  const [favorites, setFavorites] = React.useState({})
-  const mediaService = MediaService()
-  const trackService = TrackService()
-  const [ready, setReady] = React.useState(false)
-  const [alertMessage, setAlertMessage] = React.useState('You can add tracks to your Queue')
+  const { user, isPlaying } = storeState
+  const { authorId } = route.params
+  const [author, setAuthor] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
-  const [postDetailsPending, setPostDetailsPending] = React.useState(null)
-  const [userPosts, setUserPosts] = React.useState([])
-
-
-  React.useEffect(() => {
-    if ('params' in route) {
-      let params = route.params
-      if (params && 'details' in params)
-        setPostDetailsPending(params.details)
-    }
-  }, [route])
-
 
   React.useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Profile',
-      headerShown: false,
-    })
-
-    PostService.getUserPosts(user.uid,
-      posts => setUserPosts(posts))
-
+    getAuthor()
     return () => { }
   }, [navigation])
 
+  const getAuthor = async () => {
+    const user = await FireService.readUserByIdSync(authorId)
+    setAuthor(user)
+    setLoading(false)
+  }
 
-  if (loading) return <Center><Spinner type='Wave' /></Center>
+  if (loading || !author) return <Center><Spinner type='Wave' /></Center>
 
 
   return (
     <View style={{ flex: 1 }}>
       <ErrorBoundary caller='Profile'>
         <ErrorBoundary caller='Profile App Header'>
-          <AppHeader navigation={navigation} user={user} />
+          <AppHeader
+            title={`${user.name} Profile`}
+            navigation={navigation}
+            user={user}
+            leftIcon={'arrow-left'}
+            leftPress={() => navigation.goBack()}
+          />
         </ErrorBoundary>
 
         <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
           <ErrorBoundary caller='Profile Header'>
             <ProfileHeader
-              user={user}
+              user={author}
               navigation={navigation}
               isPlaying={isPlaying}
+              isAuthor={author.uid === user.uid}
             />
           </ErrorBoundary>
 
@@ -99,8 +85,6 @@ function Profile({ route, navigation }) {
 
           <View style={{ marginBottom: 40 }}></View>
         </ScrollView >
-
-        {/* <Text>{JSON.stringify(user.occupation, null, 2)}</Text> */}
       </ErrorBoundary>
     </View>
   )
