@@ -30,7 +30,7 @@ const Notifs = ({ navigation }) => {
       ),
       headerRight: () => (
         <View style={{ marginRight: 20 }}>
-          <Button onPress={handleShowNotifs}>
+          <Button onPress={() => navigation.navigate('Profile')}>
             {loading ? <ActivityIndicator /> : 'Done'}
           </Button>
         </View>
@@ -42,19 +42,20 @@ const Notifs = ({ navigation }) => {
 
 
   const handleShowNotifs = async () => {
-    PostService.getUserPosts(user.uid,
-      posts => setMyPosts(posts))
+    const myPosts = await PostService.getUserPostsSync(user.uid)
+    setMyPosts(myPosts)
 
-    const data = await notifService.readLikedPosts(user.uid)
-    setMyNotifs(data)
+    const likedPosts = await notifService.readLikedPosts(user.uid)
+    setMyNotifs(likedPosts)
   }
 
   return (
     <ScrollView>
-      {/* <Text>{JSON.stringify(myPosts[0].key, null, 2)}</Text> */}
 
       {myNotifs.map((itm, idx) => (
-        <TouchableOpacity key={idx}>
+        <TouchableOpacity key={idx} onPress={() => navigation.navigate('PostView', {
+          postId: itm.key
+        })}>
           <List.Item
             title={`${itm.name} liked your post`}
             description={timeago.format(itm.createdAt)}
@@ -82,7 +83,7 @@ const Notifs = ({ navigation }) => {
               resizeMode={FastImage.resizeMode.cover}
             />}
           />
-          {/* <Text>{itm.uid === user.uid ? 'Me' : 'Not Me'}</Text> */}
+
           {/* <Text>{JSON.stringify(itm, null, 2)}</Text> */}
           <Divider />
         </TouchableOpacity>

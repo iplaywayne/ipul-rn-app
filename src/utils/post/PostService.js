@@ -114,7 +114,7 @@ const PostService = (function () {
     })
   }
 
-  const getPostByID = (uid, key, next) => {
+  const getPostByID = (uid, key) => {
     const userRef = database.ref(`channels/posts/${uid}/${key}`)
     return userRef.once('value', snap => {
       return snap.val()
@@ -137,7 +137,7 @@ const PostService = (function () {
 
   return {
     putPost, removePost, addPostLike, isPostLiked,
-    getUserPosts, getGlobalPosts, getUserPostsSync
+    getUserPosts, getGlobalPosts, getUserPostsSync, getPostByID
   }
 })()
 

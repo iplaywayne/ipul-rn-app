@@ -9,10 +9,10 @@ import FireService from '../firebase/FireService'
 const NotifService = () => {
 
   const readLikedPosts = async uid => {
-    const userRef = database.ref(`likes/posts`)
+    const likesRef = database.ref(`likes/posts`)
     const myPosts = await PostService.getUserPostsSync(uid)
 
-    return userRef.once('value', snap => {
+    return likesRef.once('value', snap => {
       snap.val()
     }).then(res => {
       let likedPosts = []

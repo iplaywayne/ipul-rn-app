@@ -8,8 +8,10 @@ import Button from 'react-native-button'
 import { CommonActions } from '@react-navigation/native';
 
 import { Profile as ProfileScreen } from '../../screens/Profile'
+import { default as PublicProfileScreen } from '../../screens/Profile/PublicProfile'
 import { default as UpdateProfileScreen } from '../../screens/Profile/UpdateProfile'
 import { default as UpdateMoodScreen } from '../../screens/Profile/UpdateMood'
+import { default as PostScreen } from '../../screens/Post/Post'
 import { useAuth, useStore } from '../../contexts'
 import { NavigationDrawerStructure } from './NavigationDrawerStructure'
 import { Settings as SettingsScreen } from '../../screens/Settings'
@@ -44,6 +46,8 @@ export const ProfileNavigator = ({ navigation }) => {
         title: 'Update Profile',
       }} />
 
+      <ProfileStack.Screen name="PublicProfile" component={PublicProfileScreen} />
+
       <ProfileStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
         title: 'Update Mood',
       }} />
@@ -56,6 +60,10 @@ export const ProfileNavigator = ({ navigation }) => {
         title: 'Your Caption',
       }} />
 
+      {/* <ProfileStack.Screen name="PostView" component={PostScreen} options={{
+        title: 'Post',
+      }} />
+ */}
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{
         title: 'Settings',
       }} />
@@ -70,7 +78,10 @@ export const ProfileNavigator = ({ navigation }) => {
 
 export const NotifsNavigator = () => (
   <NotifsStack.Navigator>
-    <NotifsStack.Screen name="Notifications" component={NotifsScreen}/>
+    <NotifsStack.Screen name="Notifications" component={NotifsScreen} />
+    <NotifsStack.Screen name="PostView" component={PostScreen} options={{
+      title: 'Post',
+    }} />
   </NotifsStack.Navigator>)
 
 
