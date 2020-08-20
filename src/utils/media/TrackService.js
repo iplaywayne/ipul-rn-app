@@ -1,6 +1,5 @@
 import React from 'react'
-import { Player } from '@react-native-community/audio-toolkit'
-import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
+import TrackPlayer from 'react-native-track-player';
 import Snackbar from 'react-native-snackbar'
 
 import { ReadTracks } from './functions'
@@ -8,14 +7,6 @@ import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 import MediaService from '../media/MediaService'
 
-
-// Subscribing to the following events inside MyComponent
-const events = [
-  TrackPlayerEvents.PLAYBACK_STATE,
-  TrackPlayerEvents.PLAYBACK_ERROR,
-  TrackPlayerEvents.PLAYBACK_QUEUE_ENDED
-
-];
 
 function TrackService() {
   if (!auth) return

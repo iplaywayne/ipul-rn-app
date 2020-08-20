@@ -1,5 +1,4 @@
 import React from 'react'
-import { Player } from '@react-native-community/audio-toolkit'
 import TrackPlayer from 'react-native-track-player';
 
 import { ReadTracks } from './functions'
