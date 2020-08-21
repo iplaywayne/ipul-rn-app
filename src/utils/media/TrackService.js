@@ -8,12 +8,14 @@ import { useStore } from '../store'
 import MediaService from '../media/MediaService'
 import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 
+const TrackListStructure = async tracks => {
+  return await tracks.map(t => TrackPlayerStructure(t))
+}
 
 function TrackService() {
   const [storeState, storeDispatch] = useStore()
   const { tracks, queued, currentTrack } = storeState
   const mediaService = MediaService()
-
 
   React.useLayoutEffect(() => {
     if (auth && !tracks.length)
@@ -21,7 +23,7 @@ function TrackService() {
     return () => { }
   }, [])
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
       Snackbar.show({
         text: `Your playlist has ended`,
@@ -53,6 +55,7 @@ function TrackService() {
           TrackPlayer.CAPABILITY_PLAY,
           TrackPlayer.CAPABILITY_PAUSE,
           TrackPlayer.CAPABILITY_STOP,
+          TrackPlayer.CAPABILITY_SKIP,
           TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
           TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
           TrackPlayer.CAPABILITY_JUMP_FORWARD,
@@ -64,30 +67,18 @@ function TrackService() {
 
   const play = async (item) => {
     storeDispatch.setCurrentTrack(item)
-    await TrackPlayer.play()
     storeDispatch.setPlaying(true)
+    await TrackPlayer.play()
   }
 
   const pause = async () => {
-    await TrackPlayer.pause()
     storeDispatch.setPlaying(false)
-  }
-
-  const addAllToQueue = async () => {
-    TrackPlayer.add(tracks)
-      .then(res => {
-        TrackPlayer.play()
-          .then(r => r.json())
-          .then(r => console.log(r))
-          .catch(e => console.log(e))
-      })
-      .catch(err => console.warn('error', err))
+    await TrackPlayer.pause()
   }
 
   const getTracks = cb => ReadTracks(cb)
 
-
-  return { setup, addAllToQueue, getTracks, play, pause }
+  return { setup, getTracks, play, pause }
 }
 
 export default TrackService

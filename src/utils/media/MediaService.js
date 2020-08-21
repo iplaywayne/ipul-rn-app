@@ -36,6 +36,10 @@ function MediaService() {
     const result = getTracks(result => result.filter(t => t.acid === acid))
     return result
   }
+  const getTrackByIdSync = async acid => {
+    const result = getTracks(result => result.filter(t => t.acid === acid))
+    return result
+  }
 
   const getTracks = cb => ReadTracks(cb)
 
@@ -87,7 +91,7 @@ function MediaService() {
 
   return {
     addAllToQueue, getTracks, getFavorites, addMediaLike, addMediaView,
-    addMediaPlay
+    addMediaPlay, getTrackById, getTrackByIdSync
   }
 }
 
