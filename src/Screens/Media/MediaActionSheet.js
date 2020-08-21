@@ -1,10 +1,19 @@
 import React from 'react'
 import { View, Text, ActionSheetIOS } from 'react-native'
+import TrackPlayer from 'react-native-track-player'
 
-const MediaActionSheet = () =>
-  ActionSheetIOS.showActionSheetWithOptions(
+import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
+import MediaService from '../../utils/media/MediaService'
+import TrackService from '../../utils/media/TrackService'
+import { useStore, wait } from '../../utils'
+
+
+const MediaActionSheet = (item, storeDispatch) => {
+  console.log(item.title)
+
+  return ActionSheetIOS.showActionSheetWithOptions(
     {
-      options: ["Cancel", "Add to Queue", "Add to Favorites", "Report"],
+      options: ["Cancel", "Add to Queue", "Report"],
       destructiveButtonIndex: 3,
       cancelButtonIndex: 0
     },
@@ -15,11 +24,12 @@ const MediaActionSheet = () =>
           return
         case 1:
           console.log('Add to Queue')
+          storeDispatch.addToQueue(item)
           return
+        // case 2:
+        //   console.log('Add to Favorites')
+        //   return
         case 2:
-          console.log('Add to Favorites')
-          return
-        case 3:
           console.log('Report')
           return
         default:
@@ -27,5 +37,7 @@ const MediaActionSheet = () =>
       }
     }
   );
+}
+
 
 export default MediaActionSheet

@@ -133,14 +133,13 @@ function Media({ navigation }) {
       <View>
         {(currentTrack || {}).acid && !searchQuery &&
           <View style={{ alignItems: 'center', marginBottom: -10 }}>
-          <FastImage source={(currentTrack || {}).art_link ? { uri: (currentTrack || {}).art_link } : logo}
+            <FastImage source={(currentTrack || {}).art_link ? { uri: (currentTrack || {}).art_link } : logo}
               style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
               resizeMode='cover' />
-            {currentTrack && <Text>
-            <Text style={{ fontWeight: '700' }}>
-              {(currentTrack || {}).artist}</Text>
-            <Text>{(currentTrack || {}).title}</Text>
-            </Text>}
+            {currentTrack && <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+              <Text style={{ fontWeight: '700' }}>{(currentTrack || {}).artist}</Text>
+              <Text style={{ marginLeft: 5 }}>{(currentTrack || {}).title}</Text>
+            </View>}
           </View>}
 
         <ScrollView style={{ height: 'auto', marginTop: 15 }}

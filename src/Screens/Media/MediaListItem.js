@@ -20,7 +20,7 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
     setTimeout(() => {
       addQueue(item)
       setLoading(false)
-    }, 1000)
+    }, 250)
   }
 
   return (
@@ -47,7 +47,7 @@ export const MediaListItem = ({ currentTrack, item, idx, addQueue, isLoading }) 
             </Button>}
         </View>
       </View>
-      {currentTrack === item ?
+      {currentTrack.acid === item.acid ?
         <View style={{
           flex: 1, justifyContent: 'center', alignItems: 'center',
           paddingBottom: 10

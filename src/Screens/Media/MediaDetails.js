@@ -28,6 +28,7 @@ export function MediaDetails({ route, navigation }) {
   const [pageTrack, setPageTrack] = React.useState(null)
   const [nextTrack, setNextTrack] = React.useState(null)
   const focusedTrack = pageTrack ? pageTrack : item
+  const [isLiked, setIsLiked] = React.useState(false)
 
   React.useLayoutEffect(() => {
     if (tracks.length > 0) {
@@ -53,10 +54,26 @@ export function MediaDetails({ route, navigation }) {
     return () => setPageTrack(null)
   }, [])
 
+  React.useEffect(() => {
+    if (pageTrack) readIsLiked()
+    return () => setPageTrack(null)
+  }, [pageTrack])
 
-  const handleAddMediaLike = () => mediaService.addMediaLike(focusedTrack.acid)
 
-  const handleAddTapped = item => MediaActionSheet(item)
+  const readIsLiked = async () => {
+    try {
+      const result = await mediaService.isMediaLiked(pageTrack.acid, user.uid)
+      setIsLiked(result?.liked)
+    } catch (e) {
+    }
+  }
+
+  const handleAddMediaLike = async () => {
+    let result = await mediaService.addMediaLike(user, focusedTrack, !isLiked)
+    setIsLiked(result?.liked)
+  }
+
+  const handleAddTapped = itm => MediaActionSheet(itm, storeDispatch)
 
   const handlePlayTapped = async (item) => {
     setTimeout(async () => {
@@ -103,6 +120,9 @@ export function MediaDetails({ route, navigation }) {
       let prevId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === prevId)[0]
       trackService.play(crtTrk)
+      setPageTrack(crtTrk)
+      const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
+      setIsLiked(result?.liked)
     } catch (err) {
       Snackbar.show({
         text: err.message,
@@ -119,6 +139,9 @@ export function MediaDetails({ route, navigation }) {
       let nextId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === nextId)[0]
       trackService.play(crtTrk)
+      setPageTrack(crtTrk)
+      const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
+      setIsLiked(result?.liked)
     } catch (err) {
       if (err.message.indexOf('left') !== -1) {
         Snackbar.show({
@@ -134,6 +157,7 @@ export function MediaDetails({ route, navigation }) {
   const handleSelectedTapped = async item => {
     await TrackPlayer.skip(item.acid)
     await trackService.play(item)
+    setPageTrack(item)
     console.log('[SELECTEDREQUEST] Play')
   }
 
@@ -177,7 +201,7 @@ export function MediaDetails({ route, navigation }) {
           <Icons name='skip-previous' size={65} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => handleAddTapped(item))}>
+        <TouchableOpacity onPress={() => wait(() => handleAddTapped(focusedTrack))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
@@ -192,7 +216,7 @@ export function MediaDetails({ route, navigation }) {
           }} />}
 
         <TouchableOpacity onPress={() => wait(() => handleAddMediaLike())}>
-          <Icons name='heart-outline' size={30} />
+          <Icons name={isLiked ? 'heart' : 'heart-outline'} size={30} style={{ color: isLiked ? 'red' : 'black' }} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => wait(() => handleNextTapped())}>
@@ -252,10 +276,8 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {queued && queued.map((itm, idx) => (
-          <TouchableOpacity key={idx}
-            onPress={() => navigation.push('MediaDetails', {
-              item: itm, user: user, tracks: tracks
-            })}
+          <TouchableOpacity key={itm.acid}
+            onPress={() => handleSelectedTapped(itm)}
             style={{
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
               alignItems: 'center'

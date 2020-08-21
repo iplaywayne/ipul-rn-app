@@ -61,13 +61,39 @@ function MediaService() {
     })
   }
 
-  const addMediaLike = acid => {
-    if (!acid) {
-      console.log('Missing ACID')
+  const addMediaLike = (user, media, val) => {
+    const { acid } = media
+    const { uid } = user
+    if (!acid || !uid) {
+      console.log('Missing addMediaLike Param')
       return
     }
-    const userRef = database.ref(`channels/media/${acid}`)
-    userRef.update({ likes: firebase.database.ServerValue.increment(1) })
+    const mediaRef = database.ref(`channels/media/${acid}`)
+    const mediaLikeRef = database.ref(`likes/media/${acid}/${uid}`)
+    let toInsert = {
+      likes: val ? firebase.database.ServerValue.increment(1) : firebase.database.ServerValue.increment(-1),
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    }
+    mediaRef.update(toInsert)
+    mediaLikeRef.update({
+      ...toInsert,
+      liked: val,
+    })
+    return mediaLikeRef.once('value', snap => {
+      snap.val()
+    }).then(res => res.val())
+  }
+
+  const isMediaLiked = async (acid, uid) => {
+    if (!acid || !uid) {
+      console.log('Missing isMediaLiked Param')
+      return
+    }
+    let itBe = []
+    const mediaLikeRef = database.ref(`likes/media/${acid}/${uid}`)
+    return mediaLikeRef.once('value', snap => {
+      snap.val()
+    }).then(async res => await res.val())
   }
 
   const addMediaView = acid => {
@@ -91,7 +117,7 @@ function MediaService() {
 
   return {
     addAllToQueue, getTracks, getFavorites, addMediaLike, addMediaView,
-    addMediaPlay, getTrackById, getTrackByIdSync
+    addMediaPlay, getTrackById, getTrackByIdSync, isMediaLiked
   }
 }
 
