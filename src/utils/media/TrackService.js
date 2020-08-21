@@ -6,10 +6,10 @@ import { ReadTracks } from './functions'
 import { firebase, database, auth, trimWWWString } from '../../utils'
 import { useStore } from '../store'
 import MediaService from '../media/MediaService'
+import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 
 
 function TrackService() {
-  if (!auth) return
   const [storeState, storeDispatch] = useStore()
   const { tracks, queued, currentTrack } = storeState
   const mediaService = MediaService()
@@ -21,43 +21,16 @@ function TrackService() {
     return () => { }
   }, [])
 
-
-  setPlaybackListener = async () => {
-    TrackPlayer.addEventListener('playback-state', async (data) => {
-      const playingId = await TrackPlayer.getCurrentTrack()
-      switch (data.state) {
-        case 'loading':
-          storeDispatch.setLoading(true)
-          return
-        case 'buffering':
-          return
-        case 'ready':
-          storeDispatch.setLoading(false)
-          return
-        case 'playing':
-          if (playingId === currentTrack.acid) {
-            console.log('Playing Track', currentTrack.title)
-            storeDispatch.setPlaying(true)
-          }
-        default:
-          console.log(data.state)
-          return
-      }
-    })
-  }
-
-
   React.useLayoutEffect(() => {
-    setPlaybackListener()
     TrackPlayer.addEventListener('playback-queue-ended', async (data) => {
-      console.log(`[TRACKSERVICE] Your playlist has ended`);
       Snackbar.show({
         text: `Your playlist has ended`,
+        textColor: 'black',
         duration: Snackbar.LENGTH_INDEFINITE,
         backgroundColor: 'skyblue',
         action: {
           text: 'OK',
-          textColor: 'skyblue',
+          textColor: 'black',
           onPress: () => { /* Do something. */ },
         },
       });
@@ -73,10 +46,8 @@ function TrackService() {
     }
   }, [])
 
-
   const setup = () => {
     TrackPlayer.setupPlayer().then(() => {
-      // Player setup with options
       TrackPlayer.updateOptions({
         capabilities: [
           TrackPlayer.CAPABILITY_PLAY,
@@ -91,8 +62,19 @@ function TrackService() {
     })
   }
 
+  const play = async (item) => {
+    storeDispatch.setCurrentTrack(item)
+    await TrackPlayer.play()
+    storeDispatch.setPlaying(true)
+  }
+
+  const pause = async () => {
+    await TrackPlayer.pause()
+    storeDispatch.setPlaying(false)
+  }
+
   const addAllToQueue = async () => {
-    TrackPlayer.add(state.tracks)
+    TrackPlayer.add(tracks)
       .then(res => {
         TrackPlayer.play()
           .then(r => r.json())
@@ -105,7 +87,7 @@ function TrackService() {
   const getTracks = cb => ReadTracks(cb)
 
 
-  return { setup, addAllToQueue, getTracks }
+  return { setup, addAllToQueue, getTracks, play, pause }
 }
 
 export default TrackService

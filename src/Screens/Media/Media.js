@@ -55,6 +55,14 @@ function Media({ navigation }) {
     addQueue(item)
   }
 
+  const handleNavigateDetails = itm => {
+    navigation.navigate('MediaDetails', {
+      item: itm,
+      user: user,
+      tracks: tracks
+    })
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       header: props => (<HeaderSearchBar
@@ -64,24 +72,19 @@ function Media({ navigation }) {
         onPressHamburgerIcon={() => navigation.toggleDrawer()}
       />),
     })
-  }, [loading])
+  }, [])
 
+  React.useEffect(() => {
+    if (!searchQuery) setTrackQuery(tracks)
+  }, [])
 
   React.useEffect(() => {
     setTimeout(() => {
       if (tracks.length) {
+        // storeDispatch.setLoading(false)
         setLoading(false)
       }
-    }, 1500)
-
-  }, [tracks])
-
-  React.useEffect(() => {
-
-    storeDispatch.setLoading(false)
-    if (!searchQuery) {
-      setTrackQuery(tracks)
-    }
+    }, 500)
   }, [])
 
 
@@ -90,7 +93,7 @@ function Media({ navigation }) {
 
   const MediaContent = () => (
     <View>
-      {'acid' in currentTrack && !searchQuery &&
+      {(currentTrack || {}).acid && !searchQuery &&
         <View style={{ alignItems: 'center', marginBottom: -10 }}>
           <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
             style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
@@ -102,16 +105,12 @@ function Media({ navigation }) {
 
       <ScrollView style={{ height: 'auto', marginTop: 15 }}
         showsVerticalScrollIndicator={false}>
-        {tracksToDisplay.length ? tracksToDisplay.slice(0, 11).map((itm, idx) => (
+        {tracksToDisplay.length ? tracksToDisplay.slice(0, 17).map((itm, idx) => (
           <MediaListItem
-            key={idx}
+            key={itm.acid}
             item={itm}
-            addQueue={item => navigation.navigate('MediaDetails', {
-              item: itm,
-              user: user,
-              tracks: tracks
-            })}
-            isLoading={isLoading}
+            addQueue={handleNavigateDetails}
+            // isLoading={isLoading}
             currentTrack={currentTrack}
           />
         )) :
@@ -120,7 +119,7 @@ function Media({ navigation }) {
             alignItems: 'center', marginTop: 10
           }}><Text style={{ fontWeight: '700' }}>nothing found. should we add this?</Text></View>}
       </ScrollView>
-    </View >
+    </View>
   )
 
   return (
@@ -131,7 +130,36 @@ function Media({ navigation }) {
       scrollEnabled={true}
     >
 
-      <MediaContent />
+      <View>
+        {(currentTrack || {}).acid && !searchQuery &&
+          <View style={{ alignItems: 'center', marginBottom: -10 }}>
+          <FastImage source={(currentTrack || {}).art_link ? { uri: (currentTrack || {}).art_link } : logo}
+              style={{ flex: 0, height: 200, width: 200, marginTop: 20, marginBottom: 20, borderRadius: 5 }}
+              resizeMode='cover' />
+            {currentTrack && <Text>
+            <Text style={{ fontWeight: '700' }}>
+              {(currentTrack || {}).artist}</Text>
+            <Text>{(currentTrack || {}).title}</Text>
+            </Text>}
+          </View>}
+
+        <ScrollView style={{ height: 'auto', marginTop: 15 }}
+          showsVerticalScrollIndicator={false}>
+          {tracksToDisplay.length ? tracksToDisplay.slice(0, 17).map((itm, idx) => (
+            <MediaListItem
+              key={itm.acid}
+              item={itm}
+              addQueue={() => handleNavigateDetails(itm)}
+              isLoading={isLoading}
+              currentTrack={currentTrack}
+            />
+          )) :
+            <View style={{
+              flex: 1, justifyContent: 'center',
+              alignItems: 'center', marginTop: 10
+            }}><Text style={{ fontWeight: '700' }}>nothing found. should we add this?</Text></View>}
+        </ScrollView>
+      </View>
 
     </KeyboardAwareScrollView>
   )

@@ -1,4 +1,6 @@
 import TrackPlayer from 'react-native-track-player'
+import { logo } from '../../../assets/images/ipul_logo_trans.png'
+
 
 export const TrackPlayerStructure = item => ({
   idx: Math.random(item.acid * 1100),
@@ -7,7 +9,7 @@ export const TrackPlayerStructure = item => ({
   artist: item.artist,
   genre: item.genre,
   album: 'iPlayuListen App',
-  artwork: trimWWWString(item.art_link),
+  artwork: trimWWWString(item.art_link) || logo,
   url: trimWWWString(item.song),
 })
 

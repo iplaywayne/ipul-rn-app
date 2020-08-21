@@ -8,6 +8,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card, Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
 import DoubleClick from 'react-native-double-tap'
+import Snackbar from 'react-native-snackbar'
 
 import { siteLogo, logo } from '../../constants'
 import { useStore, wait } from '../../utils'
@@ -25,55 +26,90 @@ export function MediaDetails({ route, navigation }) {
   const mediaService = MediaService()
   const trackService = TrackService()
 
-  const handleAddMediaLike = () => {
-    mediaService.addMediaLike(item.acid)
-  }
+  const handleAddMediaLike = () => mediaService.addMediaLike(item.acid)
 
-  const addQueue = async (item) => {
-    MediaActionSheet()
-    // console.log(TrackPlayerStructure(item))
-    // await TrackPlayer.setupPlayer()
-    // await TrackPlayer.add(TrackPlayerStructure(item))
-    // console.log('Done')
-    // setTimeout(async () => {
-    //   const queued = await TrackPlayer.getQueue()
-    //   storeDispatch.setQueued(queued)
-    // }, 250)
-  }
+  const handleAddTapped = item => MediaActionSheet(item)
 
-  const playNow = async (item) => {
+  const handlePlayTapped = async (item) => {
     setTimeout(async () => {
-      if (!isPlaying && !currentTrack) {
-        storeDispatch.setLoading(true)
-        storeDispatch.setPlaying(true)
-        storeDispatch.setCurrentTrack(item)
-        await TrackPlayer.setupPlayer()
-        await TrackPlayer.reset()
-        await TrackPlayer.add(TrackPlayerStructure(item))
-        await TrackPlayer.play()
-        mediaService.addMediaPlay(item.acid)
-      } else if (!isPlaying && currentTrack.acid === item.acid) {
-        storeDispatch.setPlaying(true)
-        TrackPlayer.play()
-      } else if (isPlaying && currentTrack.acid === item.acid) {
-        storeDispatch.setPlaying(false)
-        TrackPlayer.pause()
+      let queued = await TrackPlayer.getQueue()
+      let state = await TrackPlayer.getState()
+      let isSameRequest = item.acid === currentTrack.acid
+      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+
+      console.log('Previous Play State [', state, ']', 'Queued [', queued.length, ']')
+
+      if (isSameRequest) {
+        console.log('A')
+        if (isPlaying) {
+          // await TrackPlayer.skip(item.acid)
+          await trackService.pause()
+          console.log('[SAMEREQUEST] Pause')
+        } else {
+          await TrackPlayer.skip(item.acid)
+          await trackService.play(item)
+          console.log('[SAMEREQUEST] Play')
+        }
       } else {
-        storeDispatch.setLoading(true)
-        storeDispatch.setPlaying(true)
-        storeDispatch.setCurrentTrack(item)
-        await TrackPlayer.setupPlayer()
-        await TrackPlayer.reset()
-        await TrackPlayer.add(TrackPlayerStructure(item))
-        await TrackPlayer.play()
-        mediaService.addMediaPlay(item.acid)
+        if (isPlaying) {
+          console.log('B')
+          await TrackPlayer.skip(item.acid)
+          await trackService.play(item)
+          console.log('[NEWREQUEST] Play New')
+        } else {
+          console.log('C')
+          await TrackPlayer.skip(item.acid)
+          await trackService.play(item)
+          console.log('[NEWREQUEST] Play')
+        }
       }
-      const queued = await TrackPlayer.getQueue()
-      storeDispatch.setQueued(queued)
     }, 200)
   }
 
-  React.useEffect(() => {
+  const handlePreviousTapped = async () => {
+    try {
+      await TrackPlayer.skipToPrevious()
+      console.log(await TrackPlayer.getCurrentTrack())
+    } catch (err) {
+      Snackbar.show({
+        text: err.message,
+        textColor: 'black',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: 'skyblue'
+      });
+    }
+  }
+
+  const handleNextTapped = async () => {
+    TrackPlayer.skipToNext()
+      .then(async res => {
+        const currentTrk = mediaService.getTrackById(await TrackPlayer.getCurrentTrack())
+        navigation.replace('MediaDetails', {
+          item: currentTrk,
+          user: user,
+          tracks: tracks
+        })
+        console.log(await TrackPlayer.getCurrentTrack())
+      })
+      .catch(err => {
+        if (err.message.indexOf('left') !== -1) {
+          Snackbar.show({
+            text: err.message.replace('is', 'are'),
+            textColor: 'black',
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: 'skyblue'
+          });
+        }
+      })
+  }
+
+  const handleRepeatMedia = () => {
+    TrackPlayer.seekTo(0)
+      .then(res => console.log('Done'))
+      .catch(err => console.log('ERROR'))
+  }
+
+  React.useLayoutEffect(() => {
     if (tracks.length > 0) {
       let tracksLikeThis = tracks.filter(t => t.acid !== item.acid &&
         JSON.stringify(t).includes(item.genre)).slice(0, 3)
@@ -88,27 +124,6 @@ export function MediaDetails({ route, navigation }) {
       headerShown: false
     })
   }, [])
-
-  const handleNextMedia = () => {
-    TrackPlayer.skipToNext()
-      .then(async res => {
-        const currentTrk = mediaService.getTrackById(await TrackPlayer.getCurrentTrack())
-        console.log(currentTrk)
-        navigation.replace('MediaDetails', {
-          item: currentTrk,
-          user: user,
-          tracks: tracks
-        })
-      })
-      .catch(err => console.log('ERROR'))
-  }
-
-  const handleRepeatMedia = () => {
-    TrackPlayer.seekTo(0)
-      .then(res => console.log('Done'))
-      .catch(err => console.log('ERROR'))
-
-  }
 
 
   return (
@@ -134,16 +149,16 @@ export function MediaDetails({ route, navigation }) {
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
         marginHorizontal: 20
       }}>
-        <TouchableOpacity onPress={handleRepeatMedia}>
-          <Icons name='repeat' size={65} />
+        <TouchableOpacity onPress={handlePreviousTapped}>
+          <Icons name='skip-previous' size={65} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => addQueue(item))}>
+        <TouchableOpacity onPress={() => wait(() => handleAddTapped(item))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
         {!isLoading ?
-          <TouchableOpacity onPress={() => wait(() => playNow(item), 250)}>
+          <TouchableOpacity onPress={() => wait(() => handlePlayTapped(item), 250)}>
             {isPlaying && currentTrack.acid !== item.acid &&
               <Icons name='play-circle' size={100} />}
             {isPlaying && currentTrack.acid === item.acid &&
@@ -160,7 +175,7 @@ export function MediaDetails({ route, navigation }) {
           <Icons name='heart-outline' size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => handleNextMedia())}>
+        <TouchableOpacity onPress={() => wait(() => handleNextTapped())}>
           <Icons name='skip-next' size={65} />
         </TouchableOpacity>
       </View>
@@ -189,7 +204,7 @@ export function MediaDetails({ route, navigation }) {
               }} />
             <View style={{ paddingLeft: 15 }}>
               <Text style={{ padding: 0 }}>
-                <Text style={{ fontWeight: '700' }}>{itm.artist}</Text> {itm.title}
+                <Text style={{ fontWeight: '700' }}>{itm.artist}</Text> {itm.title} {itm.acid === currentTrack.acid && 'is Playing'}
               </Text>
               <Text style={{ opacity: .5 }}>{itm.genre}</Text>
             </View>
@@ -197,6 +212,17 @@ export function MediaDetails({ route, navigation }) {
         ))}
       </View>
 
+
+      {
+        currentTrack &&
+        <View>
+          <Divider />
+
+          <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
+            Current track is {currentTrack.title}
+          </Text>
+        </View>
+      }
 
       {
         queued.length > 0 &&
