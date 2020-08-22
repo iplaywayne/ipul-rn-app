@@ -10,7 +10,9 @@ import AuthProvider from './src/contexts/AuthContext'
 import StoreProvider from './src/contexts/StoreContext'
 
 
-export default function Main() {
+export default function Main({ isHeadless }) {
+  if (isHeadless) return null // if called in background, ignore and allow notifs
+
   LogBox.ignoreAllLogs()
 
   return (

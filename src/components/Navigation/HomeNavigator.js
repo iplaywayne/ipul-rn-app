@@ -15,39 +15,28 @@ import { Media as MediaScreen } from '../../screens/Media'
 
 
 const MediaStack = createStackNavigator();
+
 const Drawer = createDrawerNavigator();
 
 
-export const HomeNavigator = ({ navigation }) => {
-  const [authState] = useAuth()
-  const { user } = authState
+export const HomeNavigator = ({ navigation }) => (
+  <MediaStack.Navigator mode='card'>
 
-  return (
-    <MediaStack.Navigator mode='card'>
+    <MediaStack.Screen name="Home" component={HomeScreen} options={{
+      headerShown: false
+    }} />
+    <MediaStack.Screen name="MediaDetails" component={MediaDetails} options={{
+      title: 'Media Details',
+    }} />
 
-      {/* Media Screen */}
-      <MediaStack.Screen name="Home" component={HomeScreen} options={{
-        headerShown: false
-      }} />
-      <MediaStack.Screen name="MediaDetails" component={MediaDetails} options={{
-        title: 'Media Details',
-      }} />
+  </MediaStack.Navigator>
+)
 
-    </MediaStack.Navigator>
-  )
-}
-
-export const HomeDrawerNavigator = () => {
-  const [storeState] = useStore()
-  const [authState] = useAuth()
-  const { user } = authState
-
-  return (
-    <Drawer.Navigator drawerType='slide'>
-      <Drawer.Screen name="Media" component={HomeNavigator} />
-      <Drawer.Screen name="Request" component={HomeNavigator} />
-      <Drawer.Screen name="History" component={HomeNavigator} />
-      <Drawer.Screen name="FAQ" component={HomeNavigator} />
-    </Drawer.Navigator >
-  )
-}
+export const HomeDrawerNavigator = () => (
+  <Drawer.Navigator drawerType='slide'>
+    <Drawer.Screen name="Media" component={HomeNavigator} />
+    <Drawer.Screen name="Request" component={HomeNavigator} />
+    <Drawer.Screen name="History" component={HomeNavigator} />
+    <Drawer.Screen name="FAQ" component={HomeNavigator} />
+  </Drawer.Navigator >
+)

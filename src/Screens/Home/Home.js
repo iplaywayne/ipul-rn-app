@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
-  Alert, TouchableOpacity
+  Alert, TouchableOpacity, AppState, DeviceEventEmitter
 } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
@@ -13,6 +13,9 @@ import Popover from 'react-native-popover-view';
 import Spinner from 'react-native-spinkit'
 import Button from 'react-native-button'
 import Snackbar from 'react-native-snackbar'
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import axios from 'axios'
+
 
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
@@ -23,6 +26,11 @@ import Camera from '../../components/Camera/Camera'
 import { ErrorBoundary } from '../../components'
 import PostService from '../../utils/post/PostService'
 import PostCard from '../../components/Post/PostCard'
+import { messaging } from '../../utils/firebase'
+import FCMService from '../../utils/notifs/FCMService'
+import LocalAlert from '../../utils/notifs/LocalAlert'
+import MediaRow from '../../components/Media/MediaRow'
+import HomeHeader from './HomeHeader'
 
 
 function Home(props) {
@@ -35,53 +43,35 @@ function Home(props) {
   const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
   const [globalPosts, setGlobalPosts] = React.useState(null)
-  const [alertMessage, setAlertMessage] = React.useState('asdf')
+  const [alertMessage, setAlertMessage] = React.useState()
+  const fcmService = FCMService
 
-  const onOpen = () => {
-    modalizeRef.current?.open();
-  };
+  const onOpen = () => modalizeRef.current?.open();
 
-  const MediaRow = ({ title, query, tracks }) => (
-    <View>
-      <Text style={{ paddingTop: 5, paddingLeft: 15, paddingBottom: 10, fontWeight: '700' }}>{title}</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15, flexDirection: 'row' }}>
+  let myDevice = 'cfSMiDPpZ7qFcf3HAbRj6r:APA91bGACMFr0PAH_UOL_UsbbiKjAxiwg20E012Cs1Ikq_fiZ9PlVSGOeEyFVlGi8zHrvaygqDBfqBbie5g8rN_RVGoI949b1_ktb2sI61XOYD9_AD3PZj3dVGUF4stibrdpsUZt-KSz'
 
-        {tracks && tracks.filter(t => JSON.stringify(t).toLowerCase().includes(query)).map((itm, idx) => (
-          <MiniCard key={idx} item={itm} />
-        ))}
-      </ScrollView>
-    </View>
-  )
 
   React.useLayoutEffect(() => {
     PostService.getGlobalPosts(posts => {
       setGlobalPosts(posts)
     })
-    setTimeout(() => {
-      if (tracks.length) {
-        trackService.setup()
-        setLoading(false)
-      }
-    }, 1000)
+    trackService.setup()
+
+    setTimeout(() => setLoading(false), 1000)
+
+    LocalAlert('iPlayuListen', `${user.name}`)
+    return () => { }
   }, [tracks])
 
 
   if (loading) return <Center><Spinner type='Wave' /></Center>
 
-  const HomeHeader = () => (
-    <View>
-      <Text style={styles.title}>
-        {isAdmin ? 'Hi Admin' : 'Welcome'}, {name}
-      </Text>
-    </View>
-  )
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
 
       <ErrorBoundary caller='Home Header'>
-        <HomeHeader />
+        <HomeHeader name={user.name} isAdmin={isAdmin} />
       </ErrorBoundary>
 
       <Divider style={{ marginBottom: 20 }} />
@@ -92,6 +82,7 @@ function Home(props) {
         <MediaRow title='Top R & B' query='r&' tracks={tracks} />
         <MediaRow title='Top Reggae' query='regg' tracks={tracks} />
       </ErrorBoundary>
+
 
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
@@ -136,7 +127,6 @@ function Home(props) {
       </ErrorBoundary>
 
 
-
       <View style={{ height: 50 }}></View>
     </ScrollView>
   )
@@ -144,9 +134,7 @@ function Home(props) {
 
 const styles = StyleSheet.create({
   root: {
-    // paddingTop: 30,
-    // flex: 1,
-    // paddingBottom: 50,
+
   },
   title: {
     fontSize: 28,
