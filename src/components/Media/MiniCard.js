@@ -45,12 +45,8 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const removeQueue = async () => {
     setTimeout(async () => {
       await storeDispatch.removeFromQueue(item)
-      Snackbar.show({
-        text: `${item.title} has been removed from your Queue`,
-        textColor: 'black',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: 'skyblue'
-      });
+      
+      LocalAlert('Media Queue', `${item.title} has been removed from your Queue`)
     }, 500)
   }
 

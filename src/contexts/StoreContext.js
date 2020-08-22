@@ -48,7 +48,7 @@ function reducer(state, action) {
       if (state.queued.includes(action.val)) return state
       return { ...state, queued: state.queued.concat(action.val) };
     case REMOVE_FROM_QUEUE:
-      return { ...state, queued: state.queued.filter((itm => itm.idx !== action.val.idx)) };
+      return { ...state, queued: state.queued.filter((itm => itm.acid !== action.val.acid)) };
     case SET_PLAYING:
       return { ...state, isPlaying: action.val };
     case SET_LOADING:
