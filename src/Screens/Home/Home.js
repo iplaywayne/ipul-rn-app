@@ -56,7 +56,7 @@ function Home(props) {
     trackService.setup()
 
     setTimeout(() => setLoading(false), 1000)
-
+    PushNotificationIOS.cancelAllLocalNotifications()
     return () => { }
   }, [tracks])
 

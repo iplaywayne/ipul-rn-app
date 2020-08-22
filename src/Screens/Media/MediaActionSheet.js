@@ -6,6 +6,7 @@ import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/funct
 import MediaService from '../../utils/media/MediaService'
 import TrackService from '../../utils/media/TrackService'
 import { useStore, wait } from '../../utils'
+import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 const MediaActionSheet = (item, storeDispatch) => {
@@ -25,6 +26,7 @@ const MediaActionSheet = (item, storeDispatch) => {
         case 1:
           console.log('Add to Queue')
           storeDispatch.addToQueue(item)
+          LocalAlert('Media Queue', `${item.title} has been added to your Queue`)
           return
         // case 2:
         //   console.log('Add to Favorites')

@@ -16,6 +16,7 @@ import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/funct
 import MediaService from '../../utils/media/MediaService'
 import TrackService from '../../utils/media/TrackService'
 import MediaActionSheet from './MediaActionSheet'
+import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 export function MediaDetails({ route, navigation }) {
@@ -52,12 +53,12 @@ export function MediaDetails({ route, navigation }) {
   React.useEffect(() => {
     setPageTrack(item)
     storeDispatch.setLoading(false)
-    return () => setPageTrack(null)
+    // return () => setPageTrack(null)
   }, [route])
 
   React.useEffect(() => {
     if (pageTrack) readIsLiked()
-    return () => setPageTrack(null)
+    // return () => setPageTrack(null)
   }, [pageTrack])
 
 
@@ -72,6 +73,7 @@ export function MediaDetails({ route, navigation }) {
   const handleAddMediaLike = async () => {
     let result = await mediaService.addMediaLike(user, focusedTrack, !isLiked)
     setIsLiked(result?.liked)
+    result?.liked && LocalAlert('Media Liked', 'Your like has been registered')
   }
 
   const handleAddTapped = itm => MediaActionSheet(itm, storeDispatch)
@@ -82,6 +84,7 @@ export function MediaDetails({ route, navigation }) {
       storeDispatch.setLoading(false)
       return
     }
+
     setTimeout(async () => {
       let queued = await TrackPlayer.getQueue()
       let state = await TrackPlayer.getState()
@@ -91,6 +94,12 @@ export function MediaDetails({ route, navigation }) {
         TrackPlayer.pause()
         trackService.pause()
         return
+      }
+
+      if (!queued.length) {
+        TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+      } else {
+        TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
       }
 
       try {
@@ -130,12 +139,14 @@ export function MediaDetails({ route, navigation }) {
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
       setIsLiked(result?.liked)
     } catch (err) {
-      Snackbar.show({
-        text: err.message,
-        textColor: 'black',
-        duration: Snackbar.LENGTH_LONG,
-        backgroundColor: 'skyblue'
-      });
+      LocalAlert('Notification', err.message)
+
+      // Snackbar.show({
+      //   text: err.message,
+      //   textColor: 'black',
+      //   duration: Snackbar.LENGTH_LONG,
+      //   backgroundColor: 'skyblue'
+      // });
     }
   }
 
@@ -150,12 +161,14 @@ export function MediaDetails({ route, navigation }) {
       setIsLiked(result?.liked)
     } catch (err) {
       if (err.message.indexOf('left') !== -1) {
-        Snackbar.show({
-          text: err.message.replace('is', 'are'),
-          textColor: 'black',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'skyblue'
-        });
+        LocalAlert('Notification', err.message.replace('is', 'are'))
+
+        // Snackbar.show({
+        //   text: err.message.replace('is', 'are'),
+        //   textColor: 'black',
+        //   duration: Snackbar.LENGTH_LONG,
+        //   backgroundColor: 'skyblue'
+        // });
       }
     }
   }
@@ -207,7 +220,7 @@ export function MediaDetails({ route, navigation }) {
           <Icons name='skip-previous' size={65} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => handleAddTapped(focusedTrack))}>
+        <TouchableOpacity onPress={() => wait(() => handleAddTapped(pageTrack))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
@@ -222,16 +235,16 @@ export function MediaDetails({ route, navigation }) {
           }} />} */}
 
         <TouchableOpacity onPress={() => wait(() => handlePlayTapped(focusedTrack), 250)}>
-        {!isLoading ?
+          {!isLoading ?
             <View>{isPlaying ? <Icons name='pause-circle' size={100} /> : <Icons name='play-circle' size={100} />}</View>
-           :
-          <ActivityIndicator style={{
-            margin: 9,
-            backgroundColor: 'black',
-            padding: 31, borderRadius: 100 / 2
-          }} />}
+            :
+            <ActivityIndicator style={{
+              margin: 9,
+              backgroundColor: 'black',
+              padding: 31, borderRadius: 100 / 2
+            }} />}
         </TouchableOpacity>
-        
+
         <TouchableOpacity onPress={() => wait(() => handleAddMediaLike())}>
           <Icons name={isLiked ? 'heart' : 'heart-outline'} size={30} style={{ color: isLiked ? 'red' : 'black' }} />
         </TouchableOpacity>
