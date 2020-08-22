@@ -40,13 +40,11 @@ function Home(props) {
   const name = user && user.name
   const trackService = TrackService()
   const topRemixes = tracks && tracks.filter(trk => JSON.stringify(trk).toLowerCase().includes('s')).slice(0, 11)
-  const modalizeRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true)
   const [globalPosts, setGlobalPosts] = React.useState(null)
   const [alertMessage, setAlertMessage] = React.useState()
   const fcmService = FCMService
 
-  const onOpen = () => modalizeRef.current?.open();
 
   let myDevice = 'cfSMiDPpZ7qFcf3HAbRj6r:APA91bGACMFr0PAH_UOL_UsbbiKjAxiwg20E012Cs1Ikq_fiZ9PlVSGOeEyFVlGi8zHrvaygqDBfqBbie5g8rN_RVGoI949b1_ktb2sI61XOYD9_AD3PZj3dVGUF4stibrdpsUZt-KSz'
 
@@ -59,7 +57,6 @@ function Home(props) {
 
     setTimeout(() => setLoading(false), 1000)
 
-    LocalAlert('iPlayuListen', `${user.name}`)
     return () => { }
   }, [tracks])
 

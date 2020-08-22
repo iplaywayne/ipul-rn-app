@@ -30,7 +30,7 @@ import { styles } from './styles'
 
 
 
-function Media({ navigation }) {
+function Media({ route, navigation }) {
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { isLoading, tracks, currentTrack, queued } = storeState
@@ -72,7 +72,7 @@ function Media({ navigation }) {
         onPressHamburgerIcon={() => navigation.toggleDrawer()}
       />),
     })
-  }, [])
+  }, [route])
 
   React.useEffect(() => {
     if (!searchQuery) setTrackQuery(tracks)

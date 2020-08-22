@@ -58,8 +58,6 @@ function TrackService() {
           TrackPlayer.CAPABILITY_SKIP,
           TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
           TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-          TrackPlayer.CAPABILITY_JUMP_FORWARD,
-          TrackPlayer.CAPABILITY_JUMP_BACKWARD,
         ],
       })
     })

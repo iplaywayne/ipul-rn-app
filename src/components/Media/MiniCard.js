@@ -11,12 +11,14 @@ import FastImage from 'react-native-fast-image'
 import { v4 as uuidv4 } from 'uuid';
 import { Divider } from 'react-native-paper'
 import Snackbar from 'react-native-snackbar'
+import { useNavigation } from '@react-navigation/native';
 
 import { useAuth, useStore } from '../../contexts'
 import { logo, siteLogo } from '../../constants'
 import { firebase, database, auth, truncate, trimWWWString } from '../../utils'
 import { SendPlayerDetails } from '../../utils/media/functions'
 import MediaService from '../../utils/media/MediaService'
+import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 function MiniCard({ idx, item, addControl, removeControl }) {
@@ -26,26 +28,21 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const { avatar, details } = user ?? { avatar: '', details: {} }
   const { queued, tracks, isPlaying, currentTrack } = storeState
   const [isAlert, setIsAlert] = React.useState()
+  const navigation = useNavigation()
 
   if (!item) item = {}
   let newItem = { ...item, id: item.acid }
 
-  const addQueue = async () => {
+  const onPress = async () => {
     if (removeControl) return
-    setTimeout(() => storeDispatch.setLoading(true), 250)
     setTimeout(() => {
-      SendPlayerDetails(item, storeDispatch)
-      Snackbar.show({
-        text: `${item.title} has been added to your Queue`,
-        textColor: 'black',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: 'skyblue'
-      });
+      navigation.navigate('MediaDetails', {
+        item, user, tracks
+      })
     }, 250)
   }
 
   const removeQueue = async () => {
-    setTimeout(() => storeDispatch.setLoading(true), 250)
     setTimeout(async () => {
       await storeDispatch.removeFromQueue(item)
       Snackbar.show({
@@ -58,7 +55,7 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   }
 
   return (
-    <TouchableScale onPress={addQueue}>
+    <TouchableScale onPress={onPress}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'column' }}>
 

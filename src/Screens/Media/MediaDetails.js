@@ -30,14 +30,13 @@ export function MediaDetails({ route, navigation }) {
   const focusedTrack = pageTrack ? pageTrack : item
   const [isLiked, setIsLiked] = React.useState(false)
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (tracks.length > 0) {
       if (!queued.length) TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
 
       let tracksLikeThis = tracks.filter(t => t.acid !== focusedTrack.acid &&
         JSON.stringify(t).includes(focusedTrack.genre)).slice(0, 3)
       setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
-      storeDispatch.setLoading(false)
       storeDispatch.setCurrentTrack(item)
     }
   }, [tracks])
@@ -47,12 +46,14 @@ export function MediaDetails({ route, navigation }) {
     navigation.setOptions({
       headerShown: false
     })
+
   }, [])
 
   React.useEffect(() => {
     setPageTrack(item)
+    storeDispatch.setLoading(false)
     return () => setPageTrack(null)
-  }, [])
+  }, [route])
 
   React.useEffect(() => {
     if (pageTrack) readIsLiked()
@@ -76,6 +77,11 @@ export function MediaDetails({ route, navigation }) {
   const handleAddTapped = itm => MediaActionSheet(itm, storeDispatch)
 
   const handlePlayTapped = async (item) => {
+    if (isLoading) {
+      TrackPlayer.reset()
+      storeDispatch.setLoading(false)
+      return
+    }
     setTimeout(async () => {
       let queued = await TrackPlayer.getQueue()
       let state = await TrackPlayer.getState()
@@ -174,7 +180,7 @@ export function MediaDetails({ route, navigation }) {
       <TouchableOpacity onPress={() => navigation.goBack()}
         style={{ position: 'absolute', top: 60, left: 25, zIndex: 10 }}>
         <Text style={{ fontWeight: '700' }}>
-          <Icons style={{ fontSize: 25, color: 'white' }} name='arrow-down' />
+          <Icons style={{ fontSize: 25, color: 'white' }} name='arrow-left' />
         </Text>
       </TouchableOpacity>
 
@@ -205,7 +211,7 @@ export function MediaDetails({ route, navigation }) {
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
-        {!isLoading ?
+        {/* {!isLoading ?
           <TouchableOpacity onPress={() => wait(() => handlePlayTapped(focusedTrack), 250)}>
             {isPlaying ? <Icons name='pause-circle' size={100} /> : <Icons name='play-circle' size={100} />}
           </TouchableOpacity> :
@@ -213,8 +219,19 @@ export function MediaDetails({ route, navigation }) {
             margin: 9,
             backgroundColor: 'black',
             padding: 31, borderRadius: 100 / 2
-          }} />}
+          }} />} */}
 
+        <TouchableOpacity onPress={() => wait(() => handlePlayTapped(focusedTrack), 250)}>
+        {!isLoading ?
+            <View>{isPlaying ? <Icons name='pause-circle' size={100} /> : <Icons name='play-circle' size={100} />}</View>
+           :
+          <ActivityIndicator style={{
+            margin: 9,
+            backgroundColor: 'black',
+            padding: 31, borderRadius: 100 / 2
+          }} />}
+        </TouchableOpacity>
+        
         <TouchableOpacity onPress={() => wait(() => handleAddMediaLike())}>
           <Icons name={isLiked ? 'heart' : 'heart-outline'} size={30} style={{ color: isLiked ? 'red' : 'black' }} />
         </TouchableOpacity>
