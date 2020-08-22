@@ -73,7 +73,7 @@ export function MediaDetails({ route, navigation }) {
   const handleAddMediaLike = async () => {
     let result = await mediaService.addMediaLike(user, focusedTrack, !isLiked)
     setIsLiked(result?.liked)
-    result?.liked && LocalAlert('Media Liked', 'Your like has been registered')
+    result?.liked && LocalAlert('Media Liked', `You liked ${focusedTrack.title} by ${focusedTrack.artist}`)
   }
 
   const handleAddTapped = itm => MediaActionSheet(itm, storeDispatch)
@@ -131,30 +131,23 @@ export function MediaDetails({ route, navigation }) {
 
   const handlePreviousTapped = async () => {
     try {
-      await TrackPlayer.skipToPrevious()
       let prevId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === prevId)[0]
+      await TrackPlayer.skipToPrevious()
       trackService.play(crtTrk)
       setPageTrack(crtTrk)
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
       setIsLiked(result?.liked)
     } catch (err) {
       LocalAlert('Notification', err.message)
-
-      // Snackbar.show({
-      //   text: err.message,
-      //   textColor: 'black',
-      //   duration: Snackbar.LENGTH_LONG,
-      //   backgroundColor: 'skyblue'
-      // });
     }
   }
 
   const handleNextTapped = async () => {
     try {
-      await TrackPlayer.skipToNext()
       let nextId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === nextId)[0]
+      await TrackPlayer.skipToNext()
       trackService.play(crtTrk)
       setPageTrack(crtTrk)
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
@@ -162,13 +155,6 @@ export function MediaDetails({ route, navigation }) {
     } catch (err) {
       if (err.message.indexOf('left') !== -1) {
         LocalAlert('Notification', err.message.replace('is', 'are'))
-
-        // Snackbar.show({
-        //   text: err.message.replace('is', 'are'),
-        //   textColor: 'black',
-        //   duration: Snackbar.LENGTH_LONG,
-        //   backgroundColor: 'skyblue'
-        // });
       }
     }
   }
@@ -185,7 +171,6 @@ export function MediaDetails({ route, navigation }) {
       .then(res => console.log('Done'))
       .catch(err => console.log('ERROR'))
   }
-
 
 
   return (
@@ -207,8 +192,17 @@ export function MediaDetails({ route, navigation }) {
         flex: 1, alignItems: 'center', marginTop: 10, justifyContent: 'center',
         flexDirection: 'row'
       }}>
-        <Text style={{ fontWeight: '700', fontSize: 20 }}>{currentTrack.artist ? currentTrack.artist : item.artist}</Text>
-        <Text style={{ marginLeft: 5, marginTop: 3 }}>{currentTrack.title ? currentTrack.title : item.title}</Text>
+        {pageTrack?.acid === item?.acid ?
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ fontWeight: '700', fontSize: 20 }}>{item?.artist ? item.artist : item.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 5 }}>{item?.title ? item.title : item.title}</Text>
+          </View>
+          :
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ fontWeight: '700', fontSize: 20 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
+          </View>
+        }
       </View>
 
 

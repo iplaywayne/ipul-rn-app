@@ -34,6 +34,8 @@ import { ErrorBoundary } from '../../components'
 import ProfileHeader from './ProfileHeader'
 import ProfileCards from './ProfileCards'
 import FetchTracks from '../../utils/media/functions/FetchTracks'
+import { TrackPlayerStructure } from '../../utils/media/functions'
+import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 const BUTTON_WIDTH = 100
@@ -101,8 +103,8 @@ function Profile({ route, navigation }) {
 
   const playNowTapped = async () => {
     if (!isPlaying && !queued.length) {
-      Alert.alert('Select a song to start your playlist')
-      return
+      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+      LocalAlert('Media Player','You have nothing queued, playing randomly')
     }
     setTimeout(() => {
       if (!isPlaying) {
