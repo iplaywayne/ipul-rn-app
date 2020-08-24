@@ -116,8 +116,8 @@ function Profile({ route, navigation }) {
       }
 
       let newQueued = await TrackPlayer.getQueue()
-
       await TrackPlayer.play()
+      
       storeDispatch.setPlaying(true)
       storeDispatch.setQueued(newQueued)
     } else {

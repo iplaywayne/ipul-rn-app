@@ -77,7 +77,6 @@ function Media({ route, navigation }) {
   React.useEffect(() => {
     setTimeout(() => {
       if (tracks.length) {
-        // storeDispatch.setLoading(false)
         setLoading(false)
       }
     }, 500)

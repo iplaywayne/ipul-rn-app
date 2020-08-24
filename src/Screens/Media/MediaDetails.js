@@ -108,7 +108,6 @@ export function MediaDetails({ route, navigation }) {
     }
   }
 
-
   const handleNextTapped = async () => {
     try {
       await TrackPlayer.skipToNext()

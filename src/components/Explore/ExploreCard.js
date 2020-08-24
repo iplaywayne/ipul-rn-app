@@ -45,8 +45,7 @@ function ExploreCard(props) {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const [storeState] = useStore()
-  const { tracks } = storeState
-  const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
+  const { name, avatar, details, tracks } = storeState?.user
   const mediaService = MediaService()
 
 
@@ -63,7 +62,7 @@ function ExploreCard(props) {
     }, 250)
   }
 
-  
+
   return (
     <ScrollView style={styles.root}>
       <DoubleClick
@@ -84,7 +83,7 @@ function ExploreCard(props) {
             children={<View style={{
               marginHorizontal: 70, marginBottom: 15, flexDirection: 'row', justifyContent: 'space-between'
             }}>
-              {item.views && <Text><Text style={{fontWeight:'700'}}>Views</Text> {item.views}</Text>}
+              {item.views && <Text><Text style={{ fontWeight: '700' }}>Views</Text> {item.views}</Text>}
               {item.plays && <Text><Text style={{ fontWeight: '700' }}>Plays</Text> {item.plays}</Text>}
               {item.likes && <Text><Text style={{ fontWeight: '700' }}>Likes</Text> {item.likes}</Text>}
             </View>}
