@@ -1,73 +1,67 @@
 import React from 'react'
-import { View, Text, TouchableOpacity ,StatusBar} from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Button from 'react-native-button'
-import { CommonActions } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Profile as ProfileScreen } from '../../screens/Profile'
-import { default as UpdateProfileScreen } from '../../screens/Profile/UpdateProfile'
-import { default as UpdateMoodScreen } from '../../screens/Profile/UpdateMood'
-import { useAuth } from '../../contexts'
-import { NavigationDrawerStructure } from './NavigationDrawerStructure'
-import { Settings as SettingsScreen } from '../../screens/Settings'
+import { SignIn as SignInScreen } from '../../screens/SignIn'
+import { SignUp as SignUpScreen } from '../../screens/SignUp'
+import { ExploreNavigator, ExploreDrawerNavigator } from '../../components/Navigation/ExploreNavigator'
+import { HomeNavigator, HomeDrawerNavigator } from '../../components/Navigation/HomeNavigator'
+import { MediaNavigator, MediaDrawerNavigator } from '../../components/Navigation/MediaNavigator'
+import { ProfileNavigator, ProfileDrawerNavigator } from '../../components/Navigation/ProfileNavigator'
+
+import SplashScreen from '../../screens/SplashScreen/SplashScreen'
 
 
-const AppStack = createStackNavigator();
+const AppTab = createMaterialBottomTabNavigator();
 
-
-const NotifsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Notifications Coming</Text></View>
-)
-const AdsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text>Ads Coming</Text></View>
-)
-
-const AppStackNavigator = ({ navigation }) => {
-  const [authState] = useAuth()
-  const { user } = authState
-
-  return (
-    <AppStack.Navigator mode='modal'>
-      <StatusBar barStyle='dark-content' />
-
-      {/* Profile Screen */}
-      <AppStack.Screen name="Profile" component={ProfileScreen} options={{
-        title: user.name || 'iPlayuListen',
-        headerShown: true,
-        headerTransparent: false, 
-        headerLeft: props => (
-          <NavigationDrawerStructure
-            navigationProps={navigation}
-            icon={<Icon name='view-dashboard' size={25} style={{ marginLeft: 20 }} />}
-          />
+const AppNavigator = () => (
+  <AppTab.Navigator
+    initialRouteName="Home"
+    activeColor="#fff"
+    barStyle={{ backgroundColor: '#121212' }}>
+    <AppTab.Screen
+      name="Home"
+      component={HomeDrawerNavigator}
+      options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="home" color={color} size={26} />
         ),
-        headerRight: props => (
-          <NavigationDrawerStructure
-            navigationProps={navigation}
-            icon={<Icon name='dots-horizontal' size={25} style={{ marginRight: 20 }} />}
-          />
-        )
-      }} />
-      <AppStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
-        title: 'Update Profile',
-      }} />
-      <AppStack.Screen name="UpdateMood" component={UpdateMoodScreen} options={{
-        title: 'Update Mood',
-      }} />
+      }}
+    />
+    <AppTab.Screen
+      name="Explore"
+      component={ExploreDrawerNavigator}
+      options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="airplane-takeoff" color={color} size={26} />
+        ),
+      }}
+    />
+    <AppTab.Screen
+      name="Media"
+      component={MediaDrawerNavigator}
+      options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="theater" color={color} size={26} />
+        ),
+      }}
+    />
+    <AppTab.Screen
+      name="Profile"
+      component={ProfileDrawerNavigator}
+      options={{
+        tabBarLabel: '',
+        tabBarIcon: ({ color }) => (
+          <MaterialCommunityIcons name="account" color={color} size={26} />
+        ),
+      }}
+    />
+  </AppTab.Navigator>
+)
 
-      
-      <AppStack.Screen name="Settings" component={SettingsScreen} options={{
-        title: 'Settings',
-      }} />
-      <AppStack.Screen name="Notifications" component={NotifsScreen} options={{
-        title: 'Notifications',
-      }} />
-      <AppStack.Screen name="Ads" component={AdsScreen} options={{
-        title: 'Advertisements',
-      }} />
-    </AppStack.Navigator>
-  )
-}
-
-export default AppStackNavigator
+export default AppNavigator
