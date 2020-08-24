@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component {
       admin: null
     }))
     const [storeState, storeDispatch] = this.context
-    const email = storeState.user.email.toLowerCase()
+    const email = storeState.user?.email?.toLowerCase()
     if (IS_ADMIN.includes(email)) this.setState({ admin: true })
   }
 

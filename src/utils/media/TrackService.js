@@ -63,6 +63,16 @@ function TrackService() {
     })
   }
 
+  const setPlaylist = async () => {
+    if (!queued.length) {
+      TrackPlayer.reset()
+      TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+    } else {
+      TrackPlayer.reset()
+      TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
+    }
+  }
+
   const play = async (item) => {
     storeDispatch.setCurrentTrack(item)
     storeDispatch.setPlaying(true)
@@ -74,9 +84,11 @@ function TrackService() {
     await TrackPlayer.pause()
   }
 
+
+
   const getTracks = cb => ReadTracks(cb)
 
-  return { setup, getTracks, play, pause }
+  return { setup, getTracks, setPlaylist, play, pause }
 }
 
 export default TrackService

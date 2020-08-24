@@ -10,7 +10,10 @@ import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 const MediaActionSheet = (item, storeDispatch) => {
-  console.log(item.title)
+  if (!item?.acid) {
+    console.log('MediaActionSheet missing item param')
+    return
+ }
 
   return ActionSheetIOS.showActionSheetWithOptions(
     {

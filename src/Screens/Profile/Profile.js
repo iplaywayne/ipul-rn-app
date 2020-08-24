@@ -36,6 +36,7 @@ import ProfileCards from './ProfileCards'
 import FetchTracks from '../../utils/media/functions/FetchTracks'
 import { TrackPlayerStructure } from '../../utils/media/functions'
 import LocalAlert from '../../utils/notifs/LocalAlert'
+import { wait } from '../../utils'
 
 
 const BUTTON_WIDTH = 100
@@ -102,19 +103,27 @@ function Profile({ route, navigation }) {
   }
 
   const playNowTapped = async () => {
-    if (!isPlaying && !queued.length) {
-      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
-      LocalAlert('Media Player','You have nothing queued, playing randomly')
-    }
-    setTimeout(() => {
-      if (!isPlaying) {
-        TrackPlayer.play()
-        storeDispatch.setPlaying(true)
+    let nowQueued = await TrackPlayer.getQueue()
+
+    wait(() => { }, 250)
+
+    if (!isPlaying) {
+      if (!nowQueued.length) {
+        LocalAlert('Media Player', 'You have nothing queued, adding randoms')
+        await TrackPlayer.add(tracks.slice(0, 8).map(t => TrackPlayerStructure(t)))
       } else {
-        TrackPlayer.pause()
-        storeDispatch.setPlaying(false)
+        LocalAlert('Media Player', `Now playing ${nowQueued.length} songs queued`)
       }
-    }, 250)
+
+      let newQueued = await TrackPlayer.getQueue()
+
+      await TrackPlayer.play()
+      storeDispatch.setPlaying(true)
+      storeDispatch.setQueued(newQueued)
+    } else {
+      await TrackPlayer.pause()
+      storeDispatch.setPlaying(false)
+    }
   }
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>

@@ -45,7 +45,6 @@ function MiniCard({ idx, item, addControl, removeControl }) {
   const removeQueue = async () => {
     setTimeout(async () => {
       await storeDispatch.removeFromQueue(item)
-      
       LocalAlert('Media Queue', `${item.title} has been removed from your Queue`)
     }, 500)
   }

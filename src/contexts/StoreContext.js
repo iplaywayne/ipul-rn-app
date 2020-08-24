@@ -76,7 +76,8 @@ function StoreProvider({ children }) {
       dispatch({ type: REMOVE_FROM_QUEUE, val: track })
       await TrackPlayer.removeUpcomingTracks()
       if (state.queued.length > 0) {
-        const updatedQueue = state.queued.filter(t => t.idx !== track.idx)
+        console.log(track)
+        const updatedQueue = state.queued.filter(t => t.id !== track.id)
         await TrackPlayer.add(updatedQueue)
         await TrackPlayer.play()
       }

@@ -12,7 +12,6 @@ export const useAuth = () => React.useContext(AuthContext)
 
 
 export default function AuthProvider({ children }) {
-  const [authorizedUser, setAuthorizedUser] = React.useState(null)
   const [{ name }, storeDispatch] = useStore()
 
   const [state, dispatch] = React.useReducer(

@@ -9,6 +9,7 @@ import { Divider } from 'react-native-paper'
 import TrackPlayer from 'react-native-track-player'
 import DoubleClick from 'react-native-double-tap'
 import Snackbar from 'react-native-snackbar'
+import Button from 'react-native-button'
 
 import { siteLogo, logo } from '../../constants'
 import { useStore, wait } from '../../utils'
@@ -17,6 +18,7 @@ import MediaService from '../../utils/media/MediaService'
 import TrackService from '../../utils/media/TrackService'
 import MediaActionSheet from './MediaActionSheet'
 import LocalAlert from '../../utils/notifs/LocalAlert'
+import { PreviousTapped } from './functions/PreviousTapped'
 
 
 export function MediaDetails({ route, navigation }) {
@@ -28,128 +30,93 @@ export function MediaDetails({ route, navigation }) {
   const trackService = TrackService()
   const [pageTrack, setPageTrack] = React.useState(null)
   const [nextTrack, setNextTrack] = React.useState(null)
+  const [viewingTrack, setViewingTrack] = React.useState(null)
   const focusedTrack = pageTrack ? pageTrack : item
   const [isLiked, setIsLiked] = React.useState(false)
-
-  React.useEffect(() => {
-    if (tracks.length > 0) {
-      if (!queued.length) TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
-
-      let tracksLikeThis = tracks.filter(t => t.acid !== focusedTrack.acid &&
-        JSON.stringify(t).includes(focusedTrack.genre)).slice(0, 3)
-      setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
-      storeDispatch.setCurrentTrack(item)
-    }
-  }, [tracks])
 
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false
     })
-
+    setViewingTrack(item)
   }, [])
 
-  React.useEffect(() => {
-    setPageTrack(item)
-    storeDispatch.setLoading(false)
-    // return () => setPageTrack(null)
-  }, [route])
 
   React.useEffect(() => {
-    if (pageTrack) readIsLiked()
-    // return () => setPageTrack(null)
-  }, [pageTrack])
+    if (tracks.length > 0) {
+      let tracksLikeThis = tracks.filter(t => t?.acid !== viewingTrack?.acid &&
+        JSON.stringify(t).includes(viewingTrack?.genre)).slice(0, 3)
+      setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
+      storeDispatch.setLoading(false)
+    }
+  }, [tracks])
+
+  React.useEffect(() => {
+    if (viewingTrack?.acid) readIsLiked()
+  }, [viewingTrack])
 
 
   const readIsLiked = async () => {
     try {
-      const result = await mediaService.isMediaLiked(pageTrack.acid, user.uid)
+      const result = await mediaService.isMediaLiked(viewingTrack?.acid, user?.uid)
       setIsLiked(result?.liked)
-    } catch (e) {
+    } catch {
+
     }
   }
 
   const handleAddMediaLike = async () => {
-    let result = await mediaService.addMediaLike(user, focusedTrack, !isLiked)
-    setIsLiked(result?.liked)
-    result?.liked && LocalAlert('Media Liked', `You liked ${focusedTrack.title} by ${focusedTrack.artist}`)
-  }
-
-  const handleAddTapped = itm => MediaActionSheet(itm, storeDispatch)
-
-  const handlePlayTapped = async (item) => {
-    if (isLoading) {
-      TrackPlayer.reset()
-      storeDispatch.setLoading(false)
+    if (!viewingTrack?.acid) {
+      console.log('Missing Track Param')
       return
     }
-
-    setTimeout(async () => {
-      let queued = await TrackPlayer.getQueue()
-      let state = await TrackPlayer.getState()
-      let isCurrentRequest = focusedTrack.acid === currentTrack.acid
-
-      if (isPlaying) {
-        TrackPlayer.pause()
-        trackService.pause()
-        return
-      }
-
-      if (!queued.length) {
-        TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
-      } else {
-        TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
-      }
-
-      try {
-        if (isCurrentRequest) {
-          if (isPlaying) {
-            await trackService.pause()
-            console.log('[CURRENTREQUEST] Pause')
-          } else {
-            await TrackPlayer.skip(focusedTrack.acid)
-            await trackService.play(focusedTrack)
-            console.log('[CURRENTREQUEST] Play')
-          }
-        } else {
-          if (isPlaying) {
-            await TrackPlayer.skip(focusedTrack.acid)
-            await trackService.play(focusedTrack)
-            console.log('[NEWREQUEST] Play New', focusedTrack.acid, queued.length)
-          } else {
-            await TrackPlayer.skip(currentTrack.acid)
-            await trackService.play(currentTrack)
-            console.log('[NEWREQUEST] Play', currentTrack.acid)
-          }
-        }
-      } catch (e) {
-        console.log(e.message)
-      }
-    }, 200)
+    let result = await mediaService.addMediaLike(user, viewingTrack, !isLiked)
+    setIsLiked(result?.liked)
+    result?.liked && LocalAlert('Media Liked', `You liked ${viewingTrack.title} by ${viewingTrack.artist}`)
   }
 
   const handlePreviousTapped = async () => {
-    try {
-      let prevId = await TrackPlayer.getCurrentTrack()
-      let crtTrk = tracks.filter(t => t.acid === prevId)[0]
-      await TrackPlayer.skipToPrevious()
-      trackService.play(crtTrk)
-      setPageTrack(crtTrk)
-      const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
-      setIsLiked(result?.liked)
-    } catch (err) {
-      LocalAlert('Notification', err.message)
+    const data = await PreviousTapped(tracks, user.uid)
+    console.log(data)
+  }
+
+  const handleAddTapped = () => MediaActionSheet(viewingTrack ? viewingTrack : item, storeDispatch)
+
+  const handlePlayTapped = async () => {
+    const nowQueued = await TrackPlayer.getQueue()
+    const state = await TrackPlayer.getState()
+    const isViewingRequest = viewingTrack?.acid === item?.acid
+    const isCurrentRequest = viewingTrack?.acid === currentTrack?.acid
+    const thisTrack = route.params.item
+
+    if (!nowQueued.length) {
+      console.log('Queue is Empty, Setting playlist . .')
+      await trackService.setPlaylist()
+    }
+
+    if (isPlaying) {
+      trackService.pause()
+    } else {
+      let currentId = await TrackPlayer.getCurrentTrack()
+      let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
+
+      console.log(currentId ? `${currentId} is the current track id` : 'there is no current track')
+      await TrackPlayer.skip(currentId)
+      await trackService.play(currentTrack)
+      console.log(currentTrack.title)
     }
   }
 
+
   const handleNextTapped = async () => {
     try {
+      await TrackPlayer.skipToNext()
       let nextId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === nextId)[0]
-      await TrackPlayer.skipToNext()
+      console.log('Next Tapped', crtTrk.title)
+      setViewingTrack(crtTrk)
       trackService.play(crtTrk)
-      setPageTrack(crtTrk)
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
       setIsLiked(result?.liked)
     } catch (err) {
@@ -183,7 +150,7 @@ export function MediaDetails({ route, navigation }) {
       </TouchableOpacity>
 
       <DoubleClick doubleTap={() => navigation.goBack()}>
-        <FastImage source={currentTrack.art_link ? { uri: currentTrack.art_link } : logo}
+        <FastImage source={currentTrack?.art_link ? { uri: currentTrack.art_link } : logo}
           style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
           resizeMode='cover' />
       </DoubleClick>
@@ -192,10 +159,15 @@ export function MediaDetails({ route, navigation }) {
         flex: 1, alignItems: 'center', marginTop: 10, justifyContent: 'center',
         flexDirection: 'row'
       }}>
-        {pageTrack?.acid === item?.acid ?
+        {viewingTrack?.acid !== item?.acid ?
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontWeight: '700', fontSize: 20 }}>{item?.artist ? item.artist : item.artist}</Text>
             <Text style={{ marginLeft: 5, marginTop: 5 }}>{item?.title ? item.title : item.title}</Text>
+            <Button onPress={() => {
+              TrackPlayer.skip(item.acid)
+              trackService.play(item)
+            }} style={{ fontSize: 13, marginTop: 6, marginLeft: 4 }}>
+              Play this</Button>
           </View>
           :
           <View style={{ flexDirection: 'row' }}>
@@ -203,6 +175,15 @@ export function MediaDetails({ route, navigation }) {
             <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
           </View>
         }
+
+
+      </View>
+      <View style={{ alignItems: 'center', marginTop: 4 }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ marginRight: 5, color: 'gray', marginTop: 1 }}>{isPlaying ? 'Playing' : 'Paused'}</Text>
+          <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
+          <Text style={{ marginLeft: 5, marginTop: 1, fontSize: 13 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
+        </View>
       </View>
 
 
@@ -214,21 +195,11 @@ export function MediaDetails({ route, navigation }) {
           <Icons name='skip-previous' size={65} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => wait(() => handleAddTapped(pageTrack))}>
+        <TouchableOpacity onPress={() => wait(() => handleAddTapped(viewingTrack))}>
           <Icons name='plus' size={30} />
         </TouchableOpacity>
 
-        {/* {!isLoading ?
-          <TouchableOpacity onPress={() => wait(() => handlePlayTapped(focusedTrack), 250)}>
-            {isPlaying ? <Icons name='pause-circle' size={100} /> : <Icons name='play-circle' size={100} />}
-          </TouchableOpacity> :
-          <ActivityIndicator style={{
-            margin: 9,
-            backgroundColor: 'black',
-            padding: 31, borderRadius: 100 / 2
-          }} />} */}
-
-        <TouchableOpacity onPress={() => wait(() => handlePlayTapped(focusedTrack), 250)}>
+        <TouchableOpacity onPress={() => wait(() => handlePlayTapped(viewingTrack), 250)}>
           {!isLoading ?
             <View>{isPlaying ? <Icons name='pause-circle' size={100} /> : <Icons name='play-circle' size={100} />}</View>
             :
@@ -264,7 +235,7 @@ export function MediaDetails({ route, navigation }) {
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
               alignItems: 'center'
             }}>
-            <FastImage source={itm.art_link ? { uri: itm.art_link } : logo}
+            <FastImage source={itm?.art_link ? { uri: itm.art_link } : logo}
               style={{
                 height: 50, width: 50, borderRadius: 50 / 2
               }} />

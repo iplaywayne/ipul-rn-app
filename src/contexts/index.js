@@ -1,2 +1,2 @@
 export { useAuth } from './AuthContext'
-export { useStore } from '../utils/store'
+export { useStore } from './StoreContext'

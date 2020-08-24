@@ -33,7 +33,7 @@ function MediaService() {
   }
 
   const getTrackById = acid => {
-    const result = getTracks(result => result.filter(t => t.acid === acid))
+    const result = getTracks(result => result.filter(t => t?.acid === acid))
     return result
   }
   const getTrackByIdSync = async acid => {
