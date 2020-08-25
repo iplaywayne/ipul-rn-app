@@ -45,6 +45,7 @@ export function MediaDetails({ route, navigation }) {
 
   React.useEffect(() => {
     if (viewingTrack?.acid) readIsLiked()
+    if (viewingTrack?.acid === item?.acid) setViewingTrack(null)
   }, [viewingTrack])
 
   React.useEffect(() => {
@@ -67,9 +68,8 @@ export function MediaDetails({ route, navigation }) {
   }
 
   const initPlayer = async () => {
-    const nowQueued = await TrackPlayer.getQueue()
-    if (!nowQueued.length && tracks)
-      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+    await TrackPlayer.reset()
+    await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
   }
 
   const handleAddMediaLike = async () => {
@@ -90,19 +90,20 @@ export function MediaDetails({ route, navigation }) {
     const isViewingRequest = viewingTrack?.acid === item?.acid
     const isCurrentRequest = viewingTrack?.acid === currentTrack?.acid
     const thisTrack = route.params.item
-
+    if (isViewingRequest) setViewingTrack(null)
 
     if (isPlaying) {
       trackService.pause()
 
     } else {
+      await initPlayer()
       let currentId = await TrackPlayer.getCurrentTrack()
       let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
 
       if (isCurrentRequest) {
         await trackService.play(viewingTrack)
+
       } else {
-        setViewingTrack(null)
         await TrackPlayer.reset()
         await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
         await TrackPlayer.skip(thisTrack.acid)
@@ -112,6 +113,8 @@ export function MediaDetails({ route, navigation }) {
   }
 
   const handlePreviousTapped = async () => {
+    // await initPlayer()
+
     try {
       await TrackPlayer.skipToPrevious()
       let prevId = await TrackPlayer.getCurrentTrack()
@@ -122,13 +125,18 @@ export function MediaDetails({ route, navigation }) {
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
       setIsLiked(result?.liked)
     } catch (err) {
-      if (err.message.indexOf('left') !== -1) {
-        LocalAlert('Notification', err.message.replace('is', 'are'))
-      }
+      let anotherTrack = tracks[tracks.length - 1]
+      await initPlayer()
+      await TrackPlayer.skip(anotherTrack?.acid)
+      await TrackPlayer.play()
+      await trackService.play(anotherTrack)
+      LocalAlert('Notification', err.message)
     }
   }
 
   const handleNextTapped = async () => {
+    // await initPlayer() 
+
     try {
       await TrackPlayer.skipToNext()
       let nextId = await TrackPlayer.getCurrentTrack()
@@ -139,6 +147,8 @@ export function MediaDetails({ route, navigation }) {
       const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
       setIsLiked(result?.liked)
     } catch (err) {
+      await initPlayer()
+      TrackPlayer.play()
       if (err.message.indexOf('left') !== -1) {
         LocalAlert('Notification', err.message.replace('is', 'are'))
       }
@@ -146,6 +156,8 @@ export function MediaDetails({ route, navigation }) {
   }
 
   const handleSelectedTapped = async item => {
+    initPlayer()
+
     setTimeout(async () => {
       await TrackPlayer.skip(item.acid)
       await trackService.play(item)
@@ -187,6 +199,7 @@ export function MediaDetails({ route, navigation }) {
             <Button onPress={() => {
               TrackPlayer.skip(item.acid)
               trackService.play(item)
+              setViewingTrack(null)
             }} style={{ fontSize: 13, marginTop: 6, marginLeft: 4 }}>
               Play this</Button>
           </View>
