@@ -63,7 +63,7 @@ function Profile({ route, navigation }) {
       <ErrorBoundary caller='Profile'>
         <ErrorBoundary caller='Profile App Header'>
           <AppHeader
-            title={`${user.name} Profile`}
+            title={`${user?.name} Profile`}
             navigation={navigation}
             user={user}
             leftIcon={'arrow-left'}

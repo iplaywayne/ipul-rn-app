@@ -54,9 +54,9 @@ function UpdateProfile({ route, navigation }) {
         next => {
           let result = {
             ...user,
-            name: next.name,
-            bio: next.bio,
-            occupation: next.occupation
+            name: next?.name,
+            bio: next?.bio,
+            occupation: next?.occupation
           }
           storeDispatch.setUser(result)
           navigation.goBack()
@@ -112,9 +112,9 @@ function UpdateProfile({ route, navigation }) {
 
   React.useEffect(() => {
     if (route) {
-      formDispatch({ type: 'SET_NAME', val: route.params.user.name })
-      formDispatch({ type: 'SET_OCCUPATION', val: route.params.user.occupation })
-      formDispatch({ type: 'SET_BIO', val: route.params.user.bio })
+      formDispatch({ type: 'SET_NAME', val: route.params.user?.name })
+      formDispatch({ type: 'SET_OCCUPATION', val: route.params.user?.occupation })
+      formDispatch({ type: 'SET_BIO', val: route.params.user?.bio })
     }
     return () => {
       if (capturedImage) {
@@ -148,7 +148,7 @@ function UpdateProfile({ route, navigation }) {
       <TextInput
         // disabled
         label="Username"
-        value={formState.name}
+        value={formState?.name}
         onChangeText={val => formDispatch({ type: 'SET_NAME', val: val })}
         type='outlined'
         onBlur={Keyboard.dismiss}
@@ -157,7 +157,7 @@ function UpdateProfile({ route, navigation }) {
       <TextInput
         // disabled
         label="Occupation"
-        value={formState.occupation}
+        value={formState?.occupation}
         onChangeText={val => formDispatch({ type: 'SET_OCCUPATION', val: val })}
         type='outlined'
         onBlur={Keyboard.dismiss}

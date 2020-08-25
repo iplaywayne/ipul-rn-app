@@ -13,7 +13,7 @@ function Settings({ navigation }) {
   const [storeState] = useStore()
   const [loading, setLoading] = React.useState(false)
   const { user } = authState
-  const name = user && user.name
+  const name = user?.name
   const [text, setText] = React.useState(name)
   const scrollY = React.useRef(new Animated.Value(0)).current
   const changingHeight = scrollY.interpolate({

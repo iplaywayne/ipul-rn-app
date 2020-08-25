@@ -92,17 +92,18 @@ export function MediaDetails({ route, navigation }) {
 
     if (isPlaying) {
       trackService.pause()
+      
     } else {
       let currentId = await TrackPlayer.getCurrentTrack()
       let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
-      setViewingTrack(null)
 
-      if (viewingTrack?.acid) {
+      if (isCurrentRequest) {
         await TrackPlayer.reset()
         await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
         await TrackPlayer.skip(viewingTrack.acid)
         await trackService.play(viewingTrack)
       } else {
+        setViewingTrack(null)
         await TrackPlayer.reset()
         await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
         await TrackPlayer.skip(thisTrack.acid)

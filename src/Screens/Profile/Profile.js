@@ -80,7 +80,7 @@ function Profile({ route, navigation }) {
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: user && user.name || 'iPlayuListen',
+      title: user?.name || 'iPlayuListen',
       headerShown: false,
     })
 
@@ -111,16 +111,16 @@ function Profile({ route, navigation }) {
 
       if (!nowQueued.length) {
         const randoms = tracks.slice(35, 42)
-        LocalAlert('Media Player', 'You have nothing queued, adding randoms')
         await TrackPlayer.add(randoms.map(t => TrackPlayerStructure(t)))
         await TrackPlayer.skip(randoms[0].acid)
         await trackService.play(randoms[0])
         storeDispatch.setQueued(randoms.map(t => {
           return { ...t, idx: t.acid * Math.random(177000) }
         }))
+        LocalAlert('Media Player', 'You have nothing queued, adding randoms')
       } else {
-        LocalAlert('Media Player', `Now playing ${queued.length} songs queued`)
         await TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
+        LocalAlert('Media Player', `Now playing ${queued.length} songs queued`)
       }
 
       await TrackPlayer.play()

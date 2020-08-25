@@ -50,18 +50,18 @@ const Notifs = ({ route, navigation }) => {
           postId: itm.key
         })}>
           <List.Item
-            title={`${itm.name} liked your post`}
+            title={`${itm?.name} liked your post`}
             description={timeago.format(itm.createdAt)}
             left={props => {
-              return (itm.image ? <FastImage
+              return (itm?.image ? <FastImage
                 style={{ height: 50, width: 50, margin: 10, borderRadius: 5 }}
                 source={{
-                  uri: itm.image,
+                  uri: itm?.image,
                   priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               /> : <Video
-                  source={{ uri: itm.video }}
+                  source={{ uri: itm?.video }}
                   style={{ width: 50, height: 50, margin: 10, borderRadius: 5 }}
                   resizeMode='cover'
                   paused={true}
