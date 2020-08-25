@@ -112,6 +112,7 @@ export function MediaDetails({ route, navigation }) {
 
     await TrackPlayer.skip(thisTrack.acid)
     await trackService.play(thisTrack)
+    setViewingTrack(null)
   }
 
   const handlePreviousTapped = async () => {
@@ -148,7 +149,7 @@ export function MediaDetails({ route, navigation }) {
       await initPlayer()
       let nextId = await TrackPlayer.getCurrentTrack()
       let crtTrk = tracks.filter(t => t.acid === nextId)[0]
-      TrackPlayer.play()
+      await TrackPlayer.play()
       await trackService.play(crtTrk)
     }
   }
