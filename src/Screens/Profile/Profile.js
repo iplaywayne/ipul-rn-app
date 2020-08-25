@@ -104,28 +104,27 @@ function Profile({ route, navigation }) {
 
   const playNowTapped = async () => {
     let nowQueued = await TrackPlayer.getQueue()
+    
+    if (isPlaying) {
+      await TrackPlayer.pause()
+      storeDispatch.setPlaying(false)
+    } else {
+      TrackPlayer.reset()
 
-    if (!isPlaying) {
       if (!nowQueued.length) {
         const randoms = tracks.slice(7, 11)
-        TrackPlayer.reset()
         LocalAlert('Media Player', 'You have nothing queued, adding randoms')
         await TrackPlayer.add(randoms.map(t => TrackPlayerStructure(t)))
         storeDispatch.setQueued(randoms.map(t => {
           return { ...t, idx: t.acid * Math.random(177000) }
         }))
       } else {
-        TrackPlayer.reset()
-        LocalAlert('Media Player', `Now playing ${nowQueued.length} songs queued`)
+        LocalAlert('Media Player', `Now playing ${queued.length} songs queued`)
         await TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
       }
-      let newQueued = await TrackPlayer.getQueue()
 
       await TrackPlayer.play()
       storeDispatch.setPlaying(true)
-    } else {
-      await TrackPlayer.pause()
-      storeDispatch.setPlaying(false)
     }
   }
 

@@ -64,13 +64,8 @@ function TrackService() {
   }
 
   const setPlaylist = async () => {
-    if (!queued.length) {
-      TrackPlayer.reset()
-      TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
-    } else {
-      TrackPlayer.reset()
-      TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
-    }
+    TrackPlayer.reset()
+    TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
   }
 
   const play = async (item) => {

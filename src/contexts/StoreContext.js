@@ -77,7 +77,6 @@ function StoreProvider({ children }) {
       const nowQueued = TrackPlayer.getQueue()
       if (nowQueued.length > 0) {
         const updatedQueue = nowQueued.filter(t => t.idx !== track.idx)
-        console.log(nowQueued.length, updatedQueue.length)
         await TrackPlayer.removeUpcomingTracks()
         await TrackPlayer.add(updatedQueue)
         await TrackPlayer.play()

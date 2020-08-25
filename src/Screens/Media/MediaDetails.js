@@ -90,21 +90,18 @@ export function MediaDetails({ route, navigation }) {
     const isCurrentRequest = viewingTrack?.acid === currentTrack?.acid
     const thisTrack = route.params.item
 
-    if (!nowQueued.length) {
-      console.log('Queue is Empty, Setting playlist . .')
-      await trackService.setPlaylist()
-    }
 
     if (isPlaying) {
       trackService.pause()
     } else {
       let currentId = await TrackPlayer.getCurrentTrack()
       let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
+      setViewingTrack(null)
 
-      console.log(currentId ? `${currentId} is the current track id` : 'there is no current track')
-      await TrackPlayer.skip(currentId)
+      await TrackPlayer.reset()
+      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+      await TrackPlayer.skip(thisTrack.acid)
       await trackService.play(currentTrack)
-      console.log(currentTrack.title)
     }
   }
 
@@ -126,10 +123,12 @@ export function MediaDetails({ route, navigation }) {
   }
 
   const handleSelectedTapped = async item => {
-    await TrackPlayer.skip(item.acid)
-    await trackService.play(item)
-    setPageTrack(item)
-    console.log('[SELECTEDREQUEST] Play')
+    setTimeout(async () => {
+      await TrackPlayer.skip(item.acid)
+      await trackService.play(item)
+      setPageTrack(item)
+      console.log('[SELECTEDREQUEST] Play')
+    }, 250)
   }
 
   const handleRepeatMedia = () => {
@@ -158,7 +157,7 @@ export function MediaDetails({ route, navigation }) {
         flex: 1, alignItems: 'center', marginTop: 10, justifyContent: 'center',
         flexDirection: 'row'
       }}>
-        {viewingTrack?.acid !== item?.acid ?
+        {item?.acid ?
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontWeight: '700', fontSize: 20 }}>{item?.artist ? item.artist : item.artist}</Text>
             <Text style={{ marginLeft: 5, marginTop: 5 }}>{item?.title ? item.title : item.title}</Text>
@@ -177,13 +176,14 @@ export function MediaDetails({ route, navigation }) {
 
 
       </View>
-      <View style={{ alignItems: 'center', marginTop: 4 }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ marginRight: 5, color: 'gray', marginTop: 1 }}>{isPlaying ? 'Playing' : 'Paused'}</Text>
-          <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
-          <Text style={{ marginLeft: 5, marginTop: 1, fontSize: 13 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
-        </View>
-      </View>
+      {viewingTrack?.acid &&
+        <View style={{ alignItems: 'center', marginTop: 4 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ marginRight: 5, color: 'gray', marginTop: 1 }}>{isPlaying ? 'Playing' : 'Paused'}</Text>
+            <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 1, fontSize: 13 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
+          </View>
+        </View>}
 
 
       <View style={{
@@ -228,7 +228,7 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {tracksLikeThis && tracksLikeThis.map((itm, idx) => (
-          <TouchableOpacity key={itm.acid}
+          <TouchableOpacity key={itm.acid * Math.round(1700)}
             onPress={() => handleSelectedTapped(itm)}
             style={{
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
@@ -270,7 +270,7 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         {queued && queued.map((itm, idx) => (
-          <TouchableOpacity key={itm.acid}
+          <TouchableOpacity key={itm.acid * Math.round(1700)}
             onPress={() => handleSelectedTapped(itm)}
             style={{
               flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
