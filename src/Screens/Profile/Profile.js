@@ -113,11 +113,11 @@ function Profile({ route, navigation }) {
         const randoms = tracks.slice(35, 42)
         LocalAlert('Media Player', 'You have nothing queued, adding randoms')
         await TrackPlayer.add(randoms.map(t => TrackPlayerStructure(t)))
+        await TrackPlayer.skip(randoms[0].acid)
+        await trackService.play(randoms[0])
         storeDispatch.setQueued(randoms.map(t => {
           return { ...t, idx: t.acid * Math.random(177000) }
         }))
-        await TrackPlayer.skip(randoms[0].acid)
-        await trackService.play(randoms[0])
       } else {
         LocalAlert('Media Player', `Now playing ${queued.length} songs queued`)
         await TrackPlayer.add(queued.map(t => TrackPlayerStructure(t)))
