@@ -24,9 +24,10 @@ import {
   HeaderClassicSearchBar
 } from "react-native-header-search-bar";
 
-import { SendPlayerDetails } from '../../utils/media/functions'
+import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
 import { MediaListItem } from './MediaListItem'
 import { styles } from './styles'
+import LocalAlert from '../../utils/notifs/LocalAlert'
 
 
 
@@ -52,11 +53,9 @@ function Media({ route, navigation }) {
   const handleListTapped = async (item) => addQueue(item)
 
   const handleNavigateDetails = itm => {
-    navigation.navigate('MediaDetails', {
-      item: itm,
-      user: user,
-      tracks: tracks
-    })
+    TrackPlayer.add(TrackPlayerStructure(itm))
+    storeDispatch.addToQueue(itm)
+    LocalAlert('Media Queue', `${itm.title} by ${itm.artist} added to your Queue`)
   }
 
   React.useLayoutEffect(() => {
