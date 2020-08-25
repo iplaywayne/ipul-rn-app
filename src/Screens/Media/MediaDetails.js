@@ -45,7 +45,7 @@ export function MediaDetails({ route, navigation }) {
 
   React.useEffect(() => {
     if (viewingTrack?.acid) readIsLiked()
-    if (viewingTrack?.acid === item?.acid) setViewingTrack(null)
+    if (currentTrack?.acid === item?.acid) setViewingTrack(null)
   }, [viewingTrack])
 
   React.useEffect(() => {
@@ -68,8 +68,14 @@ export function MediaDetails({ route, navigation }) {
   }
 
   const initPlayer = async () => {
-    await TrackPlayer.reset()
-    await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+    const nowQueued = await TrackPlayer.getQueue()
+    const nowState = await TrackPlayer.getState()
+    const nowPosition = await TrackPlayer.getPosition()
+    if (nowQueued.length < tracks.length) {
+      await TrackPlayer.reset()
+      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+    }
+    console.log(nowState, nowPosition)
   }
 
   const handleAddMediaLike = async () => {
@@ -86,30 +92,29 @@ export function MediaDetails({ route, navigation }) {
 
   const handlePlayTapped = async () => {
     const nowQueued = await TrackPlayer.getQueue()
-    const state = await TrackPlayer.getState()
+    const nowState = await TrackPlayer.getState()
+    const nowPosition = await TrackPlayer.getPosition()
+    const nowPlaying = await TrackPlayer.getCurrentTrack()
+    const nowTrack = await TrackPlayer.getTrack(nowPlaying)
     const isViewingRequest = viewingTrack?.acid === item?.acid
-    const isCurrentRequest = viewingTrack?.acid === currentTrack?.acid
     const thisTrack = route.params.item
-    if (isViewingRequest) setViewingTrack(null)
+
+    if (nowState === 'playing') {
+      console.log('Media is currently playing', nowPlaying)
+      trackService.pause()
+      return
+    } else if (nowState === 'paused') {
+      trackService.play(currentTrack)
+      return
+    }
+
     if (nowQueued.length <= tracks.length) await initPlayer()
 
-    if (isPlaying) {
-      trackService.pause()
-
-    } else {
-      if (isCurrentRequest) {
-        await TrackPlayer.skip(viewingTrack.acid)
-        await trackService.play(viewingTrack)
-      } else {
-        await TrackPlayer.skip(thisTrack.acid)
-        await trackService.play(thisTrack)
-      }
-    }
+    await TrackPlayer.skip(thisTrack.acid)
+    await trackService.play(thisTrack)
   }
 
   const handlePreviousTapped = async () => {
-    // await initPlayer()
-
     try {
       await TrackPlayer.skipToPrevious()
       let prevId = await TrackPlayer.getCurrentTrack()
@@ -125,12 +130,11 @@ export function MediaDetails({ route, navigation }) {
       await TrackPlayer.skip(anotherTrack?.acid)
       await TrackPlayer.play()
       await trackService.play(anotherTrack)
+      setViewingTrack(anotherTrack)
     }
   }
 
   const handleNextTapped = async () => {
-    // await initPlayer() 
-
     try {
       await TrackPlayer.skipToNext()
       let nextId = await TrackPlayer.getCurrentTrack()
@@ -142,7 +146,10 @@ export function MediaDetails({ route, navigation }) {
       setIsLiked(result?.liked)
     } catch (err) {
       await initPlayer()
+      let nextId = await TrackPlayer.getCurrentTrack()
+      let crtTrk = tracks.filter(t => t.acid === nextId)[0]
       TrackPlayer.play()
+      await trackService.play(crtTrk)
     }
   }
 
