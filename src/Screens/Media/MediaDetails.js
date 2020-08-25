@@ -40,7 +40,12 @@ export function MediaDetails({ route, navigation }) {
       headerShown: false
     })
     setViewingTrack(item)
+    initPlayer()
   }, [])
+
+  React.useEffect(() => {
+    if (viewingTrack?.acid) readIsLiked()
+  }, [viewingTrack])
 
   React.useEffect(() => {
     if (tracks && tracks.length > 0) {
@@ -50,10 +55,6 @@ export function MediaDetails({ route, navigation }) {
       storeDispatch.setLoading(false)
     }
   }, [tracks])
-
-  React.useEffect(() => {
-    if (viewingTrack?.acid) readIsLiked()
-  }, [viewingTrack])
 
 
   const readIsLiked = async () => {
@@ -65,6 +66,12 @@ export function MediaDetails({ route, navigation }) {
     }
   }
 
+  const initPlayer = async () => {
+    const nowQueued = await TrackPlayer.getQueue()
+    if (!nowQueued.length && tracks)
+      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+  }
+
   const handleAddMediaLike = async () => {
     if (!viewingTrack?.acid) {
       console.log('Missing Track Param')
@@ -74,11 +81,6 @@ export function MediaDetails({ route, navigation }) {
     setIsLiked(result?.liked)
     result?.liked && LocalAlert('Media Liked', `You liked ${viewingTrack.title} by ${viewingTrack.artist}`)
   }
-
-  // const handlePreviousTapped = async () => {
-  //   const data = await PreviousTapped(tracks, user.uid)
-  //   console.log(data)
-  // }
 
   const handleAddTapped = () => MediaActionSheet(viewingTrack ? viewingTrack : item, storeDispatch)
 
@@ -92,15 +94,12 @@ export function MediaDetails({ route, navigation }) {
 
     if (isPlaying) {
       trackService.pause()
-      
+
     } else {
       let currentId = await TrackPlayer.getCurrentTrack()
       let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
 
       if (isCurrentRequest) {
-        await TrackPlayer.reset()
-        await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
-        await TrackPlayer.skip(viewingTrack.acid)
         await trackService.play(viewingTrack)
       } else {
         setViewingTrack(null)

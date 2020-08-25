@@ -12,13 +12,14 @@ export const ReadTracks = cb => {
       list.unshift({
         ...child.val(),
         art_link: trimWWWString(child.val().art_link),
+        artwork: trimWWWString(child.val().art_link),
         song: trimWWWString(child.val().song),
       })
     })
 
     list.forEach(t => {
       const newTrkRef = firebase.database().ref(`/channels/media/${t.acid}`)
-      newTrkRef.set(t)
+      newTrkRef.set({ ...t, artwork: t.art_link, url: t.song })
       newTrkRef.off()
     })
 

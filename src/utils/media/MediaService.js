@@ -53,6 +53,7 @@ function MediaService() {
         list.push({
           ...child.val(),
           art_link: trimWWWString(child.val().art_link),
+          artwork: trimWWWString(child.val().art_link),
           song: trimWWWString(child.val().song),
         })
       })
