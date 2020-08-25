@@ -25,7 +25,7 @@ import AppNavigator from './components/Navigation/AppNavigator'
 import ExploreNavigator from './components/Navigation/ExploreNavigator'
 
 
-// const DopeStack = createStackNavigator()
+const DopeStack = createStackNavigator()
 
 
 App.propTypes = {
@@ -78,14 +78,15 @@ function App() {
       }
     })
   }
-  // const DopeStackNavigator = () => (
-  //   <DopeStack.Navigator screenOptions={{
-  //     headerShown: false
-  //   }}>
-  //     <DopeStack.Screen name='Profile' component={AppNavigator} />
-  //     <DopeStack.Screen name='Explore' component={AppNavigator} />
-  //   </DopeStack.Navigator>
-  // )
+
+  const DopeStackNavigator = () => (
+    <DopeStack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <DopeStack.Screen name='Profile' component={AppNavigator} />
+      <DopeStack.Screen name='DEMO' component={SplashScreen} />
+    </DopeStack.Navigator>
+  )
 
   return (
     <NavigationContainer>
@@ -93,7 +94,7 @@ function App() {
       {userToken === null ?
         <AuthStack userToken={userToken} />
         :
-        <AppNavigator />}
+        <DopeStackNavigator />}
 
     </NavigationContainer>
   )

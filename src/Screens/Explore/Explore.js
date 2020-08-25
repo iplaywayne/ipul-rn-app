@@ -36,7 +36,7 @@ function Explore(props) {
 
       <View>
         <Text style={styles.title}>Explore iPlayuListen</Text>
-        <Button title='Try' onPress={() => navigation.navigate('B')}></Button>
+        {/* <Button title='Try' onPress={() => navigation.navigate('DEMO')}></Button> */}
       </View>
 
       <Divider style={{ marginBottom: 30 }} />
