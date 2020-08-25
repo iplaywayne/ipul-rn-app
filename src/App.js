@@ -22,6 +22,10 @@ import { Center } from './components/Center'
 import AuthProvider, { useAuth } from './contexts/AuthContext'
 import AuthStack from './components/Navigation/AuthStack'
 import AppNavigator from './components/Navigation/AppNavigator'
+import ExploreNavigator from './components/Navigation/ExploreNavigator'
+
+
+// const DopeStack = createStackNavigator()
 
 
 App.propTypes = {
@@ -74,9 +78,16 @@ function App() {
       }
     })
   }
+  // const DopeStackNavigator = () => (
+  //   <DopeStack.Navigator screenOptions={{
+  //     headerShown: false
+  //   }}>
+  //     <DopeStack.Screen name='Profile' component={AppNavigator} />
+  //     <DopeStack.Screen name='Explore' component={AppNavigator} />
+  //   </DopeStack.Navigator>
+  // )
 
-
-  return ( 
+  return (
     <NavigationContainer>
 
       {userToken === null ?

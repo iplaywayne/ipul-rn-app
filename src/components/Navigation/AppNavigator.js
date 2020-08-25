@@ -21,6 +21,7 @@ const AppNavigator = () => (
     initialRouteName="Home"
     activeColor="#fff"
     barStyle={{ backgroundColor: '#121212' }}>
+    
     <AppTab.Screen
       name="Home"
       component={HomeDrawerNavigator}

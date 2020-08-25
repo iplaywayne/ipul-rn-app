@@ -12,6 +12,7 @@ import SponsoredCard from '../../components/Ads/SponsoredCard'
 import { openLink } from '../../utils/functions'
 
 function Explore(props) {
+  const { navigation } = props
   const [authState, authDispatch] = useAuth()
   const [storeState, storeDispatch] = useStore()
   const { tracks } = storeState
@@ -35,6 +36,7 @@ function Explore(props) {
 
       <View>
         <Text style={styles.title}>Explore iPlayuListen</Text>
+        <Button title='Try' onPress={() => navigation.navigate('B')}></Button>
       </View>
 
       <Divider style={{ marginBottom: 30 }} />

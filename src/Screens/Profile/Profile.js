@@ -44,9 +44,9 @@ const BUTTON_WIDTH = 100
 function Profile({ route, navigation }) {
   const [storeState, storeDispatch] = useStore()
   const { user } = storeState
-  const { name, website, avatar, bio, occupation, mood } = user ?? { name: '', website: '', avatar: '', bio: '' }
-  const { queued, isAdmin, isPlaying, isLoading } = storeState
-  const [tracks, setTracks] = React.useState({})
+  const { name, website, avatar, bio, occupation, mood } = storeState?.user
+  const { queued, isAdmin, isPlaying, isLoading, tracks } = storeState
+  // const [tracks, setTracks] = React.useState({})
   const [favorites, setFavorites] = React.useState({})
   const mediaService = MediaService()
   const trackService = TrackService()
@@ -78,7 +78,7 @@ function Profile({ route, navigation }) {
     }, 250)
   }, [tracks])
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     navigation.setOptions({
       title: user && user.name || 'iPlayuListen',
       headerShown: false,
@@ -88,10 +88,8 @@ function Profile({ route, navigation }) {
       posts => setUserPosts(posts))
 
     trackService.setup()
-    trackService.getTracks(result => setTracks(result))
-
     return () => { }
-  }, [navigation])
+  }, [])
 
   const readApi = async () => {
     try {
