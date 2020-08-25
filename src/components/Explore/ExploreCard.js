@@ -45,7 +45,7 @@ function ExploreCard(props) {
   const [authState, authDispatch] = useAuth()
   const { user } = authState
   const [storeState] = useStore()
-  const { name, avatar, details, tracks } = storeState?.user
+  const { name, avatar, details, tracks } = storeState
   const mediaService = MediaService()
 
 

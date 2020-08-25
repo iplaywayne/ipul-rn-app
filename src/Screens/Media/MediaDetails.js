@@ -44,9 +44,9 @@ export function MediaDetails({ route, navigation }) {
 
 
   React.useEffect(() => {
-    if (tracks.length > 0) {
-      let tracksLikeThis = tracks.filter(t => t?.acid !== viewingTrack?.acid &&
-        JSON.stringify(t).includes(viewingTrack?.genre)).slice(0, 3)
+    if (tracks && tracks.length > 0) {
+      let tracksLikeThis = tracks.filter(t => t?.acid !== item?.acid &&
+        JSON.stringify(t).includes(item?.genre)).slice(0, 3)
       setTracksLikeThis(tracksLikeThis.length ? tracksLikeThis : tracks.slice(0, 3))
       storeDispatch.setLoading(false)
     }
@@ -165,7 +165,7 @@ export function MediaDetails({ route, navigation }) {
       </TouchableOpacity>
 
       <DoubleClick doubleTap={() => navigation.goBack()}>
-        <FastImage source={currentTrack?.art_link ? { uri: currentTrack.art_link } : logo}
+        <FastImage source={viewingTrack?.art_link ? { uri: viewingTrack.art_link } : item.art_link || logo}
           style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
           resizeMode='cover' />
       </DoubleClick>
