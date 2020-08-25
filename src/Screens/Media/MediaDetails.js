@@ -204,7 +204,7 @@ export function MediaDetails({ route, navigation }) {
               }}
               style={{ fontSize: 13 }}
               containerStyle={{ marginLeft: 10 }}>
-              Play this</Btn>
+              Play This</Btn>
           </View>
           :
           <View style={{ flexDirection: 'row' }}>
@@ -212,12 +212,12 @@ export function MediaDetails({ route, navigation }) {
             <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
           </View>
         }
-        
+
       </View>
       <Divider />
 
       {viewingTrack?.acid &&
-        <View style={{ alignItems: 'center', marginTop: 4 }}>
+        <View style={{ alignItems: 'center', marginTop: 15 }}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ marginRight: 5, color: 'gray', marginTop: 1 }}>{isPlaying ? 'Playing' : 'Paused'}</Text>
             <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
@@ -228,7 +228,7 @@ export function MediaDetails({ route, navigation }) {
 
       <View style={{
         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-        marginHorizontal: 20
+        marginHorizontal: 20, marginTop: 10
       }}>
         <TouchableOpacity onPress={handlePreviousTapped}>
           <Icons name='skip-previous' size={65} />
