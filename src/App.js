@@ -94,7 +94,7 @@ function App() {
       {userToken === null ?
         <AuthStack userToken={userToken} />
         :
-        <DopeStackNavigator />}
+        <AppNavigator />}
 
     </NavigationContainer>
   )
