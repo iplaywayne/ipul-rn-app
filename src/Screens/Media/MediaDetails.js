@@ -11,6 +11,7 @@ import DoubleClick from 'react-native-double-tap'
 import Snackbar from 'react-native-snackbar'
 import Button from 'react-native-button'
 
+import { default as Btn } from '../../components/Prebuilt/Button'
 import { siteLogo, logo } from '../../constants'
 import { useStore, wait } from '../../utils'
 import { SendPlayerDetails, TrackPlayerStructure } from '../../utils/media/functions'
@@ -188,19 +189,22 @@ export function MediaDetails({ route, navigation }) {
       </DoubleClick>
 
       <View style={{
-        flex: 1, alignItems: 'center', marginTop: 10, justifyContent: 'center',
+        flex: 1, alignItems: 'center', marginVertical: 10, justifyContent: 'center',
         flexDirection: 'row'
       }}>
         {item?.acid ?
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '700', fontSize: 20 }}>{item?.artist ? item.artist : item.artist}</Text>
-            <Text style={{ marginLeft: 5, marginTop: 5 }}>{item?.title ? item.title : item.title}</Text>
-            <Button onPress={() => {
-              TrackPlayer.skip(item.acid)
-              trackService.play(item)
-              setViewingTrack(null)
-            }} style={{ fontSize: 13, marginTop: 6, marginLeft: 4 }}>
-              Play this</Button>
+            <Text style={{ fontWeight: '700', fontSize: 20, marginTop: 5 }}>{item?.artist ? item.artist : item.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 10 }}>{item?.title ? item.title : item.title}</Text>
+            <Btn
+              onPress={() => {
+                TrackPlayer.skip(item.acid)
+                trackService.play(item)
+                setViewingTrack(null)
+              }}
+              style={{ fontSize: 13 }}
+              containerStyle={{ marginLeft: 10 }}>
+              Play this</Btn>
           </View>
           :
           <View style={{ flexDirection: 'row' }}>
@@ -208,9 +212,10 @@ export function MediaDetails({ route, navigation }) {
             <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
           </View>
         }
-
-
+        
       </View>
+      <Divider />
+
       {viewingTrack?.acid &&
         <View style={{ alignItems: 'center', marginTop: 4 }}>
           <View style={{ flexDirection: 'row' }}>
