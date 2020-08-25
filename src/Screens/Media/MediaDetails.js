@@ -91,21 +91,16 @@ export function MediaDetails({ route, navigation }) {
     const isCurrentRequest = viewingTrack?.acid === currentTrack?.acid
     const thisTrack = route.params.item
     if (isViewingRequest) setViewingTrack(null)
+    if (nowQueued.length <= tracks.length) await initPlayer()
 
     if (isPlaying) {
       trackService.pause()
 
     } else {
-      await initPlayer()
-      let currentId = await TrackPlayer.getCurrentTrack()
-      let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
-
       if (isCurrentRequest) {
+        await TrackPlayer.skip(viewingTrack.acid)
         await trackService.play(viewingTrack)
-
       } else {
-        await TrackPlayer.reset()
-        await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
         await TrackPlayer.skip(thisTrack.acid)
         await trackService.play(thisTrack)
       }
@@ -130,7 +125,6 @@ export function MediaDetails({ route, navigation }) {
       await TrackPlayer.skip(anotherTrack?.acid)
       await TrackPlayer.play()
       await trackService.play(anotherTrack)
-      LocalAlert('Notification', err.message)
     }
   }
 
@@ -149,9 +143,6 @@ export function MediaDetails({ route, navigation }) {
     } catch (err) {
       await initPlayer()
       TrackPlayer.play()
-      if (err.message.indexOf('left') !== -1) {
-        LocalAlert('Notification', err.message.replace('is', 'are'))
-      }
     }
   }
 
