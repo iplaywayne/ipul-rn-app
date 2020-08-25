@@ -42,7 +42,6 @@ export function MediaDetails({ route, navigation }) {
     setViewingTrack(item)
   }, [])
 
-
   React.useEffect(() => {
     if (tracks && tracks.length > 0) {
       let tracksLikeThis = tracks.filter(t => t?.acid !== item?.acid &&
@@ -98,8 +97,10 @@ export function MediaDetails({ route, navigation }) {
       let currentTrack = tracks.filter(t => t?.acid === currentId)[0]
       setViewingTrack(null)
 
-      await TrackPlayer.reset()
-      await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+      if (!currentTrack?.acid) {
+        await TrackPlayer.reset()
+        await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
+      }
       await TrackPlayer.skip(thisTrack.acid)
       await trackService.play(currentTrack)
     }
