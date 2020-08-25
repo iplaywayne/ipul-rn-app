@@ -76,10 +76,10 @@ export function MediaDetails({ route, navigation }) {
     result?.liked && LocalAlert('Media Liked', `You liked ${viewingTrack.title} by ${viewingTrack.artist}`)
   }
 
-  const handlePreviousTapped = async () => {
-    const data = await PreviousTapped(tracks, user.uid)
-    console.log(data)
-  }
+  // const handlePreviousTapped = async () => {
+  //   const data = await PreviousTapped(tracks, user.uid)
+  //   console.log(data)
+  // }
 
   const handleAddTapped = () => MediaActionSheet(viewingTrack ? viewingTrack : item, storeDispatch)
 
@@ -102,6 +102,23 @@ export function MediaDetails({ route, navigation }) {
       await TrackPlayer.add(tracks.map(t => TrackPlayerStructure(t)))
       await TrackPlayer.skip(thisTrack.acid)
       await trackService.play(currentTrack)
+    }
+  }
+
+  const handlePreviousTapped = async () => {
+    try {
+      await TrackPlayer.skipToPrevious()
+      let prevId = await TrackPlayer.getCurrentTrack()
+      let crtTrk = tracks.filter(t => t.acid === prevId)[0]
+      console.log('Previous Tapped', crtTrk.title)
+      setViewingTrack(crtTrk)
+      trackService.play(crtTrk)
+      const result = await mediaService.isMediaLiked(crtTrk.acid, user.uid)
+      setIsLiked(result?.liked)
+    } catch (err) {
+      if (err.message.indexOf('left') !== -1) {
+        LocalAlert('Notification', err.message.replace('is', 'are'))
+      }
     }
   }
 
