@@ -47,6 +47,7 @@ function SponsoredCard(props) {
   const { user } = authState
   // const { name, avatar, details } = user ?? { name: '', avatar: '', details: '' }
 
+  return null
 
   return (
     <Shadow
