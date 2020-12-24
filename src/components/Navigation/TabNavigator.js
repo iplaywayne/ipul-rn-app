@@ -19,6 +19,7 @@ const Tab = createMaterialBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator
     initialRouteName="Home"
+    style={{ height: 100 }}
     activeColor="#fff"
     barStyle={{ backgroundColor: '#121212' }}>
     <Tab.Screen
