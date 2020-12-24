@@ -74,7 +74,7 @@ function SponsoredCard(props) {
               shadow={true}
               title={title}
               caption={caption}
-              location={truncate(location,18)}
+              location={truncate(location, 18)}
               avatar={avatar}
               imageStyle={{ borderRadius: 10, height: 300 }}
               image={image}

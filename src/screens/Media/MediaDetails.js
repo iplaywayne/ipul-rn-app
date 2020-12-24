@@ -23,7 +23,7 @@ import { PreviousTapped } from './functions/PreviousTapped'
 
 
 export function MediaDetails({ route, navigation }) {
-  const { item, user, tracks } = route.params
+  const { item, user, tracks } = route.params || {}
   const [storeState, storeDispatch] = useStore()
   const [tracksLikeThis, setTracksLikeThis] = React.useState(null)
   const { isPlaying, currentTrack, queued, isLoading } = storeState
@@ -183,7 +183,7 @@ export function MediaDetails({ route, navigation }) {
       </TouchableOpacity>
 
       <DoubleClick doubleTap={() => navigation.goBack()}>
-        <FastImage source={viewingTrack?.art_link ? { uri: viewingTrack.art_link } : item.art_link || logo}
+        <FastImage source={viewingTrack?.art_link ? { uri: viewingTrack.art_link } : item?.art_link || logo}
           style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
           resizeMode='cover' />
       </DoubleClick>
@@ -194,7 +194,7 @@ export function MediaDetails({ route, navigation }) {
       }}>
         {item?.acid ?
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '700', fontSize: 20, marginTop: 5 }}>{item?.artist ? item.artist : item.artist}</Text>
+            <Text style={{ fontWeight: '700', fontSize: 20, marginTop: 5 }}>{item?.artist ? item?.artist : item?.artist}</Text>
             <Text style={{ marginLeft: 5, marginTop: 10 }}>{item?.title ? item.title : item.title}</Text>
             <Btn
               onPress={() => {
@@ -208,8 +208,8 @@ export function MediaDetails({ route, navigation }) {
           </View>
           :
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '700', fontSize: 20 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
-            <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
+            <Text style={{ fontWeight: '700', fontSize: 20 }}>{currentTrack?.artist ? currentTrack.artist : item?.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item?.title}</Text>
           </View>
         }
 
@@ -220,8 +220,8 @@ export function MediaDetails({ route, navigation }) {
         <View style={{ alignItems: 'center', marginTop: 15 }}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ marginRight: 5, color: 'gray', marginTop: 1 }}>{isPlaying ? 'Playing' : 'Paused'}</Text>
-            <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item.artist}</Text>
-            <Text style={{ marginLeft: 5, marginTop: 1, fontSize: 13 }}>{currentTrack?.title ? currentTrack.title : item.title}</Text>
+            <Text style={{ fontWeight: '700', fontSize: 15 }}>{currentTrack?.artist ? currentTrack.artist : item?.artist}</Text>
+            <Text style={{ marginLeft: 5, marginTop: 1, fontSize: 13 }}>{currentTrack?.title ? currentTrack.title : item?.title}</Text>
           </View>
         </View>}
 
@@ -262,7 +262,7 @@ export function MediaDetails({ route, navigation }) {
 
       <View>
         <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
-          {user.name}, checkout more songs like this
+          {user?.name}, checkout more songs like this
         </Text>
       </View>
 

@@ -28,7 +28,7 @@ function Explore(props) {
   }, [tracks])
 
 
-  // if (loading) return <Center><Spinner type='Wave' /></Center>
+  if (loading) return <Center><Spinner type='Wave' /></Center>
 
 
   return (
@@ -41,7 +41,7 @@ function Explore(props) {
 
       <Divider style={{ marginBottom: 30 }} />
 
-      {/* <Center>
+      <Center>
         <SponsoredCard
           title='Essential Fitness Apparrel'
           caption='Shop Dynamic'
@@ -50,7 +50,7 @@ function Explore(props) {
           avatar={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
           onOpen={() => openLink('http://dynamicfitnesslife.com?afmc=1o&utm_campaign=1o&utm_source=leaddyno&utm_medium=affiliate')}
         />
-      </Center> */}
+      </Center>
 
       <View style={{
         paddingTop: 20,
