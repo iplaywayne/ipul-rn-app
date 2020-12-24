@@ -719,7 +719,7 @@ PODS:
     - Firebase/Firestore (~> 6.28.1)
     - React
     - RNFBApp
-  - RNFBMessaging (7.7.1):
+  - RNFBMessaging (7.7.2):
     - Firebase/Analytics (~> 6.28.1)
     - Firebase/Messaging (~> 6.28.1)
     - React
@@ -1070,7 +1070,7 @@ SPEC CHECKSUMS:
   RNFBAuth: 8cdec65b3c88e8f5b2aa0109d8cbfbaaa73fb379
   RNFBDatabase: 2de49cc2b01698412b231b2e369af88c33465d73
   RNFBFirestore: e6de55217697a483c9dd54c2676fd82967b19349
-  RNFBMessaging: 6b8db5ff807c38395c297698bcfa1502cbc5856c
+  RNFBMessaging: 8656a64ae9d18319a152d35c17852c90e35a037c
   RNFBStorage: ba5508aa4e1b92643c29ac52daf99f60e300a951
   RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
@@ -1088,4 +1088,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d08bb884e48c38ca563f4aea8f4c7a0f6d65fc17
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0

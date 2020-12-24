@@ -1,0 +1,1 @@
+"build:ios": "react-native bundle --entry-file='index.ios.js' --bundle-output='./ios/iPlayuListen/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"

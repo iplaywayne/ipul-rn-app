@@ -84,7 +84,7 @@ function Home(props) {
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
 
-      <ErrorBoundary caller='Home Sponsored Card'>
+      {/* <ErrorBoundary caller='Home Sponsored Card'>
         <View style={{
           flex: 1, marginBottom: 20,
           justifyContent: 'center', alignItems: 'center'
@@ -97,7 +97,7 @@ function Home(props) {
             avatar={'https://iplayulisten.com/zorei-logo.png'}
             onOpen={() => openLink('https://www.zorei.co')} />
         </View>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
 
       <ErrorBoundary caller='Home Explore Cards'>
         <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
