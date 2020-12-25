@@ -202,9 +202,9 @@ function Profile({ route, navigation }) {
 
           <Divider />
 
-          <ErrorBoundary caller='Profile Recent'>
+          {/* <ErrorBoundary caller='Profile Recent'>
             <ProfileRecent />
-          </ErrorBoundary>
+          </ErrorBoundary> */}
 
           <Divider />
 
@@ -220,12 +220,12 @@ function Profile({ route, navigation }) {
 
           <Divider /> */}
 
-          <ErrorBoundary caller='Profile Post Cards'>
+          {/* <ErrorBoundary caller='Profile Post Cards'>
             <ProfileCards
               user={user}
               navigation={navigation}
               userPosts={userPosts} />
-          </ErrorBoundary>
+          </ErrorBoundary> */}
 
           <View style={{ marginBottom: 40 }}></View>
         </ScrollView >

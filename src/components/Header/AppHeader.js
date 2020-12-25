@@ -7,16 +7,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 const AppHeader = ({ title, leftIcon, leftPress, rightIcon, rightPress, user, navigation }) => {
   return (
     <View style={{
-      paddingTop: 55, height: 89, flexDirection: 'row', paddingHorizontal: 7,
-      justifyContent: 'space-between', backgroundColor: '#fff', marginTop: 0,
-      borderBottomColor: '#ddf', borderBottomWidth: 1
+      paddingTop: 11, height: 49, flexDirection: 'row', paddingHorizontal: 3,
+      justifyContent: 'space-between', backgroundColor: '', marginTop: 0,
+      // borderBottomColor: '#ddd', borderBottomWidth: 1
     }}>
-      <NavigationDrawerStructure
+      {/* <NavigationDrawerStructure
         navigationProps={navigation}
         onPress={leftPress ? leftPress : () => navigation.navigate('CreatePost')}
         icon={<Icon name={leftIcon || 'rocket'} size={25} style={{ marginLeft: 20 }} />}
-      />
-      <Text style={{ fontWeight: '800', fontSize: 20 }}>{title || user.name}</Text>
+      /> */}
+      <Text style={{ fontWeight: '800', fontSize: 20, marginLeft: 10 }}>{title || user.name}</Text>
       <NavigationDrawerStructure
         navigationProps={navigation}
         onPress={rightPress ? rightPress : () => navigation.toggleDrawer()}

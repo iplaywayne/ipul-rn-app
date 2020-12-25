@@ -41,7 +41,7 @@ const AppNavigator = () => (
         ),
       }}
     />
-    <AppTab.Screen
+    {/* <AppTab.Screen
       name="Media"
       component={MediaDrawerNavigator}
       options={{
@@ -50,7 +50,7 @@ const AppNavigator = () => (
           <MaterialCommunityIcons name="theater" color={color} size={26} />
         ),
       }}
-    />
+    /> */}
     <AppTab.Screen
       name="Profile"
       component={ProfileDrawerNavigator}

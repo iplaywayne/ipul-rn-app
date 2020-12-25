@@ -13,11 +13,8 @@ import { Home as HomeScreen } from '../../screens/Home'
 import { MediaDetails } from '../../screens/Media/MediaDetails'
 import { Media as MediaScreen } from '../../screens/Media'
 
-
 const MediaStack = createStackNavigator();
-
 const Drawer = createDrawerNavigator();
-
 
 export const HomeNavigator = ({ navigation }) => (
   <MediaStack.Navigator mode='card'>

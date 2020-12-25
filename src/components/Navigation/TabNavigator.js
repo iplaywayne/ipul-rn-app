@@ -3,14 +3,12 @@ import { View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import { SignIn as SignInScreen } from '../../screens/SignIn'
 import { SignUp as SignUpScreen } from '../../screens/SignUp'
 import { ExploreNavigator, ExploreDrawerNavigator } from '../../components/Navigation/ExploreNavigator'
 import { HomeNavigator, HomeDrawerNavigator } from '../../components/Navigation/HomeNavigator'
 import { MediaNavigator, MediaDrawerNavigator } from '../../components/Navigation/MediaNavigator'
 import { ProfileNavigator, ProfileDrawerNavigator } from '../../components/Navigation/ProfileNavigator'
-
 import SplashScreen from '../../screens/SplashScreen/SplashScreen'
 
 

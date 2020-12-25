@@ -1,13 +1,9 @@
 import React from 'react'
-import {
-  View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Image, StatusBar, Linking,
-  Alert, TouchableOpacity, AppState, DeviceEventEmitter
-} from 'react-native'
+import { View, Button as Btn, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { Divider } from 'react-native-paper'
-import InAppBrowser from 'react-native-inappbrowser-reborn'
 import { Shadow } from 'react-native-neomorph-shadows';
 import Popover from 'react-native-popover-view';
 import Spinner from 'react-native-spinkit'
@@ -16,12 +12,9 @@ import Snackbar from 'react-native-snackbar'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import axios from 'axios'
 
-
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import TrackService from '../../utils/media/TrackService'
-import SponsoredCard from '../../components/Ads/SponsoredCard'
-import { openLink } from '../../utils/functions'
 import Camera from '../../components/Camera/Camera'
 import { ErrorBoundary } from '../../components'
 import PostService from '../../utils/post/PostService'
@@ -46,9 +39,6 @@ function Home(props) {
   const fcmService = FCMService
 
 
-  let myDevice = 'cfSMiDPpZ7qFcf3HAbRj6r:APA91bGACMFr0PAH_UOL_UsbbiKjAxiwg20E012Cs1Ikq_fiZ9PlVSGOeEyFVlGi8zHrvaygqDBfqBbie5g8rN_RVGoI949b1_ktb2sI61XOYD9_AD3PZj3dVGUF4stibrdpsUZt-KSz'
-
-
   React.useLayoutEffect(() => {
     PostService.getGlobalPosts(posts => {
       setGlobalPosts(posts)
@@ -60,9 +50,7 @@ function Home(props) {
     return () => { }
   }, [tracks])
 
-
   if (loading) return <Center><Spinner type='Wave' /></Center>
-
 
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
@@ -80,26 +68,9 @@ function Home(props) {
         <MediaRow title='Top Reggae' query='regg' tracks={tracks} />
       </ErrorBoundary>
 
-
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
 
-
-      {/* <ErrorBoundary caller='Home Sponsored Card'>
-        <View style={{
-          flex: 1, marginBottom: 20,
-          justifyContent: 'center', alignItems: 'center'
-        }}>
-          <SponsoredCard
-            title={'Stock up on your travel essentials!'}
-            caption={'Shop Zorei'}
-            location={'Zorei.co'}
-            image={'https://iplayulisten.com/zorei-logo.png'}
-            avatar={'https://iplayulisten.com/zorei-logo.png'}
-            onOpen={() => openLink('https://www.zorei.co')} />
-        </View>
-      </ErrorBoundary> */}
-
-      <ErrorBoundary caller='Home Explore Cards'>
+      {/* <ErrorBoundary caller='Home Explore Cards'>
         <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
 
           {topRemixes.slice(0, 2).map((itm, idx) => (
@@ -121,8 +92,7 @@ function Home(props) {
           ))}
 
         </View>
-      </ErrorBoundary>
-
+      </ErrorBoundary> */}
 
       <View style={{ height: 50 }}></View>
     </ScrollView>

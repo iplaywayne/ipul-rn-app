@@ -8,8 +8,6 @@ import Spinner from 'react-native-spinkit'
 import { ExploreCard, Center } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import MediaService from '../../utils/media/MediaService'
-import SponsoredCard from '../../components/Ads/SponsoredCard'
-import { openLink } from '../../utils/functions'
 
 function Explore(props) {
   const { navigation } = props
@@ -27,9 +25,7 @@ function Explore(props) {
     }, 1500)
   }, [tracks])
 
-
   if (loading) return <Center><Spinner type='Wave' /></Center>
-
 
   return (
     <ScrollView style={styles.root}>
@@ -39,18 +35,7 @@ function Explore(props) {
         {/* <Button title='Try' onPress={() => navigation.navigate('DEMO')}></Button> */}
       </View>
 
-      <Divider style={{ marginBottom: 30 }} />
-
-      <Center>
-        <SponsoredCard
-          title='Essential Fitness Apparrel'
-          caption='Shop Dynamic'
-          location='dynamicfitnesslife.com'
-          image={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
-          avatar={'https://iplayulisten.com/assets/images/sponsored/dynamicfit.png'}
-          onOpen={() => openLink('http://dynamicfitnesslife.com?afmc=1o&utm_campaign=1o&utm_source=leaddyno&utm_medium=affiliate')}
-        />
-      </Center>
+      <Divider style={{ marginBottom: 0 }} />
 
       <View style={{
         paddingTop: 20,
@@ -67,14 +52,13 @@ function Explore(props) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 30,
     flex: 1,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     padding: 20,
-    marginTop: 50,
+    marginTop: 10,
   },
   miniCard: {
     borderWidth: 1,

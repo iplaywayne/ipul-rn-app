@@ -8,7 +8,7 @@ import { logo, width, height } from '../../constants'
 
 export const styles = StyleSheet.create({
   root: {
-    paddingTop: 20,
+    paddingTop: 5,
     flex: 1,
   },
   header: {

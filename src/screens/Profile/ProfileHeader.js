@@ -1,11 +1,7 @@
 import React from 'react'
-import {
-  View, SafeAreaView, ScrollView, StyleSheet, Image, Alert, TouchableOpacity,
-  Dimensions, StatusBar, Animated, ActivityIndicator, ActionSheetIOS, Text
-} from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator, Text } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { Avatar } from 'react-native-paper'
-
 import Btn from '../../components/Prebuilt/Button'
 
 

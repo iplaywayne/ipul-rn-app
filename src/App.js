@@ -1,17 +1,12 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {
-  LogBox,
-  View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator, Alert
-} from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Spinner from 'react-native-spinkit'
 import PropTypes from 'prop-types'
 import { Input, Block } from 'galio-framework';
-
-
 import Button from 'react-native-button'
 import { firebase } from './utils/firebase'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
@@ -24,15 +19,6 @@ import AuthStack from './components/Navigation/AuthStack'
 import AppNavigator from './components/Navigation/AppNavigator'
 import ExploreNavigator from './components/Navigation/ExploreNavigator'
 
-
-const DopeStack = createStackNavigator()
-
-
-App.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string
-  })
-}
 
 function App() {
   const [authState, authDispatch] = useAuth()
@@ -79,24 +65,13 @@ function App() {
     })
   }
 
-  const DopeStackNavigator = () => (
-    <DopeStack.Navigator screenOptions={{
-      headerShown: false
-    }}>
-      <DopeStack.Screen name='Profile' component={AppNavigator} />
-      <DopeStack.Screen name='DEMO' component={SplashScreen} />
-    </DopeStack.Navigator>
-  )
-
   return (
-    <NavigationContainer>
-
+    <>
       {userToken === null ?
         <AuthStack userToken={userToken} />
         :
         <AppNavigator />}
-
-    </NavigationContainer>
+    </>
   )
 }
 
