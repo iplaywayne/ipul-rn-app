@@ -94,7 +94,6 @@ function Home(props) {
         </View>
       </ErrorBoundary> */}
 
-      <View style={{ height: 50 }}></View>
     </ScrollView>
   )
 }

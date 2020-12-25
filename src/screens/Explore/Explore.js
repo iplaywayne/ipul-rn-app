@@ -35,10 +35,10 @@ function Explore(props) {
         {/* <Button title='Try' onPress={() => navigation.navigate('DEMO')}></Button> */}
       </View>
 
-      <Divider style={{ marginBottom: 0 }} />
+      <Divider/>
 
       <View style={{
-        paddingTop: 20,
+        paddingTop: 10,
         paddingBottom: 50, justifyContent: 'center', alignItems: 'center'
       }}>
         {topRemixes.map((itm, idx) => (

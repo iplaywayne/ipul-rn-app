@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  ScrollView, View, Text, TouchableOpacity, ActivityIndicator,
-  ActionSheetIOS, Alert
-} from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider } from 'react-native-paper'
@@ -10,7 +7,6 @@ import TrackPlayer from 'react-native-track-player'
 import DoubleClick from 'react-native-double-tap'
 import Snackbar from 'react-native-snackbar'
 import Button from 'react-native-button'
-
 import { default as Btn } from '../../components/Prebuilt/Button'
 import { siteLogo, logo } from '../../constants'
 import { useStore, wait } from '../../utils'
@@ -176,7 +172,7 @@ export function MediaDetails({ route, navigation }) {
   return (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <TouchableOpacity onPress={() => navigation.goBack()}
-        style={{ position: 'absolute', top: 60, left: 25, zIndex: 10 }}>
+        style={{ position: 'absolute', top: 25, left: 25, zIndex: 10 }}>
         <Text style={{ fontWeight: '700' }}>
           <Icons style={{ fontSize: 25, color: 'white' }} name='arrow-left' />
         </Text>
@@ -184,36 +180,10 @@ export function MediaDetails({ route, navigation }) {
 
       <DoubleClick doubleTap={() => navigation.goBack()}>
         <FastImage source={viewingTrack?.art_link ? { uri: viewingTrack.art_link } : item?.art_link || logo}
-          style={{ height: 400, width: '100%', borderTopLeftRadius: 25, borderTopRightRadius: 25 }}
+          style={{ height: 400, width: '100%' }}
           resizeMode='cover' />
       </DoubleClick>
 
-      <View style={{
-        flex: 1, alignItems: 'center', marginVertical: 10, justifyContent: 'center',
-        flexDirection: 'row'
-      }}>
-        {item?.acid ?
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '700', fontSize: 20, marginTop: 5 }}>{item?.artist ? item?.artist : item?.artist}</Text>
-            <Text style={{ marginLeft: 5, marginTop: 10 }}>{item?.title ? item.title : item.title}</Text>
-            <Btn
-              onPress={() => {
-                TrackPlayer.skip(item.acid)
-                trackService.play(item)
-                setViewingTrack(null)
-              }}
-              style={{ fontSize: 13 }}
-              containerStyle={{ marginLeft: 10 }}>
-              Play This</Btn>
-          </View>
-          :
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '700', fontSize: 20 }}>{currentTrack?.artist ? currentTrack.artist : item?.artist}</Text>
-            <Text style={{ marginLeft: 5, marginTop: 5 }}>{currentTrack?.title ? currentTrack.title : item?.title}</Text>
-          </View>
-        }
-
-      </View>
       <Divider />
 
       {viewingTrack?.acid &&
@@ -260,36 +230,6 @@ export function MediaDetails({ route, navigation }) {
 
       <Divider style={{ marginTop: 10 }} />
 
-      <View>
-        <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
-          {user?.name}, checkout more songs like this
-        </Text>
-      </View>
-
-      <View>
-        {tracksLikeThis && tracksLikeThis.map((itm, idx) => (
-          <TouchableOpacity key={itm.acid * Math.round(1700)}
-            onPress={() => handleSelectedTapped(itm)}
-            style={{
-              flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
-              alignItems: 'center'
-            }}>
-            <FastImage source={itm?.art_link ? { uri: itm.art_link } : logo}
-              style={{
-                height: 50, width: 50, borderRadius: 50 / 2
-              }} />
-            <View style={{ paddingLeft: 15 }}>
-              <Text style={{ padding: 0 }}>
-                <Text style={{ fontWeight: '700' }}>{itm.artist}</Text> {itm.title} {itm.acid === currentTrack.acid &&
-                  <Text style={{ color: 'purple', fontWeight: '700' }}>is Playing</Text>}
-              </Text>
-              <Text style={{ opacity: .5 }}>{itm.genre}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-
       {nextTrack > 0 &&
         <View>
           <Divider />
@@ -299,42 +239,9 @@ export function MediaDetails({ route, navigation }) {
           </Text>
         </View>}
 
-      {queued.length > 0 &&
-        <View>
-          <Divider />
-
-          <Text style={{ fontWeight: '700', padding: 20, fontSize: 15 }}>
-            Upcoming tracks
-        </Text>
-        </View>}
-
-      <View>
-        {queued && queued.map((itm, idx) => (
-          <TouchableOpacity key={itm.acid * Math.round(1700)}
-            onPress={() => handleSelectedTapped(itm)}
-            style={{
-              flexDirection: 'row', paddingLeft: 20, paddingBottom: 10,
-              alignItems: 'center'
-            }}>
-            <FastImage source={itm.art_link ? { uri: itm.art_link } : logo}
-              style={{
-                height: 50, width: 50, borderRadius: 50 / 2
-              }} />
-            <View style={{ paddingLeft: 15 }}>
-              <Text style={{ padding: 0 }}>
-                <Text style={{ fontWeight: '700' }}>{itm.artist}</Text> {itm.title}
-              </Text>
-              <Text style={{ opacity: .5 }}>
-                {currentTrack.acid === itm.acid ? 'Currently playing' : ''}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* <Text style={{ height: 500 }}>
+      <Text style={{ height: 500 }}>
         {JSON.stringify(route.params, null, 2)}
-      </Text> */}
+      </Text>
     </ScrollView >
   )
 }
