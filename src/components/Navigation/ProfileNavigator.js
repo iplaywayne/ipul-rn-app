@@ -44,6 +44,7 @@ export const ProfileNavigator = ({ navigation }) => {
 
       <ProfileStack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{
         title: 'Update Profile',
+        headerShown: false,
       }} />
 
       <ProfileStack.Screen name="PublicProfile" component={PublicProfileScreen} options={{

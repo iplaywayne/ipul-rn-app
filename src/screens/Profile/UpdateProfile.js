@@ -1,21 +1,12 @@
 import React from 'react'
-import {
-  ScrollView, View, Alert, ActivityIndicator, Image, TouchableOpacity,
-  KeyboardAvoidingView, Keyboard
-} from 'react-native'
+import { ScrollView, View, ActivityIndicator, Image, TouchableOpacity, Keyboard } from 'react-native'
 import Button from 'react-native-button'
-import { CommonActions } from '@react-navigation/native';
 import { Avatar, Divider, Text, TextInput } from 'react-native-paper';
-import Animated from 'react-native-reanimated'
-// import ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-
-
 import { Center } from '../../components'
 import { useAuth, useStore, wait } from '../../utils'
 import Btn from '../../components/Prebuilt/Button'
 import { ProfileService } from '../../utils/profile'
-
 
 
 function UpdateProfile({ route, navigation }) {
@@ -45,7 +36,6 @@ function UpdateProfile({ route, navigation }) {
     occupation: '',
   })
 
-
   const handleDone = async (state) => {
     try {
       await wait(() => setLoading(true))
@@ -69,7 +59,6 @@ function UpdateProfile({ route, navigation }) {
     }
   }
 
-
   const handleSelectImage = () => {
     try {
       ImagePicker.openCamera({
@@ -90,7 +79,6 @@ function UpdateProfile({ route, navigation }) {
     navigation.goBack()
   }
 
-
   React.useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -109,7 +97,6 @@ function UpdateProfile({ route, navigation }) {
 
   }, [loading, capturedImage, formState])
 
-
   React.useEffect(() => {
     if (route) {
       formDispatch({ type: 'SET_NAME', val: route.params.user?.name })
@@ -126,8 +113,6 @@ function UpdateProfile({ route, navigation }) {
     }
   }, [route])
 
-
-
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={16}>
 
@@ -141,8 +126,12 @@ function UpdateProfile({ route, navigation }) {
               style={{ backgroundColor: '#444' }} />}
         </TouchableOpacity>
 
-        <Btn onPress={handleSelectImage}
-          title='Select' containerStyle={{ marginTop: 10 }} />
+        <View style={{ flexDirection: 'row' }}>
+          <Btn onPress={handleSelectImage}
+            title='Select' containerStyle={{ marginTop: 10 }} />
+          <Btn onPress={() => navigation.goBack()}
+            title='Cancel' containerStyle={{ marginTop: 10 }} />
+        </View>
       </View>
 
       <TextInput

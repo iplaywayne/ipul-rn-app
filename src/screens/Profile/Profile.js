@@ -130,7 +130,6 @@ function Profile({ route, navigation }) {
 
   if (loading || !tracks.length) return <Center><Spinner type='Wave' /></Center>
 
-
   const ProfileQueued = () => (
     <View>
       {queued && queued.length > 0 ?
