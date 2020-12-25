@@ -10,7 +10,7 @@ const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying, isAuthor, s
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ marginBottom: 10, marginLeft: 20, flexDirection: 'row' }}>
+      <View style={{ marginBottom: 0, marginLeft: 20, flexDirection: 'row' }}>
 
         {avatar ?
           <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile', {
