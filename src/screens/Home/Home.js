@@ -38,8 +38,15 @@ function Home(props) {
   const [alertMessage, setAlertMessage] = React.useState()
   const fcmService = FCMService
 
+  const runApi = () => {
+    console.log('Running . .')
+    axios.get('http://localhost:5000/')
+      .then(res => console.log(res.data))
+      .catch(err => console.warn(err))
+  }
 
   React.useLayoutEffect(() => {
+    runApi()
     PostService.getGlobalPosts(posts => {
       setGlobalPosts(posts)
     })
@@ -59,7 +66,13 @@ function Home(props) {
         <HomeHeader name={user.name} isAdmin={isAdmin} />
       </ErrorBoundary>
 
+      <Button onPress={runApi}>
+        <Text>Press</Text>
+      </Button>
+
       <Divider style={{ marginBottom: 20 }} />
+
+
 
       <ErrorBoundary caller='Home Media Row'>
         <MediaRow title='Top Remixes' query='rem' tracks={tracks} />

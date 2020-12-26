@@ -2,6 +2,7 @@
   "name": "iPlayuListen",
   "version": "0.0.1",
   "private": true,
+  "proxy": "http://localhost:5000",
   "scripts": {
     "i12": "react-native run-ios --device 'iPuLi12'",
     "clean": "rm -rf /tmp/metro-*",
@@ -9,6 +10,8 @@
     "ios": "react-native run-ios --simulator='iPhone 12'",
     "start": "react-native start  --reset-cache",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/iPlayuListen/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "serve": "nodemon backend/server.js",
+    "dev": "concurrently \"npm run serve\" \"npm run ios\" ",
     "test": "jest",
     "lint": "eslint .",
     "commit": "git add . && git commit -m 'yarn commit'",
