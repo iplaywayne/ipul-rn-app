@@ -8,8 +8,8 @@ const mongoDB = {
 
     const connection = mongoose.connection;
     connection.once('open', () => {
-      console.log('MongoDB connection established!')
-    });
+      console.log('Mongo database connection established')
+    })
   }
 }
 

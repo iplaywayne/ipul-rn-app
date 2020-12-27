@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Button as Btn, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
-import { CommonActions } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { Divider } from 'react-native-paper'
@@ -15,13 +14,10 @@ import axios from 'axios'
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import TrackService from '../../utils/media/TrackService'
-import Camera from '../../components/Camera/Camera'
 import { ErrorBoundary } from '../../components'
 import PostService from '../../utils/post/PostService'
-import PostCard from '../../components/Post/PostCard'
 import { messaging } from '../../utils/firebase'
 import FCMService from '../../utils/notifs/FCMService'
-import LocalAlert from '../../utils/notifs/LocalAlert'
 import MediaRow from '../../components/Media/MediaRow'
 import HomeHeader from './HomeHeader'
 
@@ -40,7 +36,7 @@ function Home(props) {
 
   const runApi = () => {
     console.log('Running . .')
-    axios.get('http://localhost:5000/')
+    axios.post('http://localhost:5000', { name: 'stylz' })
       .then(res => console.log(res.data))
       .catch(err => console.warn(err))
   }
@@ -82,30 +78,6 @@ function Home(props) {
       </ErrorBoundary>
 
       <Divider style={{ marginTop: 15, marginBottom: 30 }} />
-
-      {/* <ErrorBoundary caller='Home Explore Cards'>
-        <View style={{ flex: 1, marginBottom: 50, justifyContent: 'center', alignItems: 'center' }}>
-
-          {topRemixes.slice(0, 2).map((itm, idx) => (
-            <ExploreCard {...props} key={itm.acid} item={itm} />
-          ))}
-
-          {globalPosts && globalPosts.slice(0, 2).map((itm, idx) => (
-            <PostCard navigation={navigation} key={itm.key} item={itm}
-              isAuthor={itm.uid === user.uid} />
-          ))}
-
-          {topRemixes.slice(3, 6).map((itm, idx) => (
-            <ExploreCard {...props} key={itm.acid} item={itm} />
-          ))}
-
-          {globalPosts && globalPosts.slice(3, 6).map((itm, idx) => (
-            <PostCard navigation={navigation} key={itm.key} item={itm}
-              isAuthor={itm.uid === user.uid} />
-          ))}
-
-        </View>
-      </ErrorBoundary> */}
 
     </ScrollView>
   )

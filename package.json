@@ -50,6 +50,7 @@
     "react-intersection-observer": "^8.26.2",
     "react-native": "^0.63.2",
     "react-native-androw": "0.0.34",
+    "react-native-aws3": "0.0.9",
     "react-native-button": "^3.0.1",
     "react-native-camera": "^3.36.0",
     "react-native-component-inview": "^1.0.2",
