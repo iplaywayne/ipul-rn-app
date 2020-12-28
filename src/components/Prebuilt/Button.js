@@ -13,7 +13,7 @@ export default function (props) {
       styleDisabled={{ color: 'white' }}
       disabled={disabled}
       containerStyle={[{
-        paddingTop: 8, margin: marginTop || 1, height: 32, width: 130, overflow: 'hidden', borderRadius: 5,
+        paddingTop: 8, margin: marginTop || 1, height: 32, width: 120, overflow: 'hidden', borderRadius: 5,
         backgroundColor: color ? color : backgroundColor || '#121212'
       }, containerStyle]}
       disabledContainerStyle={{ backgroundColor: '#ddd' }}

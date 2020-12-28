@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Button as Btn, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
+import { View, Button as Btn, SafeAreaView, ScrollView, StyleSheet, Alert } from 'react-native'
 import Icons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from 'galio-framework'
 import { Divider } from 'react-native-paper'
@@ -10,7 +10,10 @@ import Button from 'react-native-button'
 import Snackbar from 'react-native-snackbar'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import axios from 'axios'
-
+import { RNS3 } from 'react-native-aws3'
+import ImagePicker from 'react-native-image-picker'
+import RNFetchBlob from 'rn-fetch-blob'
+import Config from 'react-native-config'
 import { Center, MiniCard, ExploreCard } from '../../components'
 import { useAuth, useStore } from '../../contexts'
 import TrackService from '../../utils/media/TrackService'
@@ -20,6 +23,7 @@ import { messaging } from '../../utils/firebase'
 import FCMService from '../../utils/notifs/FCMService'
 import MediaRow from '../../components/Media/MediaRow'
 import HomeHeader from './HomeHeader'
+import { API } from '../../../api-host'
 
 
 function Home(props) {
@@ -35,14 +39,32 @@ function Home(props) {
   const fcmService = FCMService
 
   const runApi = () => {
-    console.log('Running . .')
-    axios.post('http://localhost:5000', { name: 'stylz' })
-      .then(res => console.log(res.data))
+    axios(API)
+      .then(res => console.log(res.data, API))
       .catch(err => console.warn(err))
+
+
+    // ImagePicker.showImagePicker(res => {
+    // const file = {
+    //   uri: res.uri,
+    //   name: "image.png",
+    //   type: "image/png"
+    // }
+    // const options = {
+    //   keyPrefix: "",
+    //   bucket: "ipul-media-demo",
+    //   region: "us-east-1",
+    //   accessKey: "AKIAJ5722HJJZAWMPKHQ",
+    //   secretKey: "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",
+    //   successActionStatus: 201
+    // }
+    // RNS3.put(file, options)
+    //   .then(res => console.log(res.body.postResponse.location))
+    //   .catch(err => console.log(err))
+    // })
   }
 
   React.useLayoutEffect(() => {
-    runApi()
     PostService.getGlobalPosts(posts => {
       setGlobalPosts(posts)
     })

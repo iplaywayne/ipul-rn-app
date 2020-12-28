@@ -51,7 +51,7 @@ const ProfileHeader = ({ user, navigation, playNowTapped, isPlaying, isAuthor, s
       {showButtons &&
         <View style={{
           justifyContent: 'center',
-          paddingHorizontal: 5, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
+          marginHorizontal: 20, paddingTop: 5, paddingBottom: 10, flexDirection: 'row'
         }}>
           <Btn
             title='Update Profile'

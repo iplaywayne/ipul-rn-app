@@ -1,16 +1,15 @@
 {
-  "name": "iPlayuListen",
-  "version": "0.0.1",
+  "name": "iplayulisten",
+  "version": "0.0.2",
   "private": true,
-  "proxy": "http://localhost:5000",
   "scripts": {
     "i12": "react-native run-ios --device 'iPuLi12'",
     "clean": "rm -rf /tmp/metro-*",
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator='iPhone 12'",
-    "start": "react-native start  --reset-cache",
+    "start": "PORT=7000 react-native start --reset-cache",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/iPlayuListen/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
-    "serve": "nodemon backend/server.js",
+    "serve": "nodemon --inspect backend/server.js",
     "dev": "concurrently \"npm run serve\" \"npm run ios\" ",
     "test": "jest",
     "lint": "eslint .",
@@ -85,6 +84,7 @@
     "react-native-vector-icons": "^7.0.0",
     "react-native-video": "^5.1.0-alpha7",
     "reanimated-bottom-sheet": "^1.0.0-alpha.20",
+    "rn-fetch-blob": "^0.12.0",
     "rn-placeholder": "^3.0.1",
     "styled-components": "^5.1.1",
     "timeago.js": "^4.0.2",
@@ -98,9 +98,11 @@
     "eslint": "^7.6.0",
     "jest": "^26.2.2",
     "metro-react-native-babel-preset": "^0.61.0",
+    "react-native-config": "^1.4.1",
     "react-test-renderer": "16.13.1"
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }
