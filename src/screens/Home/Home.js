@@ -23,7 +23,7 @@ import { messaging } from '../../utils/firebase'
 import FCMService from '../../utils/notifs/FCMService'
 import MediaRow from '../../components/Media/MediaRow'
 import HomeHeader from './HomeHeader'
-import { API } from '../../../api-host'
+import { API, process } from '../../../api-host'
 
 
 function Home(props) {
@@ -40,7 +40,7 @@ function Home(props) {
 
   const runApi = () => {
     axios(API)
-      .then(res => console.log(res.data, API))
+      .then(res => console.log(res.data, process.env.ATLAS_ACCESSKEY))
       .catch(err => console.warn(err))
 
 
