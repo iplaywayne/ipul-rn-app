@@ -54,8 +54,8 @@ function Home(props) {
     //   keyPrefix: "",
     //   bucket: "ipul-media-demo",
     //   region: "us-east-1",
-    //   accessKey: "AKIAJ5722HJJZAWMPKHQ",
-    //   secretKey: "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",
+    //   accessKey: "",
+    //   secretKey: "",
     //   successActionStatus: 201
     // }
     // RNS3.put(file, options)

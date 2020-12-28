@@ -7,10 +7,9 @@
     "clean": "rm -rf /tmp/metro-*",
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator='iPhone 12'",
-    "start": "PORT=7000 react-native start --reset-cache",
+    "start": "react-native start --reset-cache",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/iPlayuListen/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
-    "serve": "nodemon --inspect backend/server.js",
-    "dev": "concurrently \"npm run serve\" \"npm run ios\" ",
+    "dev": "",
     "test": "jest",
     "lint": "eslint .",
     "commit": "git add . && git commit -m 'yarn commit'",
@@ -103,6 +102,5 @@
   },
   "jest": {
     "preset": "react-native"
-  },
-  "proxy": "http://localhost:3000"
+  }
 }
