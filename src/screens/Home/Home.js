@@ -40,7 +40,7 @@ function Home(props) {
 
   const runApi = () => {
     axios(API)
-      .then(res => console.log(res.data, process.env.ATLAS_ACCESSKEY))
+      .then(res => console.log(res.data, process.env.AWS_ACCESSKEY))
       .catch(err => console.warn(err))
 
 
